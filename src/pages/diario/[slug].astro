@@ -1,0 +1,77 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../components/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('diario');
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const formatDate = (date: Date) => {
+  return date.toLocaleDateString('it-IT', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  });
+};
+
+const baseUrl = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title={`${post.data.title} | Diario`} description={post.data.description || `Leggi "${post.data.title}" sul diario di Egidio Giacoia.`}>
+  <article class="post-container">
+    <div class="post-header">
+      <a href={`${baseUrl}diario`} class="back-link">← Torna al diario</a>
+      <time datetime={post.data.pubDate.toISOString()} class="post-date">
+        {formatDate(post.data.pubDate)}
+      </time>
+      <h1>{post.data.title}</h1>
+    </div>
+    
+    <div class="prose" id="post-content">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .post-container {
+    padding: 1rem 0;
+  }
+
+  .post-header {
+    margin-bottom: 3rem;
+  }
+
+  .back-link {
+    display: inline-block;
+    font-size: 0.9rem;
+    text-decoration: none;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+    transition: color var(--transition-fast);
+  }
+
+  .back-link:hover {
+    color: var(--accent);
+  }
+
+  .post-date {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+  }
+
+  h1 {
+    font-size: 2.4rem;
+    line-height: 1.25;
+    margin-bottom: 0;
+  }
+</style>

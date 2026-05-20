@@ -1,0 +1,153 @@
+---
+import '../styles/global.css';
+import ThemeToggle from './ThemeToggle.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { 
+  title = "Egidio Giacoia | Freelance & Creativo", 
+  description = "Sito personale, blog e portfolio di Egidio Giacoia." 
+} = Astro.props;
+
+const baseUrl = import.meta.env.BASE_URL;
+const currentPath = Astro.url.pathname;
+const cleanPath = currentPath.endsWith('/') ? currentPath : `${currentPath}/`;
+
+// Helper to determine if a menu link is active
+const isActive = (path: string) => {
+  const target = `${baseUrl}${path}`.replace(/\/+/g, '/');
+  const targetWithSlash = target.endsWith('/') ? target : `${target}/`;
+  
+  if (path === '' || path === '/') {
+    return cleanPath === targetWithSlash;
+  }
+  return cleanPath.startsWith(targetWithSlash);
+};
+---
+
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    
+    <!-- SEO & Favicon -->
+    <link rel="icon" type="image/svg+xml" href={`${baseUrl}favicon.svg`} />
+    
+    <!-- Theme Script (Inline to prevent flash) -->
+    <script is:inline>
+      const getThemePreference = () => {
+        if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+          return localStorage.getItem('theme');
+        }
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      };
+      
+      const theme = getThemePreference();
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    </script>
+  </head>
+  <body>
+    <!-- Desktop Header -->
+    <header class="desktop-header">
+      <a href={baseUrl} class="logo-link" id="logo-link">Egidio Giacoia</a>
+      <nav id="main-navigation" class="desktop-nav">
+        <a href={`${baseUrl}diario`} class={isActive('diario') ? 'active' : ''} id="nav-diario">Diario</a>
+        <a href={`${baseUrl}progetti`} class={isActive('progetti') ? 'active' : ''} id="nav-progetti">Progetti</a>
+        <a href={`${baseUrl}fotografia`} class={isActive('fotografia') ? 'active' : ''} id="nav-fotografia">Fotografia</a>
+        <a href={`${baseUrl}now`} class={isActive('now') ? 'active' : ''} id="nav-now">Now</a>
+        <ThemeToggle />
+      </nav>
+    </header>
+
+    <!-- Mobile Header (Logo centered at the top) -->
+    <header class="mobile-header">
+      <a href={baseUrl} class="logo-link logo-centered" id="mobile-logo-link">Egidio Giacoia</a>
+    </header>
+
+    <!-- Floating Hamburger Button (Bottom Right) -->
+    <button id="mobile-menu-toggle" class="mobile-menu-toggle-btn" aria-label="Menu navigazione">
+      <span class="hamburger-bar"></span>
+      <span class="hamburger-bar"></span>
+      <span class="hamburger-bar"></span>
+    </button>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu-overlay" class="mobile-menu-overlay">
+      <nav class="mobile-nav">
+        <a href={`${baseUrl}diario`} class={isActive('diario') ? 'active' : ''} id="mob-nav-diario">Diario</a>
+        <a href={`${baseUrl}progetti`} class={isActive('progetti') ? 'active' : ''} id="mob-nav-progetti">Progetti</a>
+        <a href={`${baseUrl}fotografia`} class={isActive('fotografia') ? 'active' : ''} id="mob-nav-fotografia">Fotografia</a>
+        <a href={`${baseUrl}now`} class={isActive('now') ? 'active' : ''} id="mob-nav-now">Now</a>
+        <div class="mobile-theme-toggle-wrapper">
+          <span>Cambia tema</span>
+          <ThemeToggle />
+        </div>
+      </nav>
+    </div>
+
+    <main class="container">
+      <slot />
+    </main>
+
+    <footer>
+      <div>
+        © {new Date().getFullYear()} Egidio Giacoia.
+      </div>
+      <div>
+        Fatto a mano con <a href="https://astro.build" target="_blank" rel="noopener noreferrer">Astro</a>
+      </div>
+    </footer>
+
+    <script>
+      function setupMobileMenu() {
+        const toggleBtn = document.getElementById('mobile-menu-toggle');
+        const overlay = document.getElementById('mobile-menu-overlay');
+        
+        if (!toggleBtn || !overlay) return;
+
+        const links = overlay.querySelectorAll('a');
+
+        function toggleMenu() {
+          const isOpen = toggleBtn.classList.toggle('open');
+          overlay.classList.toggle('open', isOpen);
+          document.body.classList.toggle('menu-open', isOpen);
+        }
+
+        function closeMenu() {
+          toggleBtn.classList.remove('open');
+          overlay.classList.remove('open');
+          document.body.classList.remove('menu-open');
+        }
+
+        // Avoid adding duplicate event listeners if setup runs multiple times
+        toggleBtn.removeEventListener('click', toggleMenu);
+        toggleBtn.addEventListener('click', toggleMenu);
+
+        links.forEach(link => {
+          link.removeEventListener('click', closeMenu);
+          link.addEventListener('click', closeMenu);
+        });
+
+        // Close on escape key
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') {
+            closeMenu();
+          }
+        });
+      }
+
+      setupMobileMenu();
+      document.addEventListener('astro:after-swap', setupMobileMenu);
+    </script>
+  </body>
+</html>

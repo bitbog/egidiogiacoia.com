@@ -1,0 +1,61 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../components/BaseLayout.astro';
+
+const posts = await getCollection('diario');
+// Sort posts by date descending
+const sortedPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+// Date formatting helper
+const formatDate = (date: Date) => {
+  return date.toLocaleDateString('it-IT', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  });
+};
+
+const baseUrl = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title="Diario | Egidio Giacoia" description="Note, pensieri e riflessioni di Egidio Giacoia ordinati per data.">
+  <h1>Diario</h1>
+  <p class="section-intro">
+    Una raccolta di post scritti liberamente. Pensieri, note tecniche, riflessioni o semplici aggiornamenti, ordinati per data e senza categorizzazioni formali.
+  </p>
+
+  {sortedPosts.length === 0 ? (
+    <p class="empty-state">Nessun post presente nel diario al momento.</p>
+  ) : (
+    <div class="diary-list" id="diary-list">
+      {sortedPosts.map((post) => (
+        <a href={`${baseUrl}diario/${post.id}`} class="diary-item-link" id={`post-link-${post.id}`}>
+          <article class="diary-item">
+            <time datetime={post.data.pubDate.toISOString()} class="diary-meta">
+              {formatDate(post.data.pubDate)}
+            </time>
+            <h2>{post.data.title}</h2>
+            {post.data.description && (
+              <p class="diary-summary">{post.data.description}</p>
+            )}
+          </article>
+        </a>
+      ))}
+    </div>
+  )}
+</BaseLayout>
+
+<style>
+  .section-intro {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    margin-bottom: 3rem;
+    max-width: 60ch;
+  }
+
+  .empty-state {
+    color: var(--text-muted);
+    font-style: italic;
+    margin-top: 2rem;
+  }
+</style>

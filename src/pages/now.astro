@@ -1,0 +1,64 @@
+---
+import { getEntry, render } from 'astro:content';
+import BaseLayout from '../components/BaseLayout.astro';
+
+// Retrieve the single 'index' entry from the 'now' collection
+const entry = await getEntry('now', 'index');
+
+let Content = null;
+let lastUpdated = null;
+
+if (entry) {
+  const rendered = await render(entry);
+  Content = rendered.Content;
+  lastUpdated = entry.data.lastUpdated;
+}
+
+const formatDate = (date: Date) => {
+  return date.toLocaleDateString('it-IT', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  });
+};
+---
+
+<BaseLayout title="Now | Egidio Giacoia" description="Cosa sto facendo in questo momento della mia vita. Pagina ispirata al movimento /now di Derek Sivers.">
+  <div class="now-container">
+    <h1>Cosa sto facendo ora</h1>
+    
+    {entry && lastUpdated && (
+      <div class="last-updated">
+        Ultimo aggiornamento: <time datetime={lastUpdated.toISOString()}>{formatDate(lastUpdated)}</time>
+      </div>
+    )}
+
+    {Content ? (
+      <div class="prose mt-4" id="now-content">
+        <Content />
+      </div>
+    ) : (
+      <p class="empty-state">La pagina now non è ancora stata configurata.</p>
+    )}
+  </div>
+</BaseLayout>
+
+<style>
+  .now-container {
+    padding: 1rem 0;
+  }
+
+  .last-updated {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-bottom: 2.5rem;
+    border-left: 2px solid var(--border);
+    padding-left: 0.75rem;
+  }
+
+  .empty-state {
+    color: var(--text-muted);
+    font-style: italic;
+  }
+</style>

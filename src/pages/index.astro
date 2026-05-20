@@ -1,0 +1,139 @@
+---
+import BaseLayout from '../components/BaseLayout.astro';
+const baseUrl = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title="Egidio Giacoia | Home" description="Sito personale, blog e portfolio di Egidio Giacoia. Sviluppatore web, fotografo e creativo.">
+  <section class="intro-section">
+    <h1>Ciao, sono Egidio.</h1>
+    
+    <div class="prose">
+      <p>
+          Fin da piccolo mi sono mosso tra due mondi apparentemente distanti: 
+          la logica rigorosa dell'informatica e la libertà espressiva della fotografia. 
+          Ho capito presto che non erano in conflitto, ma potenti alleati. L'informatica
+           mi ha insegnato a vedere le strutture, a pianificare e a risolvere problemi 
+           in modo efficiente; la fotografia mi ha insegnato a cogliere l'attimo, l'emozione 
+           e la luce. Il mio lavoro nasce proprio da questo equilibrio: la ricerca della 
+           perfezione tecnica al servizio della bellezza più spontanea. 
+      </p>
+      
+      <p>
+        Questo è il mio spazio personale in scrivo di quello che mi passa per la testa, 
+        documento i miei progetti e condivido le mie fotografie.
+      </p>
+
+      <p>
+        Puoi esplorare le diverse sezioni usando i link qui sotto o la navigazione in alto:
+      </p>
+    </div>
+
+    <div class="navigation-grid">
+      <a href={`${baseUrl}diario`} class="nav-card">
+        <h3>Diario →</h3>
+        <p>Pensieri liberi, note e riflessioni senza una scadenza o una categoria precisa.</p>
+      </a>
+      
+      <a href={`${baseUrl}progetti`} class="nav-card">
+        <h3>Progetti →</h3>
+        <p>Software, prototipi ed esperimenti costruiti o ancora in fase di sviluppo.</p>
+      </a>
+      
+      <a href={`${baseUrl}fotografia`} class="nav-card">
+        <h3>Fotografia →</h3>
+        <p>Una selezione di scatti e immagini. Nessuna pretesa, solo luce e inquadrature.</p>
+      </a>
+
+      <a href={`${baseUrl}now`} class="nav-card">
+        <h3>Now →</h3>
+        <p>Cosa sto facendo esattamente in questo periodo della mia vita.</p>
+      </a>
+    </div>
+
+    <div class="contacts-section">
+      <h2>Contatti</h2>
+      <p>Se vuoi scrivermi per un progetto, fare due chiacchiere o condividere un'idea, mi trovi qui:</p>
+      <ul class="contacts-list">
+        <li>Email: <a href="mailto:egidio.giacoia98@gmail.com">egidio.giacoia98@gmail.com</a></li>
+        <li>LinkedIn: <a href="https://www.linkedin.com/in/egidio-giacoia-bab453213/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+      </ul>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .intro-section {
+    padding: 1rem 0;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .navigation-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin: 3rem 0;
+  }
+
+  .nav-card {
+    text-decoration: none;
+    color: var(--text);
+    padding: 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background-color: var(--card-bg);
+    transition: transform var(--transition-fast), border-color var(--transition-fast);
+  }
+
+  .nav-card h3 {
+    margin-bottom: 0.5rem;
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+  }
+
+  .nav-card p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 0;
+    line-height: 1.5;
+  }
+
+  .nav-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .contacts-section {
+    margin-top: 4rem;
+    border-top: 1px solid var(--border);
+    padding-top: 2rem;
+  }
+
+  .contacts-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .contacts-list {
+    list-style: none;
+    padding-left: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .contacts-list li {
+    font-size: 0.95rem;
+  }
+
+  @media (max-width: 600px) {
+    .navigation-grid {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+  }
+</style>
