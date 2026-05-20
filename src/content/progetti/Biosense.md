@@ -17,7 +17,7 @@ pubDate: 2026-05-20 # Formato: AAAA-MM-GG. Usato internamente per ordinare i pro
 ***Un bonsai morto. È da lì che tutto è cominciato.***
 Non per negligenza, ma per ignoranza,la stessa che accomuna chiunque abbia mai provato a coltivare qualcosa in casa senza sapere davvero di cosa avesse bisogno. 
 
-![Locandina BioSense](../../assets/fotografia/BioSenseImage.jpg)
+![Locandina BioSense](../../assets/BioSensePoster.jpg)
 
 L'acqua giusta, i nutrienti giusti, il momento giusto: variabili invisibili che nessuno strumento accessibile sa leggere per te. I sistemi professionali esistono, ma costano centinaia di euro, richiedono calibrazione continua e trasformano la cura di una pianta in un lavoro da laboratorio.
 BioSense nasce per risolvere questo: portare la precisione agronomica dove non è mai arrivata, senza sensori chimici, senza complessità, senza abbonamenti. Un sistema che osserva, impara e ti avvisa prima che la pianta ti dica che è troppo tardi.
