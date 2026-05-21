@@ -24,15 +24,7 @@ const baseUrl = import.meta.env.BASE_URL;
   </p>
 
   {sortedPhotos.length === 0 ? (
-    <div class="empty-gallery">
-      <p>La galleria fotografica è attualmente vuota.</p>
-      <div class="instructions-box">
-        <h3>Come creare un post fotografico:</h3>
-        <p>Crea un file Markdown (es: <code>mio-scatto.md</code>) in questa cartella:</p>
-        <code>fotografia/</code>
-        <p class="mt-4">Definisci i metadati nel frontmatter (es. titolo, data, fotocamera e l'immagine <code>cover: "./mio-scatto.jpg"</code>) proprio come per Diario e Progetti!</p>
-      </div>
-    </div>
+    <p class="empty-state">Nessuno scatto presente nella galleria al momento.</p>
   ) : (
     <div class="photo-grid" id="photo-grid">
       {sortedPhotos.map((photo) => (
@@ -70,34 +62,10 @@ const baseUrl = import.meta.env.BASE_URL;
     max-width: 60ch;
   }
 
-  .empty-gallery {
-    margin-top: 2rem;
+  .empty-state {
     color: var(--text-muted);
-  }
-
-  .instructions-box {
+    font-style: italic;
     margin-top: 2rem;
-    padding: 1.5rem;
-    border: 1px dashed var(--border);
-    border-radius: 6px;
-    background-color: var(--card-bg);
-    max-width: 500px;
-  }
-
-  .instructions-box h3 {
-    font-size: 1.1rem;
-    margin-bottom: 0.75rem;
-  }
-
-  .instructions-box code {
-    display: inline-block;
-    background-color: var(--border);
-    color: var(--text);
-    padding: 0.2rem 0.5rem;
-    border-radius: 4px;
-    font-family: monospace;
-    font-size: 0.9rem;
-    margin-top: 0.5rem;
   }
 
   /* Photo Grid Layout */
