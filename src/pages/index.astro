@@ -1,6 +1,29 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../components/BaseLayout.astro';
+
+// Recupera le collezioni
+const diaryEntries = await getCollection('diario');
+const projectEntries = await getCollection('progetti');
+const photoEntries = await getCollection('fotografia');
+
+// Ordina per data decrescente (pubDate) per trovare l'ultimo elemento caricato
+const latestDiary = diaryEntries
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())[0];
+
+const latestProject = projectEntries
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())[0];
+
+const latestPhoto = photoEntries
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())[0];
+
 const baseUrl = import.meta.env.BASE_URL;
+
+// Costruisci i link dinamici con fallback
+const diaryLink = latestDiary ? `${baseUrl}diario/${latestDiary.id}` : `${baseUrl}diario`;
+const projectLink = latestProject ? `${baseUrl}progetti/${latestProject.id}` : `${baseUrl}progetti`;
+const photoLink = latestPhoto ? `${baseUrl}fotografia/${latestPhoto.id}` : `${baseUrl}fotografia`;
+const nowLink = `${baseUrl}now`;
 ---
 
 <BaseLayout title="Egidio Giacoia | Home" description="Sito personale, blog e portfolio di Egidio Giacoia. Sviluppatore web, fotografo e creativo.">
@@ -29,22 +52,22 @@ const baseUrl = import.meta.env.BASE_URL;
     </div>
 
     <div class="navigation-grid">
-      <a href={`${baseUrl}diario`} class="nav-card">
+      <a href={diaryLink} class="nav-card">
         <h3>Diario →</h3>
         <p>Pensieri liberi, note e riflessioni senza una scadenza o una categoria precisa.</p>
       </a>
       
-      <a href={`${baseUrl}progetti`} class="nav-card">
+      <a href={projectLink} class="nav-card">
         <h3>Progetti →</h3>
         <p>Software, prototipi ed esperimenti costruiti o ancora in fase di sviluppo.</p>
       </a>
       
-      <a href={`${baseUrl}fotografia`} class="nav-card">
+      <a href={photoLink} class="nav-card">
         <h3>Fotografia →</h3>
         <p>Una selezione di scatti e immagini. Nessuna pretesa, solo luce e inquadrature.</p>
       </a>
 
-      <a href={`${baseUrl}now`} class="nav-card">
+      <a href={nowLink} class="nav-card">
         <h3>Now →</h3>
         <p>Cosa sto facendo esattamente in questo periodo della mia vita.</p>
       </a>
