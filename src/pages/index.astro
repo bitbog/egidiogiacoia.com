@@ -62,32 +62,35 @@ const formatDate = (date: Date) => {
     <div class="navigation-grid">
       <a href={diaryLink} class="nav-card">
         <h3>Diario →</h3>
-        {latestDiary && (
+        {latestDiary ? (
           <div class="latest-entry-info">
             <strong>{latestDiary.data.title}</strong> — <time datetime={latestDiary.data.pubDate.toISOString()}>{formatDate(latestDiary.data.pubDate)}</time>
           </div>
+        ) : (
+          <p>Pensieri liberi, note e riflessioni senza una scadenza o una categoria precisa.</p>
         )}
-        <p>Pensieri liberi, note e riflessioni senza una scadenza o una categoria precisa.</p>
       </a>
       
       <a href={projectLink} class="nav-card">
         <h3>Progetti →</h3>
-        {latestProject && (
+        {latestProject ? (
           <div class="latest-entry-info">
             <strong>{latestProject.data.title}</strong> — <time datetime={latestProject.data.pubDate.toISOString()}>{formatDate(latestProject.data.pubDate)}</time>
           </div>
+        ) : (
+          <p>Software, prototipi ed esperimenti costruiti o ancora in fase di sviluppo.</p>
         )}
-        <p>Software, prototipi ed esperimenti costruiti o ancora in fase di sviluppo.</p>
       </a>
       
       <a href={photoLink} class="nav-card">
         <h3>Fotografia →</h3>
-        {latestPhoto && (
+        {latestPhoto ? (
           <div class="latest-entry-info">
             <strong>{latestPhoto.data.title}</strong> — <time datetime={latestPhoto.data.pubDate.toISOString()}>{formatDate(latestPhoto.data.pubDate)}</time>
           </div>
+        ) : (
+          <p>Una selezione di scatti e immagini. Nessuna pretesa, solo luce e inquadrature.</p>
         )}
-        <p>Una selezione di scatti e immagini. Nessuna pretesa, solo luce e inquadrature.</p>
       </a>
 
       <a href={nowLink} class="nav-card">
@@ -141,11 +144,11 @@ const formatDate = (date: Date) => {
   }
 
   .latest-entry-info {
-    font-size: 0.825rem;
+    font-size: 0.9rem;
     color: var(--text-muted);
-    margin-top: -0.25rem;
-    margin-bottom: 0.75rem;
-    line-height: 1.4;
+    margin-top: 0.25rem;
+    margin-bottom: 0;
+    line-height: 1.5;
   }
 
   .latest-entry-info strong {
