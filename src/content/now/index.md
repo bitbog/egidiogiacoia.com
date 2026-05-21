@@ -1,5 +1,5 @@
 ---
-lastUpdated: 2026-05-20 # Formato: AAAA-MM-GG. Aggiorna questa data ogni volta che modifichi il file.
+lastUpdated: 2026-05-21 # Formato: AAAA-MM-GG. Aggiorna questa data ogni volta che modifichi il file.
 ---
 
 <!-- 
