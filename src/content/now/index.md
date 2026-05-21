@@ -27,4 +27,5 @@ Sto lavorando da qualche mese al progetto BioSense.
 + ***Replaced*** 
 
 ## Cosa ho ascoltato ultimamente
++ ***Vol. uno*** di Brunori Sas
 + ***La Morte Dei Miracoli***  di Frankie Hi-NRG MC
