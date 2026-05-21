@@ -24,6 +24,14 @@ const diaryLink = latestDiary ? `${baseUrl}diario/${latestDiary.id}` : `${baseUr
 const projectLink = latestProject ? `${baseUrl}progetti/${latestProject.id}` : `${baseUrl}progetti`;
 const photoLink = latestPhoto ? `${baseUrl}fotografia/${latestPhoto.id}` : `${baseUrl}fotografia`;
 const nowLink = `${baseUrl}now`;
+
+const formatDate = (date: Date) => {
+  return date.toLocaleDateString('it-IT', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  });
+};
 ---
 
 <BaseLayout title="Egidio Giacoia | Home" description="Sito personale, blog e portfolio di Egidio Giacoia. Sviluppatore web, fotografo e creativo.">
@@ -54,16 +62,31 @@ const nowLink = `${baseUrl}now`;
     <div class="navigation-grid">
       <a href={diaryLink} class="nav-card">
         <h3>Diario →</h3>
+        {latestDiary && (
+          <div class="latest-entry-info">
+            <strong>{latestDiary.data.title}</strong> — <time datetime={latestDiary.data.pubDate.toISOString()}>{formatDate(latestDiary.data.pubDate)}</time>
+          </div>
+        )}
         <p>Pensieri liberi, note e riflessioni senza una scadenza o una categoria precisa.</p>
       </a>
       
       <a href={projectLink} class="nav-card">
         <h3>Progetti →</h3>
+        {latestProject && (
+          <div class="latest-entry-info">
+            <strong>{latestProject.data.title}</strong> — <time datetime={latestProject.data.pubDate.toISOString()}>{formatDate(latestProject.data.pubDate)}</time>
+          </div>
+        )}
         <p>Software, prototipi ed esperimenti costruiti o ancora in fase di sviluppo.</p>
       </a>
       
       <a href={photoLink} class="nav-card">
         <h3>Fotografia →</h3>
+        {latestPhoto && (
+          <div class="latest-entry-info">
+            <strong>{latestPhoto.data.title}</strong> — <time datetime={latestPhoto.data.pubDate.toISOString()}>{formatDate(latestPhoto.data.pubDate)}</time>
+          </div>
+        )}
         <p>Una selezione di scatti e immagini. Nessuna pretesa, solo luce e inquadrature.</p>
       </a>
 
@@ -115,6 +138,19 @@ const nowLink = `${baseUrl}now`;
     margin-bottom: 0.5rem;
     font-family: var(--font-serif);
     font-size: 1.15rem;
+  }
+
+  .latest-entry-info {
+    font-size: 0.825rem;
+    color: var(--text-muted);
+    margin-top: -0.25rem;
+    margin-bottom: 0.75rem;
+    line-height: 1.4;
+  }
+
+  .latest-entry-info strong {
+    color: var(--text);
+    font-weight: 600;
   }
 
   .nav-card p {
