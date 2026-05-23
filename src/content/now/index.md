@@ -1,14 +1,6 @@
 ---
-lastUpdated: 2026-05-21 # Formato: AAAA-MM-GG. Aggiorna questa data ogni volta che modifichi il file.
+lastUpdated: 2026-05-21 # AGGIORNA SEMPRE LA DATA!!!!
 ---
-
-<!-- 
-  COME USARE QUESTO TEMPLATE:
-  1. Copia il contenuto di questo file o duplica il file stesso.
-  2. Rinomina la copia in "index.md" (senza l'underscore) in questa stessa cartella (`src/content/now/index.md`).
-  3. Modifica la data in "lastUpdated" sopra.
-  4. Scrivi i paragrafi per ciascuna sezione sotto.
--->
 
 ## Cosa sto studiando
 Al momento sono focalizzato su HTML, CSS, JS per creare e sviluppare il mio sito. Inoltre sto studiando Sistemi Operativi ed Elettrotecnica per l'università.
