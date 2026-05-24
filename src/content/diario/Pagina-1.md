@@ -6,12 +6,15 @@ description: "La mia fuga dai social e il ritorno ad una tecnologia più umana. 
 
 > "Viviamo in un mondo che è soltanto il nostro o, al limite, quello della nostra bolla."
 
+-*Wired*
+
 Pensaci un attimo: oggi due persone sedute sullo stesso identico divano, a pochi centimetri di distanza, possono guardare lo schermo del proprio smartphone e vedere due realtà del tutto differenti. Ognuno ha il suo feed personalizzato, le sue notizie su misura, i suoi post consigliati. Fisicamente sono insieme nella stessa stanza, nella stessa realtà ma mentalmente si trovano in due universi paralleli che non si incontreranno mai. È assurdo: siamo convinti di guardare fuori da una finestra aperta sul mondo, e invece stiamo solo fissando uno specchio che ci rimanda indietro l'eco dei nostri stessi pensieri.
 
 In filosofia c'è una parola bellissima e un po' misteriosa per descrivere questa condizione: solipsismo. È l'idea che esista solo la nostra mente e che tutto il resto sia una specie di proiezione. Ecco, gli algoritmi hanno creato una sorta di solipsismo digitale: ci convincono che la nostra bolla sia l'unico mondo reale possibile, che non esista nient'altro al di fuori delle nostre idee e dei nostri gusti. Questo specchio ci mostra solo noi stessi e ci isola dagli altri, proprio mentre siamo convinti di essere super connessi.
 
 ## Quando la tecnologia era una magia...
 >"Una tecnologia sufficientemente avanzata è indistinguibile dalla magia."
+
 -*Arthur C. Clarke*
 
 Ti ricordi quando eri piccolo? La tecnologia sembrava una magia vera e propria! Se sei cresciuto in quegli anni, ti ricorderai sicuramente l'emozione pazzesca di accendere un computer per le prime volte o di tenere in mano i primi telefoni cellulari. Ognuno di essi era strano, diverso, super colorato! Internet era una terra selvaggia tutta da esplorare, dove ogni sito web era un esperimento caotico e divertente. C'era meraviglia, mistero e scoperta.
@@ -25,6 +28,7 @@ Anche il web è stato colonizzato da pochissime grandi aziende che decidono le r
 ## Ammazzare il tempo
 
 >"Le ore vanno ammazzate. Mente sei in attesa. [...]. Ma devi trascorrere ore imperfette per averne di perfette. Devi ammazzare 10 ore per farne vivere 2. Devi solo stare attento a non ammazzare tutte le ore, tutti gli anni."
+
 -*Charles Bukowski, Il capitano è fuori a pranzo*
 
 Ci hai mai fatto caso? Ogni volta che aspetti l'autobus, sei in fila alla cassa o hai un momento libero, tiri fuori lo smartphone. Ti hanno convinto che la noia o l'attesa siano difetti da correggere subito. Ma Bukowski aveva perfettamente ragione: l'attesa e i momenti imperfetti sono lo spazio in cui nascono i pensieri più belli e le idee creative! Se riempi ogni istante con lo scroll infinito dello schermo, non stai solo passando il tempo: stai sprecando la tua vita.
