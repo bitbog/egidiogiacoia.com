@@ -17,4 +17,4 @@ Integrazione di un portfolio su questo sito. Al momento si trova [qui](https://e
 + ***Replaced*** 
 
 ## Cosa ho ascoltato ultimamente
-+ ***+1** di Fulminacci
++ ***+1*** di Fulminacci
