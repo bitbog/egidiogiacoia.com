@@ -1,23 +1,20 @@
 ---
-lastUpdated: 2026-05-21 # AGGIORNA SEMPRE LA DATA!!!!
+lastUpdated: 2026-06-04 # AGGIORNA SEMPRE LA DATA!!!!
 ---
 
 ## Cosa sto studiando
-Al momento sono focalizzato su HTML, CSS, JS per creare e sviluppare il mio sito. Inoltre sto studiando Sistemi Operativi ed Elettrotecnica per l'università.
+Sistemi Operativi ed Elettrotecnica per l'università. Storytelling fotografico per progetti personali.
 
 ## Progetti in corso
-Sto lavorando da qualche mese al progetto BioSense.
+Integrazione di un portfolio su questo sito. Al momento si trova [qui](https://egidiogiacoia98.myportfolio.com/home).
 
 ## Cosa sto leggendo
-+ ***Le non cose***  di Byung-Chul Han
++ ***Fahrenheit 451*** di ray Bradbury
 + ***21 lezioni per il XXI secolo*** di Yuval Noah Harari
-+ ***Quiet*** di Susan Cain
-+ ***La storia infinita*** di Michael Ende
 + ***Workshop di storytelling fotografico*** di Finn Beales
 
 ## A cosa sto giocando
 + ***Replaced*** 
 
 ## Cosa ho ascoltato ultimamente
-+ ***Vol. uno*** di Brunori Sas
-+ ***La Morte Dei Miracoli***  di Frankie Hi-NRG MC
++ ***+1** di Fulminacci
