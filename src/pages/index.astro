@@ -1,5 +1,5 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
 import BaseLayout from '../components/BaseLayout.astro';
 
 // Recupera le collezioni
@@ -24,6 +24,10 @@ const diaryLink = latestDiary ? `${baseUrl}diario/${latestDiary.id}` : `${baseUr
 const projectLink = latestProject ? `${baseUrl}progetti/${latestProject.id}` : `${baseUrl}progetti`;
 const photoLink = latestPhoto ? `${baseUrl}fotografia/${latestPhoto.id}` : `${baseUrl}fotografia`;
 const nowLink = `${baseUrl}now`;
+
+// Recupera la pagina "now" per l'ultimo aggiornamento
+const nowEntry = await getEntry('now', 'index');
+const nowLastUpdated = nowEntry?.data.lastUpdated;
 
 const formatDate = (date: Date) => {
   return date.toLocaleDateString('it-IT', {
@@ -131,7 +135,9 @@ const formatDate = (date: Date) => {
           <p class="card-desc">Cosa sto facendo esattamente in questo periodo della mia vita.</p>
         </div>
         <div class="card-footer">
-          <span class="card-meta">Scopri cosa faccio ora</span>
+          <span class="card-meta">
+            {nowLastUpdated ? formatDate(nowLastUpdated) : "Scopri cosa faccio ora"}
+          </span>
           <span class="card-arrow">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <line x1="5" y1="12" x2="19" y2="12"></line>
