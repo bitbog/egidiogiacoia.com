@@ -1,22 +1,24 @@
 ---
+// Importa lo stile globale del sito
 import '../styles/global.css';
-import ThemeToggle from './ThemeToggle.astro';
 
 interface Props {
   title?: string;
   description?: string;
 }
 
+// Estrae le props con valori predefiniti di fallback
 const { 
-  title = "Egidio Giacoia | Freelance & Creativo", 
+  title = "Egidio Giacoia", 
   description = "Sito personale, blog e portfolio di Egidio Giacoia." 
 } = Astro.props;
 
 const baseUrl = import.meta.env.BASE_URL;
 const currentPath = Astro.url.pathname;
+// Aggiunge uno slash finale per standardizzare il confronto dei percorsi
 const cleanPath = currentPath.endsWith('/') ? currentPath : `${currentPath}/`;
 
-// Helper to determine if a menu link is active
+// Helper per determinare se un collegamento del menu è attivo (pagina corrente)
 const isActive = (path: string) => {
   const target = `${baseUrl}${path}`.replace(/\/+/g, '/');
   const targetWithSlash = target.endsWith('/') ? target : `${target}/`;
@@ -26,6 +28,9 @@ const isActive = (path: string) => {
   }
   return cleanPath.startsWith(targetWithSlash);
 };
+
+// Controlla se ci troviamo nella Home Page (usato per nascondere i contatti nel footer)
+const isHome = isActive('/') || isActive('');
 ---
 
 <!DOCTYPE html>
@@ -39,72 +44,78 @@ const isActive = (path: string) => {
     <!-- SEO & Favicon -->
     <link rel="icon" type="image/png" href={`${baseUrl}favicon.png`} />
     
-    <!-- Theme Script (Inline to prevent flash) -->
+    <!-- Script Tema Automatico (Inline per prevenire lo sfarfallio della pagina all'avvio) -->
     <script is:inline>
-      const getThemePreference = () => {
-        if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
-          return localStorage.getItem('theme');
-        }
-        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      };
-      
-      const theme = getThemePreference();
-      if (theme === 'dark') {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
+      // Funzione che applica il tema scuro o chiaro in base alle impostazioni del dispositivo
+      function applyTheme() {
+        const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.classList.toggle('dark', isDark);
       }
+      
+      // Esegue all'avvio
+      applyTheme();
+      
+      // Resta in ascolto di eventuali cambi di tema nelle impostazioni di sistema del dispositivo
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme);
     </script>
   </head>
   <body>
-    <!-- Desktop Header -->
-    <header class="desktop-header">
-      <a href={baseUrl} class="logo-link" id="logo-link">Egidio Giacoia</a>
-      <nav id="main-navigation" class="desktop-nav">
-        <a href={`${baseUrl}diario`} class={isActive('diario') ? 'active' : ''} id="nav-diario">Diario</a>
-        <a href={`${baseUrl}progetti`} class={isActive('progetti') ? 'active' : ''} id="nav-progetti">Progetti</a>
-        <a href={`${baseUrl}fotografia`} class={isActive('fotografia') ? 'active' : ''} id="nav-fotografia">Fotografia</a>
-        <a href={`${baseUrl}now`} class={isActive('now') ? 'active' : ''} id="nav-now">Now</a>
-        <ThemeToggle />
-      </nav>
+    <!-- Barra dell'Header Fissa (Sticky Top) -->
+    <header class="bar">
+      <div class="bar-in">
+        <!-- Logo / Nome Brand -->
+        <a href={baseUrl} class="brand">Egidio Giacoia</a>
+        
+        <!-- Collegamenti Desktop (Nascosti su Mobile) -->
+        <nav class="links">
+          <a href={`${baseUrl}diario`} class={isActive('diario') ? 'active' : ''} id="nav-diario">Diario</a>
+          <a href={`${baseUrl}portfolio`} class={isActive('portfolio') ? 'active' : ''} id="nav-portfolio">Portfolio</a>
+          <a href={`${baseUrl}now`} class={isActive('now') ? 'active' : ''} id="nav-now">Now</a>
+        </nav>
+      </div>
     </header>
 
-    <!-- Mobile Header (Logo centered at the top) -->
-    <header class="mobile-header">
-      <a href={baseUrl} class="logo-link logo-centered" id="mobile-logo-link">Egidio Giacoia</a>
-    </header>
-
-    <!-- Floating Hamburger Button (Bottom Right) -->
+    <!-- Pulsante Menu Flottante per Mobile (Cerchio in basso a destra) -->
     <button id="mobile-menu-toggle" class="mobile-menu-toggle-btn" aria-label="Menu navigazione">
       <span class="hamburger-bar"></span>
       <span class="hamburger-bar"></span>
       <span class="hamburger-bar"></span>
     </button>
 
-    <!-- Mobile Menu Overlay -->
+    <!-- Schermata Overlay del Menu Mobile (Sfocatura a schermo intero) -->
     <div id="mobile-menu-overlay" class="mobile-menu-overlay">
       <nav class="mobile-nav">
-        <a href={`${baseUrl}diario`} class={isActive('diario') ? 'active' : ''} id="mob-nav-diario">Diario</a>
-        <a href={`${baseUrl}progetti`} class={isActive('progetti') ? 'active' : ''} id="mob-nav-progetti">Progetti</a>
-        <a href={`${baseUrl}fotografia`} class={isActive('fotografia') ? 'active' : ''} id="mob-nav-fotografia">Fotografia</a>
-        <a href={`${baseUrl}now`} class={isActive('now') ? 'active' : ''} id="mob-nav-now">Now</a>
-        <div class="mobile-theme-toggle-wrapper">
-          <span>Cambia tema</span>
-          <ThemeToggle />
-        </div>
+        <a href={`${baseUrl}diario`} class={isActive('diario') ? 'active' : ''}>Diario</a>
+        <a href={`${baseUrl}portfolio`} class={isActive('portfolio') ? 'active' : ''}>Portfolio</a>
+        <a href={`${baseUrl}now`} class={isActive('now') ? 'active' : ''}>Now</a>
       </nav>
     </div>
 
-    <main class="container">
-      <slot />
+    <!-- Contenitore Principale del Contenuto -->
+    <main class="wrap">
+      <div class="container">
+        <!-- Slot per inserire il codice specifico di ogni pagina -->
+        <slot />
+      </div>
+
+      <!-- Piè di pagina (Footer) -->
+      <footer>
+        <!-- Se non ci troviamo in Home Page, visualizziamo i contatti in colonna -->
+        {!isHome && (
+          <div class="footer-contacts">
+            <p>
+              Resta aggiornato: <a href="https://whatsapp.com/channel/0029VaFJXAvJ93wY6tcBGr2w" target="_blank" rel="noopener noreferrer">Canale WhatsApp</a>
+              &nbsp;·&nbsp;
+              Scrivimi: <a href="mailto:scrivimiegidio@gmail.com?subject=Messaggio%20dal%20sito">E-mail</a>
+            </p>
+          </div>
+        )}
+        <!-- Firma di Copyright -->
+        <p>© 2026 Egidio Giacoia</p>
+      </footer>
     </main>
 
-    <footer>
-      <div>
-        © {new Date().getFullYear()} Egidio Giacoia.
-      </div>
-    </footer>
-
+    <!-- Script per la gestione del Menu Mobile -->
     <script>
       function setupMobileMenu() {
         const toggleBtn = document.getElementById('mobile-menu-toggle');
@@ -114,10 +125,11 @@ const isActive = (path: string) => {
 
         const links = overlay.querySelectorAll('a');
 
+        // Mostra o nasconde l'overlay ed il pulsante animato
         function toggleMenu() {
           const isOpen = toggleBtn.classList.toggle('open');
           overlay.classList.toggle('open', isOpen);
-          document.body.classList.toggle('menu-open', isOpen);
+          document.body.classList.toggle('menu-open', isOpen); // Previene lo scroll della pagina
         }
 
         function closeMenu() {
@@ -126,16 +138,17 @@ const isActive = (path: string) => {
           document.body.classList.remove('menu-open');
         }
 
-        // Avoid adding duplicate event listeners if setup runs multiple times
+        // Rimuove eventuali listener precedenti per evitare duplicazioni con Astro View Transitions
         toggleBtn.removeEventListener('click', toggleMenu);
         toggleBtn.addEventListener('click', toggleMenu);
 
+        // Chiude il menu quando si clicca su un collegamento interno
         links.forEach(link => {
           link.removeEventListener('click', closeMenu);
           link.addEventListener('click', closeMenu);
         });
 
-        // Close on escape key
+        // Chiude il menu premendo il tasto ESC della tastiera
         document.addEventListener('keydown', (e) => {
           if (e.key === 'Escape') {
             closeMenu();
@@ -143,6 +156,7 @@ const isActive = (path: string) => {
         });
       }
 
+      // Inizializza il menu all'avvio e dopo ogni cambio pagina gestito da Astro
       setupMobileMenu();
       document.addEventListener('astro:after-swap', setupMobileMenu);
     </script>

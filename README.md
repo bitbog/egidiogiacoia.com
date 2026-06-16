@@ -1,6 +1,6 @@
 # Guida alla Gestione del Sito Personale
 
-Questa guida ti spiega in modo semplice e dettagliato come caricare e aggiornare i contenuti nelle quattro sezioni principali del tuo sito (**Diario**, **Progetti**, **Now**, **Fotografia**). 
+Questa guida ti spiega in modo semplice e dettagliato come caricare e aggiornare i contenuti nelle tre sezioni principali del tuo sito (**Diario**, **Now**, **Portfolio**). 
 
 Tutto il sito è gestito tramite file **Markdown** e immagini locali. Non c'è un pannello amministrativo: ti basta creare o modificare i file sul tuo computer, fare il push su GitHub e il sito si aggiornerà da solo online.
 
@@ -10,7 +10,22 @@ Tutto il sito è gestito tramite file **Markdown** e immagini locali. Non c'è u
 In ogni cartella dei contenuti troverai dei file che iniziano con un trattino basso (es. `_template-diario.md`).
 - **Non cancellare i file che iniziano con `_`**: sono i tuoi modelli di riferimento.
 - **Ignorati dal sito**: i file che iniziano con `_` vengono ignorati automaticamente e non compariranno mai sul sito pubblico.
-- **Come usarli**: duplica il file di template, rinomina la copia **rimuovendo** l'underscore iniziale (es. da `_template-diario.md` a `il-mio-primo-post.md`), e inserisci i tuoi testi.
+- **Como usarli**: duplica il file di template, rinomina la copia **rimuovendo** l'underscore iniziale (es. da `_template-diario.md` a `il-mio-primo-post.md`), e inserisci i tuoi testi.
+
+---
+
+## 🎨 Direzione Visiva & Design (Piano Grafico)
+Il sito segue rigorosamente la direzione visiva e i requisiti estetici del **Piano Grafico**:
+* **Tipografia**:
+  * `Fraunces` per i titoli principali e la voce autoriale (Serif).
+  * `Hanken Grotesk` per i testi lunghi, articoli e l'interfaccia (Sans-Serif).
+  * `DM Mono` per metadati, date, e pulsanti (Monospaced).
+* **Colori**: Una combinazione minimale basata sul "Verde-Teal" (`#16545A` su chiaro / `#74B6B2` su scuro) e neutri caldi color carta e inchiostro.
+* **Tema Automatico**: Il sito si adatta automaticamente ed istantaneamente alle impostazioni del tema del tuo dispositivo (Chiaro/Scuro) senza pulsanti di commutazione manuale.
+* **Effetti Interattivi (Home Page)**:
+  * **Diario**: Dispone di un alone morbido retroilluminato che crea un effetto di profondità fluttuante.
+  * **Now**: Dispone di un alone luminoso radiale che segue fluidamente i movimenti del cursore del mouse.
+  * **Portfolio**: Un grande box centrato ed esteso per evidenziare la galleria.
 
 ---
 
@@ -33,26 +48,7 @@ Gli articoli del diario si trovano nella cartella: `src/content/diario/`
 
 ---
 
-### 2. Progetti
-La lista dei tuoi esperimenti e software si trova nella cartella: `src/content/progetti/`
-
-**Come caricare un nuovo progetto:**
-1. Apri la cartella `src/content/progetti/`.
-2. Duplica il file **`_template-progetto.md`**.
-3. Rinomina la copia (es. `mio-nuovo-software.md`).
-4. Compila i metadati nell'intestazione `---`:
-   ```yaml
-   title: "Nome del Progetto"
-   description: "Una breve descrizione di due righe sul progetto."
-   status: "in corso" # IMPORTANTE: accetta solo "in corso" o "completato"
-   pubDate: 2026-05-20 # Formato: AAAA-MM-GG (serve per ordinare i progetti)
-   link: "https://github.com/tuo-username/progetto" # Opzionale, inserisci se c'è un link esterno
-   ```
-5. Descrivi il progetto in Markdown sotto i metadati. Il colore del badge ("In corso" = arancione, "Completato" = verde) viene deciso in automatico dal campo `status`.
-
----
-
-### 3. Now
+### 2. Now
 La pagina Now rappresenta quello che stai facendo in questo momento della tua vita. Si trova nella cartella: `src/content/now/`
 
 **Come aggiornare la pagina Now:**
@@ -72,13 +68,13 @@ Se non l'hai ancora configurata, segui questi passaggi per attivarla:
 
 ---
 
-### 4. Fotografia
-La galleria e le storie fotografiche si gestiscono nella cartella: `src/content/fotografia/`
+### 3. Portfolio
+La galleria e gli scatti fotografici si gestiscono nella cartella: `src/content/portfolio/`
 
-**Come aggiungere un post fotografico:**
-1. Apri la cartella `src/content/fotografia/`.
+**Come aggiungere una foto:**
+1. Apri la cartella `src/content/portfolio/`.
 2. Trascina la tua foto (es. `tramonto-colosseo.jpg`) all'interno di questa cartella. I formati supportati sono `.jpg`, `.jpeg`, `.png`, `.webp` e `.gif`.
-3. Duplica il file **`_template-fotografia.md`** e rinominalo col nome del tuo post (es. `tramonto-colosseo.md`). *Attenzione a rimuovere l'underscore all'inizio!*
+3. Duplica il file **`_template-portfolio.md`** e rinominalo col nome del tuo post (es. `tramonto-colosseo.md`). *Attenzione a rimuovere l'underscore all'inizio!*
 4. Modifica i metadati nell'intestazione del file Markdown:
    ```yaml
    title: "Tramonto sul Colosseo"
@@ -123,7 +119,7 @@ Prima di eseguire i comandi per inviare le modifiche su GitHub, ti consigliamo d
 
 ## 🚀 Pubblicazione Online (GitHub Pages)
 
-Ogni volta che hai finito di aggiungere o modificare articoli, progetti o foto, devi caricare le modifiche su GitHub. 
+Ogni volta che hai finito di aggiungere o modificare articoli o foto, devi caricare le modifiche su GitHub. 
 
 Apri il terminale nella cartella del progetto ed esegui in sequenza questi **tre comandi Git**:
 

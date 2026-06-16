@@ -10,17 +10,6 @@ const diario = defineCollection({
   }),
 });
 
-const progetti = defineCollection({
-  loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: './src/content/progetti' }),
-  schema: z.object({
-    title: z.string(),
-    description: z.string(),
-    status: z.enum(['in corso', 'completato']),
-    link: z.string().url().optional(),
-    pubDate: z.coerce.date(),
-  }),
-});
-
 const now = defineCollection({
   loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: './src/content/now' }),
   schema: z.object({
@@ -28,8 +17,8 @@ const now = defineCollection({
   }),
 });
 
-const fotografia = defineCollection({
-  loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: './src/content/fotografia' }),
+const portfolio = defineCollection({
+  loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: './src/content/portfolio' }),
   schema: ({ image }) => z.object({
     title: z.string(),
     pubDate: z.coerce.date(),
@@ -39,4 +28,4 @@ const fotografia = defineCollection({
   }),
 });
 
-export const collections = { diario, progetti, now, fotografia };
+export const collections = { diario, now, portfolio };

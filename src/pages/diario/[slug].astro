@@ -42,19 +42,20 @@ const baseUrl = import.meta.env.BASE_URL;
 
 <style>
   .post-container {
-    padding: 1rem 0;
+    padding: var(--s2) 0;
   }
 
   .post-header {
-    margin-bottom: 3rem;
+    margin-bottom: var(--s6);
   }
 
   .back-link {
     display: inline-block;
-    font-size: 0.9rem;
+    font-family: var(--font-mono);
+    font-size: 13px;
     text-decoration: none;
     color: var(--text-muted);
-    margin-bottom: 1.5rem;
+    margin-bottom: var(--s4);
     transition: color var(--transition-fast);
   }
 
@@ -64,14 +65,9 @@ const baseUrl = import.meta.env.BASE_URL;
 
   .post-date {
     display: block;
-    font-size: 0.9rem;
+    font-family: var(--font-mono);
+    font-size: 13px;
     color: var(--text-muted);
-    margin-bottom: 0.5rem;
-  }
-
-  h1 {
-    font-size: 2.4rem;
-    line-height: 1.25;
-    margin-bottom: 0;
+    margin-bottom: var(--s2);
   }
 </style>

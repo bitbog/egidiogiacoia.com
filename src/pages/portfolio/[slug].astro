@@ -4,7 +4,7 @@ import { Image } from 'astro:assets';
 import BaseLayout from '../../components/BaseLayout.astro';
 
 export async function getStaticPaths() {
-  const photos = await getCollection('fotografia');
+  const photos = await getCollection('portfolio');
   return photos.map(photo => ({
     params: { slug: photo.id },
     props: { photo },
@@ -29,9 +29,9 @@ const formatDate = (date: Date) => {
 const baseUrl = import.meta.env.BASE_URL;
 ---
 
-<BaseLayout title={`${photo.data.title} | Fotografia`} description={photo.data.title}>
+<BaseLayout title={`${photo.data.title} | Portfolio`} description={photo.data.title}>
   <div class="photo-detail-container">
-    <a href={`${baseUrl}fotografia`} class="back-link">&larr; Torna alla galleria</a>
+    <a href={`${baseUrl}portfolio`} class="back-link">&larr; Torna al portfolio</a>
 
     <article class="photo-post">
       <header class="photo-header">
@@ -88,17 +88,17 @@ const baseUrl = import.meta.env.BASE_URL;
 
 <style>
   .photo-detail-container {
-    max-width: 900px;
+    max-width: var(--max);
     margin: 0 auto;
   }
 
   .back-link {
     display: inline-block;
-    margin-bottom: 2rem;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    margin-bottom: var(--s5);
     color: var(--text-muted);
     text-decoration: none;
-    font-size: 0.9rem;
-    font-weight: 500;
     transition: color var(--transition-fast);
   }
 
@@ -107,34 +107,28 @@ const baseUrl = import.meta.env.BASE_URL;
   }
 
   .photo-header {
-    margin-bottom: 1.5rem;
-  }
-
-  .photo-header h1 {
-    font-family: var(--font-serif);
-    font-size: 2.2rem;
-    margin-bottom: 0.5rem;
-    line-height: 1.2;
+    margin-bottom: var(--s4);
   }
 
   .photo-meta-header {
-    font-size: 0.9rem;
+    font-family: var(--font-mono);
+    font-size: 12px;
     color: var(--text-muted);
   }
 
   .photo-showcase {
     width: 100%;
-    margin-bottom: 2.5rem;
+    margin-bottom: var(--s6);
     border: 1px solid var(--border);
     border-radius: 8px;
     overflow: hidden;
-    background-color: #000;
+    background-color: var(--surface);
   }
 
   .main-photo {
     width: 100%;
     height: auto;
-    max-height: 70vh;
+    max-height: 75vh;
     object-fit: contain;
     display: block;
     margin: 0 auto;
@@ -143,47 +137,53 @@ const baseUrl = import.meta.env.BASE_URL;
   .photo-body-wrapper {
     display: grid;
     grid-template-columns: 250px 1fr;
-    gap: 3rem;
+    gap: var(--s6);
     align-items: start;
   }
 
   /* Technical Details Sidebar */
   .photo-technical-details {
-    padding: 1.25rem;
-    background-color: var(--card-bg);
+    padding: 20px 22px;
+    background-color: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 6px;
+    border-radius: 12px;
   }
 
   .photo-technical-details h3 {
-    font-size: 0.9rem;
+    font-family: var(--font-mono);
+    font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: var(--text-muted);
-    margin-bottom: 1rem;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 0.5rem;
+    margin-bottom: 14px;
+    border-bottom: 1px dashed var(--border);
+    padding-bottom: 8px;
   }
 
   .photo-technical-details dl {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
     margin: 0;
   }
 
   .photo-technical-details dt {
-    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 11px;
     text-transform: uppercase;
     color: var(--text-muted);
-    margin-bottom: 0.15rem;
+    margin-bottom: 2px;
   }
 
   .photo-technical-details dd {
-    font-size: 0.9rem;
+    font-family: var(--font-sans);
+    font-size: 15px;
     font-weight: 500;
-    margin: 0;
+    margin: 0 0 12px;
     color: var(--text);
+  }
+  
+  .photo-technical-details dd:last-child {
+    margin-bottom: 0;
   }
 
   /* Photo Story (Prose) */
@@ -193,18 +193,10 @@ const baseUrl = import.meta.env.BASE_URL;
     color: var(--text);
   }
 
-  .prose :global(p) {
-    margin-bottom: 1.25rem;
-  }
-
-  .prose :global(p:last-child) {
-    margin-bottom: 0;
-  }
-
   @media (max-width: 768px) {
     .photo-body-wrapper {
       grid-template-columns: 1fr;
-      gap: 2rem;
+      gap: var(--s5);
     }
 
     .photo-technical-details {
