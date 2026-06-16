@@ -6,7 +6,7 @@ lastUpdated: 2026-06-16 # AGGIORNA SEMPRE LA DATA!!!!
 Sistemi Operativi ed Elettrotecnica per l'università. Storytelling fotografico per progetti personali.
 
 ## Progetti in corso
-+ Ho inziato a scrivere la prossima pagina del diario.
++ Ho iniziato a scrivere la prossima pagina del diario.
 + Sto integrando un portfolio dei miei lavori su questo sito. Al momento si trova [qui](https://egidiogiacoia98.myportfolio.com/home).
 
 ## Cosa sto leggendo

@@ -21,8 +21,8 @@
   --text: hsl(0, 0%, 10%);
   --text-muted: hsl(0, 0%, 40%);
   --border: hsla(0, 0%, 0%, 0.08);
-  --accent: hsl(20, 70%, 45%);
-  --accent-hover: hsl(20, 80%, 35%);
+  --accent: hsl(185, 61%, 22%); /* #16545A from manuale-di-voce.html */
+  --accent-hover: hsl(185, 61%, 16%);
   --card-bg: hsla(0, 0%, 0%, 0.02);
   --badge-in-progress-bg: hsl(35, 90%, 90%);
   --badge-in-progress-text: hsl(35, 80%, 35%);
@@ -36,8 +36,8 @@ html.dark {
   --text: hsl(30, 10%, 88%);
   --text-muted: hsl(30, 4%, 60%);
   --border: hsla(0, 0%, 100%, 0.08);
-  --accent: hsl(38, 70%, 60%);
-  --accent-hover: hsl(38, 80%, 70%);
+  --accent: hsl(176, 31%, 58%); /* #74B6B2 from manuale-di-voce.html */
+  --accent-hover: hsl(176, 41%, 68%);
   --card-bg: hsla(0, 0%, 100%, 0.03);
   --badge-in-progress-bg: hsl(35, 40%, 18%);
   --badge-in-progress-text: hsl(35, 80%, 70%);

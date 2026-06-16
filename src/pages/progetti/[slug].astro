@@ -89,15 +89,13 @@ const baseUrl = import.meta.env.BASE_URL;
   }
 
   .project-status.in-corso {
-    background-color: rgba(217, 119, 6, 0.1);
-    color: #d97706;
-    border: 1px solid rgba(217, 119, 6, 0.2);
+    background-color: var(--badge-in-progress-bg);
+    color: var(--badge-in-progress-text);
   }
 
   .project-status.completato {
-    background-color: rgba(5, 150, 105, 0.1);
-    color: #059669;
-    border: 1px solid rgba(5, 150, 105, 0.2);
+    background-color: var(--badge-completed-bg);
+    color: var(--badge-completed-text);
   }
 
   .external-link-container {

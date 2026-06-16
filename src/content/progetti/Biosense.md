@@ -1,6 +1,6 @@
 ---
 title: "BioSense"
-description: "l lusso della perfezione biologica"
+description: "Il lusso della perfezione biologica"
 status: "in corso" # Accetta solo: "in corso" oppure "completato"
 #link: "https://github.com/..." # Opzionale: inserisci l'URL di GitHub o del sito live. Cancella la riga se non c'è un link.
 pubDate: 2026-05-20 # Formato: AAAA-MM-GG. Usato internamente per ordinare i progetti dal più recente.
@@ -15,7 +15,7 @@ pubDate: 2026-05-20 # Formato: AAAA-MM-GG. Usato internamente per ordinare i pro
 -->
 
 ***Un bonsai morto. È da lì che tutto è cominciato.***
-Non per negligenza, ma per ignoranza,la stessa che accomuna chiunque abbia mai provato a coltivare qualcosa in casa senza sapere davvero di cosa avesse bisogno. 
+Non per negligenza, ma per ignoranza, la stessa che accomuna chiunque abbia mai provato a coltivare qualcosa in casa senza sapere davvero di cosa avesse bisogno. 
 
 ![Locandina BioSense](../../assets/BioSensePoster.jpg)
 
