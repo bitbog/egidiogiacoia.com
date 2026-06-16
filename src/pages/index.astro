@@ -79,6 +79,26 @@ const formatDate = (date: Date) => {
         </div>
       </a>
       
+      <a href={nowLink} class="nav-card">
+        <div class="card-header">
+          <span class="section-title">Now</span>
+        </div>
+        <div class="card-body">
+          <p class="card-desc">Cosa sto facendo esattamente in questo periodo della mia vita.</p>
+        </div>
+        <div class="card-footer">
+          <span class="card-meta">
+            {nowLastUpdated ? formatDate(nowLastUpdated) : "Scopri cosa faccio ora"}
+          </span>
+          <span class="card-arrow">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </span>
+        </div>
+      </a>
+  
       <a href={projectLink} class="nav-card">
         <div class="card-header">
           <span class="section-title">Progetti</span>
@@ -126,27 +146,8 @@ const formatDate = (date: Date) => {
           </span>
         </div>
       </a>
-
-      <a href={nowLink} class="nav-card">
-        <div class="card-header">
-          <span class="section-title">Now</span>
-        </div>
-        <div class="card-body">
-          <p class="card-desc">Cosa sto facendo esattamente in questo periodo della mia vita.</p>
-        </div>
-        <div class="card-footer">
-          <span class="card-meta">
-            {nowLastUpdated ? formatDate(nowLastUpdated) : "Scopri cosa faccio ora"}
-          </span>
-          <span class="card-arrow">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-              <polyline points="12 5 19 12 12 19"></polyline>
-            </svg>
-          </span>
-        </div>
-      </a>
     </div>
+
 
     <div class="contacts-section">
       <h2>Contatti</h2>
