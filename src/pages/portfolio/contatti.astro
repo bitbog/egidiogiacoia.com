@@ -1,0 +1,73 @@
+---
+import BaseLayout from '../../components/BaseLayout.astro';
+
+const email = 'scrivimiegidio@gmail.com';
+const mailto = `mailto:${email}?subject=Lavoriamo%20insieme`;
+const baseUrl = import.meta.env.BASE_URL;
+---
+
+<BaseLayout
+  title="Contatti | Portfolio | Egidio Giacoia"
+  description="Contatta Egidio Giacoia per collaborazioni, servizi fotografici ed eventi in Basilicata."
+>
+  <a href={`${baseUrl}portfolio`} class="back-link">&larr; Torna al portfolio</a>
+
+  <!-- ===================== CONTATTI ===================== -->
+  <section id="contatti" class="contact">
+    <div class="kicker"><span class="num">—</span><span class="lab">Contatti</span></div>
+    <h1>Lavoriamo insieme.</h1>
+    <p class="section-intro-text">
+      Hai un progetto — un luogo da raccontare, un evento da fissare, un ritratto da fare?
+      Raccontamelo: ascolto, pianifico e studio una soluzione su misura.
+    </p>
+    <a class="contact-btn" href={mailto}>{email}</a>
+  </section>
+</BaseLayout>
+
+<style>
+  .back-link {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    margin-bottom: var(--s5);
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+  .back-link:hover {
+    color: var(--accent);
+  }
+
+  section {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  .section-intro-text {
+    font-size: 1.12rem;
+    color: var(--muted);
+    max-width: 62ch;
+    margin-bottom: var(--s5);
+  }
+
+  /* ---------- CONTATTI ---------- */
+  .contact h1 {
+    font-size: clamp(28px, 5vw, 38px);
+    margin-bottom: var(--s4);
+  }
+
+  .contact-btn {
+    display: inline-block;
+    margin-top: var(--s3);
+    font-family: var(--font-mono);
+    font-size: 1.05rem;
+    letter-spacing: 0.02em;
+    color: var(--paper);
+    background: var(--accent);
+    text-decoration: none;
+    padding: 14px 24px;
+    border-radius: 10px;
+    transition: opacity var(--transition-fast), transform var(--transition-fast);
+  }
+  .contact-btn:hover { opacity: 0.95; transform: translateY(-1.5px); color: var(--paper); }
+</style>

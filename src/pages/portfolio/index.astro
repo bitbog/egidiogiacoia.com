@@ -1,95 +1,7 @@
 ---
 import BaseLayout from '../../components/BaseLayout.astro';
 
-/*
-  ────────────────────────────────────────────────────────────────────────
-  COME INSERIRE LE FOTO (i "riquadri" qui sotto sono segnaposto vuoti)
-  ────────────────────────────────────────────────────────────────────────
-  Ogni galleria è un semplice elenco. Ogni voce ha:
-    - cap: la didascalia (sobria, in mono). Lascia '' per nessuna didascalia.
-    - src: il percorso dell'immagine. Finché è vuoto ('') compare il riquadro.
-
-  Per aggiungere una foto:
-    1. Metti il file dentro la cartella  public/img/portfolio/
-       (es. public/img/portfolio/bosco-favino.jpg — nomi senza spazi né accenti)
-    2. Scrivi il percorso nel campo src, es.:
-       { cap: 'Bosco Favino', src: '/img/portfolio/bosco-favino.jpg' }
-    3. Salva. Il riquadro vuoto diventa la tua foto, con la sua didascalia.
-
-  Consiglio: larghezza foto ~1600–2000px, sotto 1MB (vedi README).
-  Puoi aggiungere o togliere voci liberamente: i riquadri si ridispongono da soli.
-  ────────────────────────────────────────────────────────────────────────
-*/
-
-// 01 · TURISMO E BRAND — Caso in evidenza: Visit Castelsaraceno
-// (wide: true => la foto fa da banner a tutta larghezza, sopra le tre colonne)
-const castelsaraceno: { cap: string; src: string; wide?: boolean }[] = [
-  { cap: 'Vista panoramica di Castelsaraceno', src: '/img/portfolio/vista-panoramica-castelsaraceno.jpg', wide: true },
-  { cap: 'Bosco Favino', src: '/img/portfolio/bosco-favino.jpg' },
-  { cap: 'Castelsaraceno di notte', src: '/img/portfolio/castelsaraceno-di-notte.jpg' },
-  { cap: 'Ciaspole sul Monte Armizzone', src: '/img/portfolio/ciaspole-sul-monte-armizzone.jpg' },
-  { cap: 'Monte Armizzone al tramonto', src: '/img/portfolio/monte-armizzone-al-tramonto.jpg' },
-  { cap: 'Pino Loricato', src: '/img/portfolio/pino-loricato.jpg' },
-  { cap: 'Ponte tra i Due Parchi', src: '/img/portfolio/ponte-tra-i-due-parchi.JPG' },
-  { cap: 'Mountain bike al Bosco Favino', src: '/img/portfolio/mountain-bike-al-bosco-favino.jpg' },
-];
-
-// 01 · Grafiche e materiale promozionale (formato verticale)
-const grafiche = [
-  { cap: 'Poster · Per Aspera ad Astra', src: '/img/portfolio/poster-per-aspera-ad-astra.png' },
-  { cap: 'Poster · Festa della Montagna 2022', src: '/img/portfolio/poster-festa-della-montagna-2022.jpg' },
-  { cap: 'Biglietto · Per Aspera ad Astra', src: '/img/portfolio/biglietto-per-aspera-ad-astra.png' },
-];
-
-// 01 · Hospitality — Leukòs B&B
-const leukos = [
-  { cap: 'Camera matrimoniale', src: '/img/portfolio/camera-matrimoniale.png' },
-  { cap: 'Dettaglio sulla colazione', src: '/img/portfolio/dettaglio-sulla-colazione.png' },
-  { cap: 'Esterni ed esperienze', src: '/img/portfolio/esterni-ed-esperienze.png' },
-];
-
-// 01 · Hospitality — A casa di Carla
-const carla = [
-  { cap: 'Dettaglio sulla cucina', src: '/img/portfolio/dettaglio-sulla-cucina.png' },
-  { cap: "Arredamento d'autunno", src: '/img/portfolio/arredamento-d-autunno.png' },
-  { cap: 'Tavola per la colazione', src: '/img/portfolio/tavola-per-la-colazione.jpg' },
-];
-
-// 02 · EVENTI — Feste private
-const festePrivate = [
-  { cap: 'Il protagonista · 18 anni', src: '/img/portfolio/il-protagonista-18-anni.jpg' },
-  { cap: 'Festa e balli', src: '/img/portfolio/festa-e-balli.jpg' },
-  { cap: "Fuochi d'artificio", src: '/img/portfolio/fuochi-d-artificio.jpg' },
-  { cap: 'Dettagli di una festa', src: '/img/portfolio/dettagli-di-una-festa.jpg' },
-  { cap: 'Una vita insieme', src: '/img/portfolio/una-vita-insieme.jpg' },
-  { cap: 'Divertimento', src: '/img/portfolio/divertimento.jpg' },
-];
-
-// 02 · EVENTI — Concerti e live (didascalie libere)
-const concerti = [
-  { cap: 'Spartito', src: '/img/portfolio/spartito.jpg' },
-  { cap: 'Il Maestro', src: '/img/portfolio/il-maestro.jpg' },
-  { cap: 'Il bassista', src: '/img/portfolio/il-bassista.jpg' },
-  { cap: 'Il batterista', src: '/img/portfolio/il-batterista.png' },
-  { cap: 'il sassofonista', src: '/img/portfolio/il-sassofonista.png' },
-  { cap: 'Dettagli', src: '/img/portfolio/dettagli.png' },
-];
-
-// 03 · RITRATTI (formato verticale, didascalie libere)
-const ritratti = [
-  { cap: 'Come su Vogue', src: '/img/portfolio/come-su-vogue.jpg' },
-  { cap: 'La scalata', src: '/img/portfolio/la-scalata.jpg' },
-  { cap: 'Danza e passione', src: '/img/portfolio/danza-e-passione.jpg' },
-  { cap: 'la montagna è vita', src: '/img/portfolio/la-montagna-è-vita.jpg' },
-  { cap: 'Sono il King', src: '/img/portfolio/sono-il-king.jpg' },
-  { cap: 'In studio', src: '/img/portfolio/in-studio.png' },
-];
-
-// CHI SONO — il tuo ritratto (lascia '' per il riquadro vuoto)
-const fotoChiSono = '/img/portfolio/profilo.jpg'; // es. '/img/portfolio/egidio.jpg'
-
-const email = 'scrivimiegidio@gmail.com';
-const mailto = `mailto:${email}?subject=Lavoriamo%20insieme`;
+const baseUrl = import.meta.env.BASE_URL;
 ---
 
 <BaseLayout
@@ -105,190 +17,39 @@ const mailto = `mailto:${email}?subject=Lavoriamo%20insieme`;
       Lavoro con destinazioni, brand e persone per trasformare un luogo, una serata o un volto
       in immagini che restano e che portano un risultato.
     </p>
-    <nav class="areas" aria-label="Aree di lavoro">
-      <a href="#turismo">Turismo &amp; Brand</a>
-      <a href="#eventi">Eventi</a>
-      <a href="#ritratti">Ritratti</a>
-    </nav>
   </section>
 
-  <!-- ===================== 01 · TURISMO E BRAND ===================== -->
-  <section id="turismo">
-    <div class="kicker"><span class="num">01</span><span class="lab">Turismo &amp; Brand</span></div>
-    <h2>Raccontare un luogo finché non viene voglia di andarci.</h2>
-    <p>
-      Creo strategie visive per destinazioni e attività che vogliono raccontarsi online.
-      Fotografia, video e design per trasformare l'identità di un territorio o di un brand
-      in un'esperienza che attrae turisti e clienti. Non solo bei contenuti, ma un obiettivo concreto.
-    </p>
+  <!-- ===================== PORTFOLIO NAVIGATION GRID ===================== -->
+  <section class="portfolio-hub">
+    <div class="portfolio-grid">
+      <!-- Brand & Turismo -->
+      <a href={`${baseUrl}portfolio/brand-turismo`} class="portfolio-card category-card brand-turismo-card">
+        <div class="card-bg-overlay"></div>
+        <span class="card-title">Brand &amp; Turismo</span>
+      </a>
 
-    <!-- Caso in evidenza -->
-    <article class="case">
-      <p class="case-tag">Caso in evidenza</p>
-      <h3 class="case-title">Visit Castelsaraceno</h3>
-      <div class="case-grid">
-        <div>
-          <span class="case-k">Obiettivo</span>
-          <p>Aumentare la visibilità online e l'attrattività turistica del borgo, con contenuti per i canali social e il materiale promozionale.</p>
-        </div>
-        <div>
-          <span class="case-k">Soluzione</span>
-          <p>Una serie di shooting su paesaggio, esperienze e dettagli del borgo, più le grafiche per le campagne social e gli eventi.</p>
-        </div>
-      </div>
-    </article>
+      <!-- Eventi -->
+      <a href={`${baseUrl}portfolio/eventi`} class="portfolio-card category-card eventi-card">
+        <div class="card-bg-overlay"></div>
+        <span class="card-title">Eventi</span>
+      </a>
 
-    <!-- Galleria caso (riquadri vuoti da riempire) -->
-    <div class="gallery g-3">
-      {castelsaraceno.map((s) => (
-        <figure class={s.wide ? 'shot shot-wide' : 'shot'}>
-          {s.src
-            ? <img src={s.src} alt={s.cap || 'Castelsaraceno — Egidio Giacoia'} loading="lazy" decoding="async" />
-            : <div class="frame"><span>foto</span></div>}
-          {s.cap && <figcaption>{s.cap}</figcaption>}
-        </figure>
-      ))}
+      <!-- Ritratti -->
+      <a href={`${baseUrl}portfolio/ritratti`} class="portfolio-card category-card ritratti-card">
+        <div class="card-bg-overlay"></div>
+        <span class="card-title">Ritratti</span>
+      </a>
+
+      <!-- Chi sono -->
+      <a href={`${baseUrl}portfolio/chi-sono`} class="portfolio-card long-card chi-sono-card">
+        <span class="long-card-title">Chi sono</span>
+      </a>
+
+      <!-- Contatti -->
+      <a href={`${baseUrl}portfolio/contatti`} class="portfolio-card long-card contatti-card">
+        <span class="long-card-title">Contatti</span>
+      </a>
     </div>
-
-    <h3 class="sub">Grafiche e materiale promozionale, alcuni esempi</h3>
-    <div class="gallery g-3 g-portrait">
-      {grafiche.map((s) => (
-        <figure class="shot">
-          {s.src
-            ? <img src={s.src} alt={s.cap || 'Grafica — Egidio Giacoia'} loading="lazy" decoding="async" />
-            : <div class="frame"><span>grafica</span></div>}
-          {s.cap && <figcaption>{s.cap}</figcaption>}
-        </figure>
-      ))}
-    </div>
-
-    <h3 class="sub">Hospitality — collaborazioni</h3>
-    <p class="sub-desc">Servizi per strutture ricettive del territorio: ambienti, dettagli ed esperienze.</p>
-
-    <p class="collab-name">Leukòs B&amp;B <a class="collab-link" href="https://www.leukosbnb.it" target="_blank" rel="noopener noreferrer">leukosbnb.it ↗</a></p>
-    <div class="gallery g-3">
-      {leukos.map((s) => (
-        <figure class="shot">
-          {s.src
-            ? <img src={s.src} alt={s.cap || 'Leukòs B&B — Egidio Giacoia'} loading="lazy" decoding="async" />
-            : <div class="frame"><span>foto</span></div>}
-          {s.cap && <figcaption>{s.cap}</figcaption>}
-        </figure>
-      ))}
-    </div>
-
-    <p class="collab-name">A casa di Carla</p>
-    <div class="gallery g-3">
-      {carla.map((s) => (
-        <figure class="shot">
-          {s.src
-            ? <img src={s.src} alt={s.cap || 'A casa di Carla — Egidio Giacoia'} loading="lazy" decoding="async" />
-            : <div class="frame"><span>foto</span></div>}
-          {s.cap && <figcaption>{s.cap}</figcaption>}
-        </figure>
-      ))}
-    </div>
-
-    <p class="area-cta">Hai un brand o una destinazione da promuovere? <a href={mailto}>Scrivimi</a>.</p>
-  </section>
-
-  <!-- ===================== 02 · EVENTI ===================== -->
-  <section id="eventi">
-    <div class="kicker"><span class="num">02</span><span class="lab">Eventi</span></div>
-    <h2>L'energia di una serata, prima che svanisca.</h2>
-    <p>
-      Ogni evento è un'esplosione di momenti irripetibili. Il mio lavoro è coglierne l'essenza
-      con uno stile reportagistico: presente quando serve, mai invadente.
-    </p>
-
-    <h3 class="sub">Feste private</h3>
-    <p class="sub-desc">Con discrezione e attenzione ai dettagli, catturo sorrisi, abbracci e allegria. Diciottesimi, anniversari, ricorrenze a Potenza e dintorni — ricordi che non sbiadiscono.</p>
-    <div class="gallery g-3">
-      {festePrivate.map((s) => (
-        <figure class="shot">
-          {s.src
-            ? <img src={s.src} alt={s.cap || 'Evento — Egidio Giacoia'} loading="lazy" decoding="async" />
-            : <div class="frame"><span>foto</span></div>}
-          {s.cap && <figcaption>{s.cap}</figcaption>}
-        </figure>
-      ))}
-    </div>
-
-    <h3 class="sub">Concerti e spettacoli live</h3>
-    <p class="sub-desc">Sul palco e tra il pubblico, l'energia pura della musica dal vivo: concerti, band e festival in tutta la Basilicata.</p>
-    <div class="gallery g-3">
-      {concerti.map((s) => (
-        <figure class="shot">
-          {s.src
-            ? <img src={s.src} alt={s.cap || 'Live — Egidio Giacoia'} loading="lazy" decoding="async" />
-            : <div class="frame"><span>foto</span></div>}
-          {s.cap && <figcaption>{s.cap}</figcaption>}
-        </figure>
-      ))}
-    </div>
-
-    <h3 class="sub">Come lavoro</h3>
-    <ul class="howto">
-      <li><div><strong>Discrezione e professionalità.</strong><span>Durante l'evento sono una presenza quasi invisibile, pronta a cogliere ogni attimo senza disturbare.</span></div></li>
-      <li><div><strong>Focus sull'autenticità.</strong><span>Stile reportagistico, scatti spontanei: racconto la vera atmosfera, non una posa.</span></div></li>
-      <li><div><strong>Consegna veloce.</strong><span>Una selezione dei migliori scatti, post-prodotti in alta risoluzione, nei tempi concordati.</span></div></li>
-    </ul>
-
-    <p class="area-cta">Stai organizzando un evento? <a href={mailto}>Verifica la disponibilità</a>.</p>
-  </section>
-
-  <!-- ===================== 03 · RITRATTI ===================== -->
-  <section id="ritratti">
-    <div class="kicker"><span class="num">03</span><span class="lab">Ritratti</span></div>
-    <h2>Un ritratto che parli davvero di chi sei.</h2>
-    <p>
-      Ritratti professionali e personali: un'immagine che non si limita a posare, ma racconta.
-      Per una foto profilo che funzioni davvero, o per un ritratto da tenere.
-    </p>
-    <div class="gallery g-3 g-portrait">
-      {ritratti.map((s) => (
-        <figure class="shot">
-          {s.src
-            ? <img src={s.src} alt={s.cap || 'Ritratto — Egidio Giacoia'} loading="lazy" decoding="async" />
-            : <div class="frame"><span>foto</span></div>}
-          {s.cap && <figcaption>{s.cap}</figcaption>}
-        </figure>
-      ))}
-    </div>
-  </section>
-
-  <!-- ===================== CHI SONO ===================== -->
-  <section id="chi-sono">
-    <div class="kicker"><span class="num">—</span><span class="lab">Chi sono</span></div>
-    <div class="bio">
-      <figure class="bio-photo">
-        {fotoChiSono
-          ? <img src={fotoChiSono} alt="Egidio Giacoia" loading="lazy" decoding="async" />
-          : <div class="frame frame-portrait"><span>ritratto</span></div>}
-      </figure>
-      <div class="bio-text">
-        <h2>Egidio Giacoia</h2>
-        <p>
-          Fotografo e content creator con un'anima da informatico. L'informatica mi ha insegnato a
-          vedere le strutture e a risolvere problemi; la fotografia a cogliere l'attimo, l'emozione e la luce.
-        </p>
-        <p>
-          Lavoro in Basilicata, tra brand, destinazioni e persone, cercando la precisione tecnica
-          al servizio della bellezza più spontanea. Quando non ho la macchina in mano, mi trovi
-          su un sentiero di montagna o dentro un libro di tecnologia: credo che la curiosità sia il motore di tutto.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===================== CONTATTI ===================== -->
-  <section id="contatti" class="contact">
-    <h2>Lavoriamo insieme.</h2>
-    <p>
-      Hai un progetto — un luogo da raccontare, un evento da fissare, un ritratto da fare?
-      Raccontamelo: ascolto, pianifico e studio una soluzione su misura.
-    </p>
-    <a class="contact-btn" href={mailto}>{email}</a>
   </section>
 </BaseLayout>
 
@@ -311,237 +72,185 @@ const mailto = `mailto:${email}?subject=Lavoriamo%20insieme`;
   }
   .lede strong { color: var(--text); font-weight: 500; }
 
-  .areas {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--s2);
-  }
-  .areas a {
-    font-family: var(--font-mono);
-    font-size: 12.5px;
-    letter-spacing: 0.02em;
-    text-decoration: none;
-    color: var(--text);
-    border: 1px solid var(--border);
-    background: var(--surface);
-    padding: 7px 13px;
-    border-radius: 999px;
-    transition: border-color var(--transition-fast), color var(--transition-fast);
-  }
-  .areas a:hover { border-color: var(--accent); color: var(--accent); }
-
-  /* ---------- SUB HEADINGS ---------- */
-  .sub {
-    margin-top: var(--s7);
-    margin-bottom: var(--s2);
-  }
-  .sub-desc {
-    color: var(--muted);
-    font-size: 0.98rem;
-    margin-bottom: var(--s4);
+  /* ---------- PORTFOLIO HUB GRID ---------- */
+  .portfolio-hub {
+    border-top: 1px solid var(--border);
+    padding-top: var(--s7);
   }
 
-  /* ---------- CASE STUDY ---------- */
-  .case {
+  .portfolio-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: var(--s5);
+    margin: var(--s2) 0 var(--s6);
+  }
+
+  /* Base properties for all portfolio cards */
+  .portfolio-card {
     border: 1px solid var(--border);
     border-radius: 12px;
-    background: var(--surface);
-    padding: 22px 24px;
-    margin: var(--s5) 0 var(--s5);
-  }
-  .case-tag {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: var(--s2);
-  }
-  .case-title {
-    font-family: var(--font-serif);
-    font-size: 1.5rem;
-    font-weight: 500;
-    color: var(--text);
-    text-transform: none;
-    letter-spacing: -0.01em;
-    margin: 0 0 var(--s4);
-  }
-  .case-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--s5);
-  }
-  .case-k {
-    display: block;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: var(--s1);
-  }
-  .case-grid p { margin: 0; font-size: 0.98rem; }
-  @media (max-width: 560px) {
-    .case-grid { grid-template-columns: 1fr; gap: var(--s4); }
-  }
-
-  /* ---------- COLLAB LABELS ---------- */
-  .collab-name {
-    font-family: var(--font-serif);
-    font-size: 1.1rem;
-    color: var(--text);
-    margin: var(--s5) 0 var(--s3);
+    text-decoration: none;
+    box-sizing: border-box;
     display: flex;
-    align-items: baseline;
-    gap: var(--s3);
-    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    transition: border-color var(--transition-fast), background-color var(--transition-fast), box-shadow var(--transition-fast);
   }
-  .collab-link {
-    font-family: var(--font-mono);
-    font-size: 12px;
+
+  /* --- Category Cards (With blurred background image) --- */
+  .category-card {
+    height: 185px;
+    color: #ffffff;
+    text-align: center;
+    z-index: 1;
+  }
+
+  .category-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    background-color: var(--surface); /* Fallback color */
+    z-index: -2;
+    transition: transform var(--transition-medium);
+  }
+
+  /* 
+    Background Images. 
+    Per inserire le tue foto sfocate di sfondo:
+    1. Salva i file in /public/img/portfolio/ usando i nomi qui sotto 
+       (es. bg-brand-turismo.jpg, bg-eventi.jpg, bg-ritratti.jpg)
+    2. In alternativa, puoi scommentare i percorsi fallback per usare le foto originali.
+  */
+  .brand-turismo-card::before {
+    background-image: url('/img/portfolio/bg-brand-turismo.jpg');
+    /* Per usare la foto originale come fallback temporaneo: */
+    /* background-image: url('/img/portfolio/vista-panoramica-castelsaraceno.jpg'); */
+  }
+
+  .eventi-card::before {
+    background-image: url('/img/portfolio/bg-eventi.jpg');
+    /* Per usare la foto originale come fallback temporaneo: */
+    /* background-image: url('/img/portfolio/festa-e-balli.jpg'); */
+  }
+
+  .ritratti-card::before {
+    background-image: url('/img/portfolio/bg-ritratti.jpg');
+    /* Per usare la foto originale come fallback temporaneo: */
+    /* background-image: url('/img/portfolio/come-su-vogue.jpg'); */
+  }
+
+  .card-bg-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.65));
+    z-index: -1;
+    transition: background-color var(--transition-fast);
+  }
+
+  .category-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 10px 25px -10px color-mix(in srgb, var(--accent) 30%, transparent);
+  }
+
+  .category-card:hover::before {
+    transform: scale(1.06);
+  }
+
+  .category-card:hover .card-bg-overlay {
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.75));
+  }
+
+  .category-card .card-title {
+    font-family: var(--font-serif);
+    font-size: 1.35rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  /* --- Long Cards (Chi sono / Contatti) --- */
+  .long-card {
+    height: 100px;
+    background: var(--surface);
     color: var(--accent);
-    text-decoration: none;
-    border-bottom: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
-  }
-  .collab-link:hover { border-color: var(--accent); }
-
-  /* ---------- GALLERY (masonry: ogni foto nel suo rapporto reale) ---------- */
-  .gallery {
-    width: min(1040px, 90vw);
-    margin-left: 50%;
-    transform: translateX(-50%);
-    column-count: 3;
-    column-gap: 12px;
-    margin-top: var(--s4);
-    margin-bottom: var(--s4);
-  }
-  @media (max-width: 720px) { .gallery { column-count: 2; } }
-  @media (max-width: 460px) { .gallery { column-count: 1; } }
-
-  .shot {
-    margin: 0 0 12px;
-    break-inside: avoid;
-    -webkit-column-break-inside: avoid;
   }
 
-  /* Immagine reale: rapporto di forma effettivo, nessun ritaglio */
-  .shot img {
-    width: 100%;
-    height: auto;
-    display: block;
-    border-radius: 8px;
-    border: 1px solid var(--border);
+  .long-card:hover {
+    border-color: var(--accent);
+    background-color: var(--accent-2);
   }
 
-  /* Riquadro segnaposto: tiene un formato finché non inserisci la foto */
-  .frame {
-    aspect-ratio: var(--ar, 3 / 2);
-    width: 100%;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    display: grid;
-    place-items: center;
-    background: linear-gradient(135deg, var(--accent-2), color-mix(in srgb, var(--accent) 16%, var(--surface)));
-  }
-  .frame span {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.06em;
-    color: var(--muted);
+  .long-card-title {
+    font-family: var(--font-serif);
+    font-size: 1.6rem;
+    font-weight: 500;
+    letter-spacing: -0.015em;
   }
 
-  .g-portrait { --ar: 3 / 4; }
-
-  /* Banner a tutta larghezza: sopra le tre colonne */
-  .shot-wide {
-    column-span: all;
-    margin-bottom: 16px;
+  /* Desktop Grid placement */
+  .brand-turismo-card { order: 1; }
+  .eventi-card { order: 2; }
+  .ritratti-card { order: 3; }
+  
+  .chi-sono-card {
+    grid-column: span 3;
+    order: 4;
   }
-  .shot-wide .frame { aspect-ratio: 16 / 7; }
-
-  figcaption {
-    font-family: var(--font-mono);
-    font-size: 11.5px;
-    color: var(--muted);
-    margin-top: 8px;
-    line-height: 1.4;
+  
+  .contatti-card {
+    grid-column: span 3;
+    order: 5;
   }
 
-  /* ---------- AREA CTA (riga sobria a fine sezione) ---------- */
-  .area-cta {
-    margin-top: var(--s6);
-    font-size: 1.02rem;
-    color: var(--text);
-  }
-  .area-cta a {
-    color: var(--accent);
-    text-decoration: none;
-    border-bottom: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
-    transition: border-color var(--transition-fast);
-  }
-  .area-cta a:hover { border-color: var(--accent); }
+  /* ---------- RESPONSIVE / MOBILE ---------- */
+  @media (max-width: 600px) {
+    .portfolio-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--s4);
+    }
 
-  /* ---------- COME LAVORO ---------- */
-  .howto {
-    list-style: none;
-    margin: var(--s4) 0 0;
-    padding: 0;
-  }
-  .howto li {
-    display: grid;
-    grid-template-columns: 18px 1fr;
-    gap: 14px;
-    padding: 13px 0;
-    border-top: 1px solid var(--border);
-  }
-  .howto li:first-child { border-top: none; }
-  .howto li::before {
-    content: "";
-    width: 7px;
-    height: 7px;
-    margin-top: 10px;
-    border-radius: 50%;
-    background: var(--accent);
-  }
-  .howto strong { font-weight: 600; }
-  .howto span { display: block; color: var(--muted); font-size: 0.95rem; margin-top: 2px; }
+    /* Small pills for Chi sono and Contatti at the top */
+    .chi-sono-card {
+      grid-column: span 1;
+      order: 1;
+      height: 52px;
+      border-radius: 999px;
+    }
 
-  /* ---------- CHI SONO ---------- */
-  .bio {
-    display: grid;
-    grid-template-columns: 220px 1fr;
-    gap: var(--s6);
-    align-items: start;
-    margin-top: var(--s4);
-  }
-  .bio-photo { margin: 0; }
-  .frame-portrait { aspect-ratio: 4 / 5; }
-  .bio-photo img {
-    width: 100%;
-    height: auto;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    display: block;
-  }
-  .bio-text h2 { margin-top: 0; }
-  @media (max-width: 560px) {
-    .bio { grid-template-columns: 1fr; gap: var(--s4); }
-    .bio-photo { max-width: 240px; }
-  }
+    .contatti-card {
+      grid-column: span 1;
+      order: 2;
+      height: 52px;
+      border-radius: 999px;
+    }
 
-  /* ---------- CONTATTI ---------- */
-  .contact-btn {
-    display: inline-block;
-    margin-top: var(--s3);
-    font-family: var(--font-mono);
-    font-size: 1rem;
-    letter-spacing: 0.02em;
-    color: var(--paper);
-    background: var(--accent);
-    text-decoration: none;
-    padding: 13px 22px;
-    border-radius: 10px;
-    transition: opacity var(--transition-fast), transform var(--transition-fast);
+    .chi-sono-card .long-card-title,
+    .contatti-card .long-card-title {
+      font-family: var(--font-sans);
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* Categories stack below the pills */
+    .brand-turismo-card {
+      grid-column: span 2;
+      order: 3;
+    }
+
+    .eventi-card {
+      grid-column: span 2;
+      order: 4;
+    }
+
+    .ritratti-card {
+      grid-column: span 2;
+      order: 5;
+    }
   }
-  .contact-btn:hover { opacity: 0.9; transform: translateY(-1px); color: var(--paper); }
 </style>

@@ -1,0 +1,207 @@
+---
+import BaseLayout from '../../components/BaseLayout.astro';
+
+// 02 · EVENTI — Feste private
+const festePrivate = [
+  { cap: 'Il protagonista · 18 anni', src: '/img/portfolio/il-protagonista-18-anni.jpg' },
+  { cap: 'Festa e balli', src: '/img/portfolio/festa-e-balli.jpg' },
+  { cap: "Fuochi d'artificio", src: '/img/portfolio/fuochi-d-artificio.jpg' },
+  { cap: 'Dettagli di una festa', src: '/img/portfolio/dettagli-di-una-festa.jpg' },
+  { cap: 'Una vita insieme', src: '/img/portfolio/una-vita-insieme.jpg' },
+  { cap: 'Divertimento', src: '/img/portfolio/divertimento.jpg' },
+];
+
+// 02 · EVENTI — Concerti e live (didascalie libere)
+const concerti = [
+  { cap: 'Spartito', src: '/img/portfolio/spartito.jpg' },
+  { cap: 'Il Maestro', src: '/img/portfolio/il-maestro.jpg' },
+  { cap: 'Il bassista', src: '/img/portfolio/il-bassista.jpg' },
+  { cap: 'Il batterista', src: '/img/portfolio/il-batterista.png' },
+  { cap: 'il sassofonista', src: '/img/portfolio/il-sassofonista.png' },
+  { cap: 'Dettagli', src: '/img/portfolio/dettagli.png' },
+];
+
+const email = 'scrivimiegidio@gmail.com';
+const mailto = `mailto:${email}?subject=Lavoriamo%20insieme`;
+const baseUrl = import.meta.env.BASE_URL;
+---
+
+<BaseLayout
+  title="Eventi | Portfolio | Egidio Giacoia"
+  description="Servizi fotografici reportage per concerti, festival e feste private a Potenza e in Basilicata."
+>
+  <a href={`${baseUrl}portfolio`} class="back-link">&larr; Torna al portfolio</a>
+
+  <!-- ===================== 02 · EVENTI ===================== -->
+  <section id="eventi">
+    <div class="kicker"><span class="num">02</span><span class="lab">Eventi</span></div>
+    <h1>L'energia di una serata, prima che svanisca.</h1>
+    <p class="section-intro-text">
+      Ogni evento è un'esplosione di momenti irripetibili. Il mio lavoro è coglierne l'essenza
+      con uno stile reportagistico: presente quando serve, mai invadente.
+    </p>
+
+    <h3 class="sub">Feste private</h3>
+    <p class="sub-desc">Con discrezione e attenzione ai dettagli, catturo sorrisi, abbracci e allegria. Diciottesimi, anniversari, ricorrenze a Potenza e dintorni — ricordi che non sbiadiscono.</p>
+    <div class="gallery g-3">
+      {festePrivate.map((s) => (
+        <figure class="shot">
+          {s.src
+            ? <img src={s.src} alt={s.cap || 'Evento — Egidio Giacoia'} loading="lazy" decoding="async" />
+            : <div class="frame"><span>foto</span></div>}
+          {s.cap && <figcaption>{s.cap}</figcaption>}
+        </figure>
+      ))}
+    </div>
+
+    <h3 class="sub">Concerti e spettacoli live</h3>
+    <p class="sub-desc">Sul palco e tra il pubblico, l'energia pura della musica dal vivo: concerti, band e festival in tutta la Basilicata.</p>
+    <div class="gallery g-3">
+      {concerti.map((s) => (
+        <figure class="shot">
+          {s.src
+            ? <img src={s.src} alt={s.cap || 'Live — Egidio Giacoia'} loading="lazy" decoding="async" />
+            : <div class="frame"><span>foto</span></div>}
+          {s.cap && <figcaption>{s.cap}</figcaption>}
+        </figure>
+      ))}
+    </div>
+
+    <h3 class="sub">Come lavoro</h3>
+    <ul class="howto">
+      <li><div><strong>Discrezione e professionalità.</strong><span>Durante l'evento sono una presenza quasi invisibile, pronta a cogliere ogni attimo senza disturbare.</span></div></li>
+      <li><div><strong>Focus sull'autenticità.</strong><span>Stile reportagistico, scatti spontanei: racconto la vera atmosfera, non una posa.</span></div></li>
+      <li><div><strong>Consegna veloce.</strong><span>Una selezione dei migliori scatti, post-prodotti in alta risoluzione, nei tempi concordati.</span></div></li>
+    </ul>
+
+    <p class="area-cta">Stai organizzando un evento? <a href={mailto}>Verifica la disponibilità</a>.</p>
+  </section>
+</BaseLayout>
+
+<style>
+  .back-link {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    margin-bottom: var(--s5);
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+  .back-link:hover {
+    color: var(--accent);
+  }
+
+  .section-intro-text {
+    font-size: 1.12rem;
+    color: var(--muted);
+    max-width: 62ch;
+    margin-bottom: var(--s6);
+  }
+
+  section {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  /* ---------- SUB HEADINGS ---------- */
+  .sub {
+    margin-top: var(--s7);
+    margin-bottom: var(--s2);
+  }
+  .sub-desc {
+    color: var(--muted);
+    font-size: 0.98rem;
+    margin-bottom: var(--s4);
+  }
+
+  /* ---------- GALLERY (masonry) ---------- */
+  .gallery {
+    width: min(1040px, 90vw);
+    margin-left: 50%;
+    transform: translateX(-50%);
+    column-count: 3;
+    column-gap: 12px;
+    margin-top: var(--s4);
+    margin-bottom: var(--s4);
+  }
+  @media (max-width: 720px) { .gallery { column-count: 2; } }
+  @media (max-width: 460px) { .gallery { column-count: 1; } }
+
+  .shot {
+    margin: 0 0 12px;
+    break-inside: avoid;
+    -webkit-column-break-inside: avoid;
+  }
+
+  .shot img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+
+  .frame {
+    aspect-ratio: var(--ar, 3 / 2);
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, var(--accent-2), color-mix(in srgb, var(--accent) 16%, var(--surface)));
+  }
+  .frame span {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+  }
+
+  figcaption {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--muted);
+    margin-top: 8px;
+    line-height: 1.4;
+  }
+
+  /* ---------- AREA CTA ---------- */
+  .area-cta {
+    margin-top: var(--s6);
+    font-size: 1.02rem;
+    color: var(--text);
+  }
+  .area-cta a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+    transition: border-color var(--transition-fast);
+  }
+  .area-cta a:hover { border-color: var(--accent); }
+
+  /* ---------- COME LAVORO ---------- */
+  .howto {
+    list-style: none;
+    margin: var(--s4) 0 0;
+    padding: 0;
+  }
+  .howto li {
+    display: grid;
+    grid-template-columns: 18px 1fr;
+    gap: 14px;
+    padding: 13px 0;
+    border-top: 1px solid var(--border);
+  }
+  .howto li:first-child { border-top: none; }
+  .howto li::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    margin-top: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+  .howto strong { font-weight: 600; }
+  .howto span { display: block; color: var(--muted); font-size: 0.95rem; margin-top: 2px; }
+</style>

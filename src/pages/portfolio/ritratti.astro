@@ -1,0 +1,122 @@
+---
+import BaseLayout from '../../components/BaseLayout.astro';
+
+// 03 · RITRATTI (formato verticale, didascalie libere)
+const ritratti = [
+  { cap: 'Come su Vogue', src: '/img/portfolio/come-su-vogue.jpg' },
+  { cap: 'La scalata', src: '/img/portfolio/la-scalata.jpg' },
+  { cap: 'Danza e passione', src: '/img/portfolio/danza-e-passione.jpg' },
+  { cap: 'la montagna è vita', src: '/img/portfolio/la-montagna-è-vita.jpg' },
+  { cap: 'Sono il King', src: '/img/portfolio/sono-il-king.jpg' },
+  { cap: 'In studio', src: '/img/portfolio/in-studio.png' },
+];
+
+const baseUrl = import.meta.env.BASE_URL;
+---
+
+<BaseLayout
+  title="Ritratti | Portfolio | Egidio Giacoia"
+  description="Servizi fotografici di ritratto in studio o all'aperto a Potenza e in Basilicata."
+>
+  <a href={`${baseUrl}portfolio`} class="back-link">&larr; Torna al portfolio</a>
+
+  <!-- ===================== 03 · RITRATTI ===================== -->
+  <section id="ritratti">
+    <div class="kicker"><span class="num">03</span><span class="lab">Ritratti</span></div>
+    <h1>Un ritratto che parli davvero di chi sei.</h1>
+    <p class="section-intro-text">
+      Ritratti professionali e personali: un'immagine che non si limita a posare, ma racconta.
+      Per una foto profilo che funzioni davvero, o per un ritratto da tenere.
+    </p>
+    <div class="gallery g-3 g-portrait">
+      {ritratti.map((s) => (
+        <figure class="shot">
+          {s.src
+            ? <img src={s.src} alt={s.cap || 'Ritratto — Egidio Giacoia'} loading="lazy" decoding="async" />
+            : <div class="frame"><span>foto</span></div>}
+          {s.cap && <figcaption>{s.cap}</figcaption>}
+        </figure>
+      ))}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .back-link {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    margin-bottom: var(--s5);
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+  .back-link:hover {
+    color: var(--accent);
+  }
+
+  .section-intro-text {
+    font-size: 1.12rem;
+    color: var(--muted);
+    max-width: 62ch;
+    margin-bottom: var(--s6);
+  }
+
+  section {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  /* ---------- GALLERY (masonry) ---------- */
+  .gallery {
+    width: min(1040px, 90vw);
+    margin-left: 50%;
+    transform: translateX(-50%);
+    column-count: 3;
+    column-gap: 12px;
+    margin-top: var(--s4);
+    margin-bottom: var(--s4);
+  }
+  @media (max-width: 720px) { .gallery { column-count: 2; } }
+  @media (max-width: 460px) { .gallery { column-count: 1; } }
+
+  .shot {
+    margin: 0 0 12px;
+    break-inside: avoid;
+    -webkit-column-break-inside: avoid;
+  }
+
+  .shot img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+
+  .frame {
+    aspect-ratio: var(--ar, 3 / 2);
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, var(--accent-2), color-mix(in srgb, var(--accent) 16%, var(--surface)));
+  }
+  .frame span {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+  }
+
+  .g-portrait { --ar: 3 / 4; }
+
+  figcaption {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--muted);
+    margin-top: 8px;
+    line-height: 1.4;
+  }
+</style>

@@ -1,0 +1,303 @@
+---
+import BaseLayout from '../../components/BaseLayout.astro';
+
+// 01 · TURISMO E BRAND — Caso in evidenza: Visit Castelsaraceno
+// (wide: true => la foto fa da banner a tutta larghezza, sopra le tre colonne)
+const castelsaraceno: { cap: string; src: string; wide?: boolean }[] = [
+  { cap: 'Vista panoramica di Castelsaraceno', src: '/img/portfolio/vista-panoramica-castelsaraceno.jpg', wide: true },
+  { cap: 'Bosco Favino', src: '/img/portfolio/bosco-favino.jpg' },
+  { cap: 'Castelsaraceno di notte', src: '/img/portfolio/castelsaraceno-di-notte.jpg' },
+  { cap: 'Ciaspole sul Monte Armizzone', src: '/img/portfolio/ciaspole-sul-monte-armizzone.jpg' },
+  { cap: 'Monte Armizzone al tramonto', src: '/img/portfolio/monte-armizzone-al-tramonto.jpg' },
+  { cap: 'Pino Loricato', src: '/img/portfolio/pino-loricato.jpg' },
+  { cap: 'Ponte tra i Due Parchi', src: '/img/portfolio/ponte-tra-i-due-parchi.JPG' },
+  { cap: 'Mountain bike al Bosco Favino', src: '/img/portfolio/mountain-bike-al-bosco-favino.jpg' },
+];
+
+// 01 · Grafiche e materiale promozionale (formato verticale)
+const grafiche = [
+  { cap: 'Poster · Per Aspera ad Astra', src: '/img/portfolio/poster-per-aspera-ad-astra.png' },
+  { cap: 'Poster · Festa della Montagna 2022', src: '/img/portfolio/poster-festa-della-montagna-2022.jpg' },
+  { cap: 'Biglietto · Per Aspera ad Astra', src: '/img/portfolio/biglietto-per-aspera-ad-astra.png' },
+];
+
+// 01 · Hospitality — Leukòs B&B
+const leukos = [
+  { cap: 'Camera matrimoniale', src: '/img/portfolio/camera-matrimoniale.png' },
+  { cap: 'Dettaglio sulla colazione', src: '/img/portfolio/dettaglio-sulla-colazione.png' },
+  { cap: 'Esterni ed esperienze', src: '/img/portfolio/esterni-ed-esperienze.png' },
+];
+
+// 01 · Hospitality — A casa di Carla
+const carla = [
+  { cap: 'Dettaglio sulla cucina', src: '/img/portfolio/dettaglio-sulla-cucina.png' },
+  { cap: "Arredamento d'autunno", src: '/img/portfolio/arredamento-d-autunno.png' },
+  { cap: 'Tavola per la colazione', src: '/img/portfolio/tavola-per-la-colazione.jpg' },
+];
+
+const email = 'scrivimiegidio@gmail.com';
+const mailto = `mailto:${email}?subject=Lavoriamo%20insieme`;
+const baseUrl = import.meta.env.BASE_URL;
+---
+
+<BaseLayout
+  title="Brand & Turismo | Portfolio | Egidio Giacoia"
+  description="Strategie visive e fotografia per destinazioni turistiche, borghi, brand e strutture ricettive in Basilicata."
+>
+  <a href={`${baseUrl}portfolio`} class="back-link">&larr; Torna al portfolio</a>
+
+  <!-- ===================== 01 · TURISMO E BRAND ===================== -->
+  <section id="turismo">
+    <div class="kicker"><span class="num">01</span><span class="lab">Turismo &amp; Brand</span></div>
+    <h1>Raccontare un luogo finché non viene voglia di andarci.</h1>
+    <p class="section-intro-text">
+      Creo strategie visive per destinazioni e attività che vogliono raccontarsi online.
+      Fotografia, video e design per trasformare l'identità di un territorio o di un brand
+      in un'esperienza che attrae turisti e clienti. Non solo bei contenuti, ma un obiettivo concreto.
+    </p>
+
+    <!-- Caso in evidenza -->
+    <article class="case">
+      <p class="case-tag">Caso in evidenza</p>
+      <h2 class="case-title">Visit Castelsaraceno</h2>
+      <div class="case-grid">
+        <div>
+          <span class="case-k">Obiettivo</span>
+          <p>Aumentare la visibilità online e l'attrattività turistica del borgo, con contenuti per i canali social e il materiale promozionale.</p>
+        </div>
+        <div>
+          <span class="case-k">Soluzione</span>
+          <p>Una serie di shooting su paesaggio, esperienze e dettagli del borgo, più le grafiche per le campagne social e gli eventi.</p>
+        </div>
+      </div>
+    </article>
+
+    <!-- Galleria caso (riquadri vuoti da riempire) -->
+    <div class="gallery g-3">
+      {castelsaraceno.map((s) => (
+        <figure class={s.wide ? 'shot shot-wide' : 'shot'}>
+          {s.src
+            ? <img src={s.src} alt={s.cap || 'Castelsaraceno — Egidio Giacoia'} loading="lazy" decoding="async" />
+            : <div class="frame"><span>foto</span></div>}
+          {s.cap && <figcaption>{s.cap}</figcaption>}
+        </figure>
+      ))}
+    </div>
+
+    <h3 class="sub">Grafiche e materiale promozionale, alcuni esempi</h3>
+    <div class="gallery g-3 g-portrait">
+      {grafiche.map((s) => (
+        <figure class="shot">
+          {s.src
+            ? <img src={s.src} alt={s.cap || 'Grafica — Egidio Giacoia'} loading="lazy" decoding="async" />
+            : <div class="frame"><span>grafica</span></div>}
+          {s.cap && <figcaption>{s.cap}</figcaption>}
+        </figure>
+      ))}
+    </div>
+
+    <h3 class="sub">Hospitality — collaborazioni</h3>
+    <p class="sub-desc">Servizi per strutture ricettive del territorio: ambienti, dettagli ed esperienze.</p>
+
+    <p class="collab-name">Leukòs B&amp;B <a class="collab-link" href="https://www.leukosbnb.it" target="_blank" rel="noopener noreferrer">leukosbnb.it ↗</a></p>
+    <div class="gallery g-3">
+      {leukos.map((s) => (
+        <figure class="shot">
+          {s.src
+            ? <img src={s.src} alt={s.cap || 'Leukòs B&B — Egidio Giacoia'} loading="lazy" decoding="async" />
+            : <div class="frame"><span>foto</span></div>}
+          {s.cap && <figcaption>{s.cap}</figcaption>}
+        </figure>
+      ))}
+    </div>
+
+    <p class="collab-name">A casa di Carla</p>
+    <div class="gallery g-3">
+      {carla.map((s) => (
+        <figure class="shot">
+          {s.src
+            ? <img src={s.src} alt={s.cap || 'A casa di Carla — Egidio Giacoia'} loading="lazy" decoding="async" />
+            : <div class="frame"><span>foto</span></div>}
+          {s.cap && <figcaption>{s.cap}</figcaption>}
+        </figure>
+      ))}
+    </div>
+
+    <p class="area-cta">Hai un brand o una destinazione da promuovere? <a href={mailto}>Scrivimi</a>.</p>
+  </section>
+</BaseLayout>
+
+<style>
+  .back-link {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    margin-bottom: var(--s5);
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+  .back-link:hover {
+    color: var(--accent);
+  }
+
+  .section-intro-text {
+    font-size: 1.12rem;
+    color: var(--muted);
+    max-width: 62ch;
+    margin-bottom: var(--s6);
+  }
+
+  section {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  /* ---------- SUB HEADINGS ---------- */
+  .sub {
+    margin-top: var(--s7);
+    margin-bottom: var(--s2);
+  }
+  .sub-desc {
+    color: var(--muted);
+    font-size: 0.98rem;
+    margin-bottom: var(--s4);
+  }
+
+  /* ---------- CASE STUDY ---------- */
+  .case {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+    padding: 22px 24px;
+    margin: var(--s5) 0 var(--s5);
+  }
+  .case-tag {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: var(--s2);
+  }
+  .case-title {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--text);
+    text-transform: none;
+    letter-spacing: -0.01em;
+    margin: 0 0 var(--s4);
+  }
+  .case-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s5);
+  }
+  .case-k {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: var(--s1);
+  }
+  .case-grid p { margin: 0; font-size: 0.98rem; }
+  @media (max-width: 560px) {
+    .case-grid { grid-template-columns: 1fr; gap: var(--s4); }
+  }
+
+  /* ---------- COLLAB LABELS ---------- */
+  .collab-name {
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    color: var(--text);
+    margin: var(--s5) 0 var(--s3);
+    display: flex;
+    align-items: baseline;
+    gap: var(--s3);
+    flex-wrap: wrap;
+  }
+  .collab-link {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  }
+  .collab-link:hover { border-color: var(--accent); }
+
+  /* ---------- GALLERY (masonry) ---------- */
+  .gallery {
+    width: min(1040px, 90vw);
+    margin-left: 50%;
+    transform: translateX(-50%);
+    column-count: 3;
+    column-gap: 12px;
+    margin-top: var(--s4);
+    margin-bottom: var(--s4);
+  }
+  @media (max-width: 720px) { .gallery { column-count: 2; } }
+  @media (max-width: 460px) { .gallery { column-count: 1; } }
+
+  .shot {
+    margin: 0 0 12px;
+    break-inside: avoid;
+    -webkit-column-break-inside: avoid;
+  }
+
+  .shot img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+
+  .frame {
+    aspect-ratio: var(--ar, 3 / 2);
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, var(--accent-2), color-mix(in srgb, var(--accent) 16%, var(--surface)));
+  }
+  .frame span {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+  }
+
+  .g-portrait { --ar: 3 / 4; }
+
+  .shot-wide {
+    column-span: all;
+    margin-bottom: 16px;
+  }
+  .shot-wide .frame { aspect-ratio: 16 / 7; }
+
+  figcaption {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--muted);
+    margin-top: 8px;
+    line-height: 1.4;
+  }
+
+  /* ---------- AREA CTA ---------- */
+  .area-cta {
+    margin-top: var(--s6);
+    font-size: 1.02rem;
+    color: var(--text);
+  }
+  .area-cta a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+    transition: border-color var(--transition-fast);
+  }
+  .area-cta a:hover { border-color: var(--accent); }
+</style>

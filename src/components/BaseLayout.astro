@@ -46,17 +46,30 @@ const isHome = isActive('/') || isActive('');
     
     <!-- Script Tema Automatico (Inline per prevenire lo sfarfallio della pagina all'avvio) -->
     <script is:inline>
-      // Funzione che applica il tema scuro o chiaro in base alle impostazioni del dispositivo
-      function applyTheme() {
-        const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      // Funzione globale che applica il tema in base a localStorage o preferenze di sistema
+      window.applyTheme = function() {
+        const storedTheme = localStorage.getItem('theme');
+        let isDark = false;
+        
+        if (storedTheme) {
+          isDark = storedTheme === 'dark';
+        } else {
+          isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        }
+        
         document.documentElement.classList.toggle('dark', isDark);
-      }
+      };
       
       // Esegue all'avvio
-      applyTheme();
+      window.applyTheme();
       
       // Resta in ascolto di eventuali cambi di tema nelle impostazioni di sistema del dispositivo
-      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme);
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+        // Se l'utente non ha impostato un tema manuale, segue il sistema
+        if (!localStorage.getItem('theme')) {
+          document.documentElement.classList.toggle('dark', e.matches);
+        }
+      });
     </script>
   </head>
   <body>
@@ -72,6 +85,26 @@ const isHome = isActive('/') || isActive('');
           <a href={`${baseUrl}portfolio`} class={isActive('portfolio') ? 'active' : ''} id="nav-portfolio">Portfolio</a>
           <a href={`${baseUrl}now`} class={isActive('now') ? 'active' : ''} id="nav-now">Now</a>
         </nav>
+
+        <!-- Pulsante Cambio Tema (Visibile sia su Desktop che Mobile) -->
+        <button id="theme-toggle" class="theme-toggle-btn" aria-label="Cambia tema scuro/chiaro">
+          <!-- Icona Sole (mostrata in dark mode) -->
+          <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2"></path>
+            <path d="M12 20v2"></path>
+            <path d="m4.93 4.93 1.41 1.41"></path>
+            <path d="m17.66 17.66 1.41 1.41"></path>
+            <path d="M2 12h2"></path>
+            <path d="M20 12h2"></path>
+            <path d="m6.34 17.66-1.41 1.41"></path>
+            <path d="m19.07 4.93-1.41 1.41"></path>
+          </svg>
+          <!-- Icona Luna (mostrata in light mode) -->
+          <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+          </svg>
+        </button>
       </div>
     </header>
 
@@ -159,6 +192,33 @@ const isHome = isActive('/') || isActive('');
       // Inizializza il menu all'avvio e dopo ogni cambio pagina gestito da Astro
       setupMobileMenu();
       document.addEventListener('astro:after-swap', setupMobileMenu);
+
+      // Gestione del click del Theme Toggle
+      function setupThemeToggle() {
+        const toggleBtn = document.getElementById('theme-toggle');
+        if (!toggleBtn) return;
+
+        function handleToggle() {
+          const isDark = document.documentElement.classList.contains('dark');
+          const newTheme = isDark ? 'light' : 'dark';
+          
+          document.documentElement.classList.toggle('dark', !isDark);
+          localStorage.setItem('theme', newTheme);
+        }
+
+        toggleBtn.removeEventListener('click', handleToggle);
+        toggleBtn.addEventListener('click', handleToggle);
+      }
+
+      setupThemeToggle();
+      
+      // Re-inizializza il toggle e ri-applica il tema corretto dopo uno swap di pagina Astro View Transitions
+      document.addEventListener('astro:after-swap', () => {
+        if (typeof window.applyTheme === 'function') {
+          window.applyTheme();
+        }
+        setupThemeToggle();
+      });
     </script>
   </body>
 </html>

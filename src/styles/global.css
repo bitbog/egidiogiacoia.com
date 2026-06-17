@@ -100,6 +100,7 @@ body {
   flex-direction: column;
   background-color: var(--bg);
   color: var(--text);
+  transition: background-color var(--transition-medium), color var(--transition-medium);
 }
 
 /* Layout Wrapper */
@@ -135,6 +136,7 @@ header.bar {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
+  position: relative; /* Per posizionamento assoluto del toggle su mobile */
 }
 
 .brand {
@@ -170,7 +172,48 @@ header.bar {
   color: var(--accent);
 }
 
+/* Theme Toggle Button Style */
+.theme-toggle-btn {
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  color: var(--ink);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--transition-medium), color var(--transition-medium), transform var(--transition-fast);
+}
 
+.theme-toggle-btn:hover {
+  background-color: var(--accent-2);
+  color: var(--accent);
+  transform: scale(1.08);
+}
+
+.theme-toggle-btn:active {
+  transform: scale(0.92);
+}
+
+.theme-toggle-btn .sun-icon {
+  display: none;
+}
+.theme-toggle-btn .moon-icon {
+  display: block;
+}
+
+html.dark .theme-toggle-btn .sun-icon {
+  display: block;
+}
+html.dark .theme-toggle-btn .moon-icon {
+  display: none;
+}
+
+/* Transizione fluida degli elementi di testo e contenitori al cambio tema */
+h1, h2, h3, h4, p, a, li, span, code, pre, blockquote, hr, img, footer, .project-card, .photo-card-item, header.bar {
+  transition: color var(--transition-medium), background-color var(--transition-medium), border-color var(--transition-medium), box-shadow var(--transition-medium);
+}
 
 /* Headings */
 h1, h2, h3, h4 {
@@ -631,6 +674,19 @@ footer p {
   /* Hide desktop header links on mobile */
   .links {
     display: none !important;
+  }
+
+  .theme-toggle-btn {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .theme-toggle-btn:hover {
+    transform: translateY(-50%) scale(1.08);
+  }
+  .theme-toggle-btn:active {
+    transform: translateY(-50%) scale(0.92);
   }
 
   body.menu-open {
