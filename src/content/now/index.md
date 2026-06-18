@@ -1,5 +1,5 @@
 ---
-lastUpdated: 2026-06-16 # AGGIORNA SEMPRE LA DATA!!!!
+lastUpdated: 2026-06-17 # AGGIORNA SEMPRE LA DATA!!!!
 ---
 
 ## Cosa sto studiando
@@ -7,7 +7,6 @@ Sistemi Operativi ed Elettrotecnica per l'università. Storytelling fotografico 
 
 ## Progetti in corso
 + Ho iniziato a scrivere la prossima pagina del diario.
-+ Sto integrando un portfolio dei miei lavori su questo sito. Al momento si trova [qui](https://egidiogiacoia98.myportfolio.com/home).
 
 ## Cosa sto leggendo
 + ***La Luna e i falò*** di Cesare Pavese
