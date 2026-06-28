@@ -1,5 +1,5 @@
 ---
-lastUpdated: 2026-06-17 # AGGIORNA SEMPRE LA DATA!!!!
+lastUpdated: 2026-06-28 # AGGIORNA SEMPRE LA DATA!!!!
 ---
 
 ## Cosa sto studiando
