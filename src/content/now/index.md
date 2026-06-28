@@ -11,7 +11,7 @@ Sistemi Operativi ed Elettrotecnica per l'università. Storytelling fotografico 
 ## Cosa sto leggendo
 + ***La Luna e i falò*** di Cesare Pavese
 + ***21 lezioni per il XXI secolo*** di Yuval Noah Harari
-+ ***Workshop di storytelling fotografico*** di Finn Beales
+
 
 ## A cosa sto giocando
 + ***Replaced*** 
@@ -20,6 +20,7 @@ Sistemi Operativi ed Elettrotecnica per l'università. Storytelling fotografico 
 Questi sono i libri che ho letto dall'inizio dell'anno. Quelli con la stellina vicino
 sono quelli che mi sono piaciuti di più. 
 
++ ***Workshop di storytelling fotografico*** di Finn Beales
 + ***Fahrenheit 451*** - Ray Bradbury ⭐
 + ***Le non cose*** - Byung-Chul Han
 + ***Il gabbiano Jonathan Livingstone*** - Richard Bach
