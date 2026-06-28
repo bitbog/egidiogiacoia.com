@@ -3,7 +3,7 @@ lastUpdated: 2026-06-28 # AGGIORNA SEMPRE LA DATA!!!!
 ---
 
 ## Cosa sto studiando
-Sistemi Operativi ed Elettrotecnica per l'università. Storytelling fotografico per progetti personali.
+Sistemi Operativi ed Elettrotecnica per l'università.
 
 ## Progetti in corso
 + Ho iniziato a scrivere la prossima pagina del diario.
