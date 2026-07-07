@@ -1,12 +1,12 @@
 ---
-lastUpdated: 2026-06-28 # AGGIORNA SEMPRE LA DATA!!!!
+lastUpdated: 2026-07-07 # AGGIORNA SEMPRE LA DATA!!!!
 ---
 
 ## Cosa sto studiando
 Sistemi Operativi ed Elettrotecnica per l'università.
 
 ## Progetti in corso
-+ Ho iniziato a scrivere la prossima pagina del diario.
++ Ho iniziato a sviluppare [DispensAPP](https://egidiogiacoia.com/diario/pagina-2-dispensapp).
 
 ## Cosa sto leggendo
 + ***La Luna e i falò*** di Cesare Pavese

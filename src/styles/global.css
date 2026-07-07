@@ -425,6 +425,45 @@ section:first-of-type {
   text-align: center;
 }
 
+/* Image row for side-by-side images in articles */
+.prose .image-row {
+  display: flex;
+  gap: var(--s3);
+  margin: var(--s6) 0;
+}
+
+.prose .image-row img {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .prose .image-row {
+    flex-direction: row;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    margin: var(--s6) -22px; /* Spazia fino ai bordi dello schermo */
+    padding: 0 22px; /* Allineamento iniziale identico al testo */
+    scrollbar-width: none; /* Nasconde barra Firefox */
+    -ms-overflow-style: none; /* Nasconde barra IE/Edge */
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .prose .image-row::-webkit-scrollbar {
+    display: none; /* Nasconde barra Chrome/Safari */
+  }
+
+  .prose .image-row img {
+    flex: 0 0 260px; /* Larghezza fissa per favorire l'anteprima (peek) di quella successiva */
+    max-width: 75vw;
+    scroll-snap-align: start;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(0, 0, 0, 0.04);
+  }
+}
+
+
 /* Project Cards Grid */
 .projects-grid {
   display: grid;
