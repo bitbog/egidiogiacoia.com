@@ -1,9 +1,9 @@
 ---
-lastUpdated: 2026-07-07 # AGGIORNA SEMPRE LA DATA!!!!
+lastUpdated: 2026-07-11 # AGGIORNA SEMPRE LA DATA!!!!
 ---
 
 ## Cosa sto studiando
-Sistemi Operativi ed Elettrotecnica per l'università.
+Java e Kotlin.
 
 ## Progetti in corso
 + Ho iniziato a sviluppare [DispensAPP](https://egidiogiacoia.com/diario/pagina-2-dispensapp).
