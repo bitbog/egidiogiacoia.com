@@ -3,12 +3,12 @@ import BaseLayout from '../../components/BaseLayout.astro';
 
 // 03 · RITRATTI (formato verticale, didascalie libere)
 const ritratti = [
-  { cap: 'Come su Vogue', src: '/img/portfolio/come-su-vogue.jpg' },
-  { cap: 'La scalata', src: '/img/portfolio/la-scalata.jpg' },
-  { cap: 'Danza e passione', src: '/img/portfolio/danza-e-passione.jpg' },
-  { cap: 'la montagna è vita', src: '/img/portfolio/la-montagna-è-vita.jpg' },
-  { cap: 'Sono il King', src: '/img/portfolio/sono-il-king.jpg' },
-  { cap: 'In studio', src: '/img/portfolio/in-studio.png' },
+  { cap: 'Come su Vogue', src: '/img/portfolio/come-su-vogue.webp', w: 600, h: 900 },
+  { cap: 'La scalata', src: '/img/portfolio/la-scalata.webp', w: 600, h: 800 },
+  { cap: 'Danza e passione', src: '/img/portfolio/danza-e-passione.webp', w: 600, h: 900 },
+  { cap: 'la montagna è vita', src: '/img/portfolio/la-montagna-è-vita.webp', w: 600, h: 400 },
+  { cap: 'Sono il King', src: '/img/portfolio/sono-il-king.webp', w: 600, h: 750 },
+  { cap: 'In studio', src: '/img/portfolio/in-studio.webp', w: 600, h: 900 },
 ];
 
 const baseUrl = import.meta.env.BASE_URL;
@@ -32,7 +32,7 @@ const baseUrl = import.meta.env.BASE_URL;
       {ritratti.map((s) => (
         <figure class="shot">
           {s.src
-            ? <img src={s.src} alt={s.cap || 'Ritratto — Egidio Giacoia'} loading="lazy" decoding="async" />
+            ? <img src={s.src} alt={s.cap || 'Ritratto — Egidio Giacoia'} width={s.w} height={s.h} loading="lazy" decoding="async" />
             : <div class="frame"><span>foto</span></div>}
           {s.cap && <figcaption>{s.cap}</figcaption>}
         </figure>

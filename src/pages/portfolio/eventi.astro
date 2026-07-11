@@ -3,22 +3,22 @@ import BaseLayout from '../../components/BaseLayout.astro';
 
 // 02 · EVENTI — Feste private
 const festePrivate = [
-  { cap: 'Il protagonista · 18 anni', src: '/img/portfolio/il-protagonista-18-anni.jpg' },
-  { cap: 'Festa e balli', src: '/img/portfolio/festa-e-balli.jpg' },
-  { cap: "Fuochi d'artificio", src: '/img/portfolio/fuochi-d-artificio.jpg' },
-  { cap: 'Dettagli di una festa', src: '/img/portfolio/dettagli-di-una-festa.jpg' },
-  { cap: 'Una vita insieme', src: '/img/portfolio/una-vita-insieme.jpg' },
-  { cap: 'Divertimento', src: '/img/portfolio/divertimento.jpg' },
+  { cap: 'Il protagonista · 18 anni', src: '/img/portfolio/il-protagonista-18-anni.webp', w: 600, h: 300 },
+  { cap: 'Festa e balli', src: '/img/portfolio/festa-e-balli.webp', w: 600, h: 400 },
+  { cap: "Fuochi d'artificio", src: '/img/portfolio/fuochi-d-artificio.webp', w: 600, h: 400 },
+  { cap: 'Dettagli di una festa', src: '/img/portfolio/dettagli-di-una-festa.webp', w: 600, h: 901 },
+  { cap: 'Una vita insieme', src: '/img/portfolio/una-vita-insieme.webp', w: 600, h: 900 },
+  { cap: 'Divertimento', src: '/img/portfolio/divertimento.webp', w: 600, h: 400 },
 ];
 
 // 02 · EVENTI — Concerti e live (didascalie libere)
 const concerti = [
-  { cap: 'Spartito', src: '/img/portfolio/spartito.jpg' },
-  { cap: 'Il Maestro', src: '/img/portfolio/il-maestro.jpg' },
-  { cap: 'Il bassista', src: '/img/portfolio/il-bassista.jpg' },
-  { cap: 'Il batterista', src: '/img/portfolio/il-batterista.png' },
-  { cap: 'il sassofonista', src: '/img/portfolio/il-sassofonista.png' },
-  { cap: 'Dettagli', src: '/img/portfolio/dettagli.png' },
+  { cap: 'Spartito', src: '/img/portfolio/spartito.webp', w: 600, h: 400 },
+  { cap: 'Il Maestro', src: '/img/portfolio/il-maestro.webp', w: 600, h: 400 },
+  { cap: 'Il bassista', src: '/img/portfolio/il-bassista.webp', w: 600, h: 400 },
+  { cap: 'Il batterista', src: '/img/portfolio/il-batterista.webp', w: 600, h: 400 },
+  { cap: 'il sassofonista', src: '/img/portfolio/il-sassofonista.webp', w: 600, h: 900 },
+  { cap: 'Dettagli', src: '/img/portfolio/dettagli.webp', w: 600, h: 900 },
 ];
 
 const email = 'scrivimiegidio@gmail.com';
@@ -47,7 +47,7 @@ const baseUrl = import.meta.env.BASE_URL;
       {festePrivate.map((s) => (
         <figure class="shot">
           {s.src
-            ? <img src={s.src} alt={s.cap || 'Evento — Egidio Giacoia'} loading="lazy" decoding="async" />
+            ? <img src={s.src} alt={s.cap || 'Evento — Egidio Giacoia'} width={s.w} height={s.h} loading="lazy" decoding="async" />
             : <div class="frame"><span>foto</span></div>}
           {s.cap && <figcaption>{s.cap}</figcaption>}
         </figure>
@@ -60,7 +60,7 @@ const baseUrl = import.meta.env.BASE_URL;
       {concerti.map((s) => (
         <figure class="shot">
           {s.src
-            ? <img src={s.src} alt={s.cap || 'Live — Egidio Giacoia'} loading="lazy" decoding="async" />
+            ? <img src={s.src} alt={s.cap || 'Live — Egidio Giacoia'} width={s.w} height={s.h} loading="lazy" decoding="async" />
             : <div class="frame"><span>foto</span></div>}
           {s.cap && <figcaption>{s.cap}</figcaption>}
         </figure>

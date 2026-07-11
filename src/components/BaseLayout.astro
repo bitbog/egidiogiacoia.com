@@ -5,13 +5,20 @@ import '../styles/global.css';
 interface Props {
   title?: string;
   description?: string;
+  /** Immagine per le anteprime social (percorso relativo alla root del sito) */
+  ogImage?: string;
 }
 
 // Estrae le props con valori predefiniti di fallback
-const { 
-  title = "Egidio Giacoia", 
-  description = "Sito personale, blog e portfolio di Egidio Giacoia." 
+const {
+  title = "Egidio Giacoia",
+  description = "Sito personale, blog e portfolio di Egidio Giacoia.",
+  ogImage = "/img/portfolio/profilo.webp"
 } = Astro.props;
+
+// URL canonico e URL assoluto dell'immagine social, costruiti dal dominio configurato in astro.config.mjs
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ogImageURL = new URL(ogImage, Astro.site);
 
 const baseUrl = import.meta.env.BASE_URL;
 const currentPath = Astro.url.pathname;
@@ -40,9 +47,28 @@ const isHome = isActive('/') || isActive('');
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    
+
     <!-- SEO & Favicon -->
     <link rel="icon" type="image/png" href={`${baseUrl}favicon.png`} />
+    <link rel="canonical" href={canonicalURL} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F2F2EF" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#15161B" />
+
+    <!-- Open Graph / Anteprime social (WhatsApp, Telegram, ecc.) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={ogImageURL} />
+    <meta property="og:locale" content="it_IT" />
+    <meta property="og:site_name" content="Egidio Giacoia" />
+    <meta name="twitter:card" content="summary" />
+
+    <!-- Font di Google: preconnect + link (non blocca il primo rendering come faceva @import nel CSS) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" />
     
     <!-- Script Tema Automatico (Inline per prevenire lo sfarfallio della pagina all'avvio) -->
     <script is:inline>
@@ -148,76 +174,52 @@ const isHome = isActive('/') || isActive('');
       </footer>
     </main>
 
-    <!-- Script per la gestione del Menu Mobile -->
+    <!-- Script per la gestione del Menu Mobile e del Theme Toggle.
+         Usa la delega degli eventi sul documento: i listener vengono registrati una sola volta
+         e funzionano anche se il DOM viene sostituito (es. Astro View Transitions). -->
     <script>
-      function setupMobileMenu() {
-        const toggleBtn = document.getElementById('mobile-menu-toggle');
-        const overlay = document.getElementById('mobile-menu-overlay');
-        
-        if (!toggleBtn || !overlay) return;
+      function closeMenu() {
+        document.getElementById('mobile-menu-toggle')?.classList.remove('open');
+        document.getElementById('mobile-menu-overlay')?.classList.remove('open');
+        document.body.classList.remove('menu-open');
+      }
 
-        const links = overlay.querySelectorAll('a');
+      document.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
 
-        // Mostra o nasconde l'overlay ed il pulsante animato
-        function toggleMenu() {
+        // Apre/chiude il menu mobile
+        if (target.closest('#mobile-menu-toggle')) {
+          const toggleBtn = document.getElementById('mobile-menu-toggle')!;
           const isOpen = toggleBtn.classList.toggle('open');
-          overlay.classList.toggle('open', isOpen);
+          document.getElementById('mobile-menu-overlay')?.classList.toggle('open', isOpen);
           document.body.classList.toggle('menu-open', isOpen); // Previene lo scroll della pagina
+          return;
         }
 
-        function closeMenu() {
-          toggleBtn.classList.remove('open');
-          overlay.classList.remove('open');
-          document.body.classList.remove('menu-open');
+        // Chiude il menu quando si clicca su un collegamento interno dell'overlay
+        if (target.closest('#mobile-menu-overlay a')) {
+          closeMenu();
+          return;
         }
 
-        // Rimuove eventuali listener precedenti per evitare duplicazioni con Astro View Transitions
-        toggleBtn.removeEventListener('click', toggleMenu);
-        toggleBtn.addEventListener('click', toggleMenu);
-
-        // Chiude il menu quando si clicca su un collegamento interno
-        links.forEach(link => {
-          link.removeEventListener('click', closeMenu);
-          link.addEventListener('click', closeMenu);
-        });
-
-        // Chiude il menu premendo il tasto ESC della tastiera
-        document.addEventListener('keydown', (e) => {
-          if (e.key === 'Escape') {
-            closeMenu();
-          }
-        });
-      }
-
-      // Inizializza il menu all'avvio e dopo ogni cambio pagina gestito da Astro
-      setupMobileMenu();
-      document.addEventListener('astro:after-swap', setupMobileMenu);
-
-      // Gestione del click del Theme Toggle
-      function setupThemeToggle() {
-        const toggleBtn = document.getElementById('theme-toggle');
-        if (!toggleBtn) return;
-
-        function handleToggle() {
+        // Cambio tema chiaro/scuro
+        if (target.closest('#theme-toggle')) {
           const isDark = document.documentElement.classList.contains('dark');
-          const newTheme = isDark ? 'light' : 'dark';
-          
           document.documentElement.classList.toggle('dark', !isDark);
-          localStorage.setItem('theme', newTheme);
+          localStorage.setItem('theme', isDark ? 'light' : 'dark');
         }
+      });
 
-        toggleBtn.removeEventListener('click', handleToggle);
-        toggleBtn.addEventListener('click', handleToggle);
-      }
+      // Chiude il menu premendo il tasto ESC della tastiera
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeMenu();
+      });
 
-      setupThemeToggle();
-      
-      // Re-inizializza il toggle e ri-applica il tema corretto dopo uno swap di pagina Astro View Transitions
+      // Ri-applica il tema corretto dopo uno swap di pagina con Astro View Transitions
       document.addEventListener('astro:after-swap', () => {
         if (typeof window.applyTheme === 'function') {
           window.applyTheme();
         }
-        setupThemeToggle();
       });
     </script>
   </body>

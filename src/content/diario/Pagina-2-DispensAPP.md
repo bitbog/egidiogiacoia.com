@@ -9,9 +9,9 @@ Ogni volta dimentico l'insalata in busta nel frigo. Ogni volta diventa un liquid
 Al momento la chiamo **DispensAPP** e sinceramente mi piacerebbe che mi proponessi qualche altro nome perchè questo mi sembra troppo scontato.
 
 <div class="image-row">
-  <img src="/img/diario/DispensAPP_Mockup1.png" alt="Schermata DispensAPP 1">
-  <img src="/img/diario/DispensAPP_Mockup2.png" alt="Schermata DispensAPP 2">
-  <img src="/img/diario/DispensAPP_Mockup3.png" alt="Schermata DispensAPP 3">
+  <img src="/img/diario/DispensAPP_Mockup1.webp" alt="Schermata DispensAPP 1" width="840" height="1455" loading="lazy" decoding="async">
+  <img src="/img/diario/DispensAPP_Mockup2.webp" alt="Schermata DispensAPP 2" width="840" height="1455" loading="lazy" decoding="async">
+  <img src="/img/diario/DispensAPP_Mockup3.webp" alt="Schermata DispensAPP 3" width="840" height="1455" loading="lazy" decoding="async">
 </div>
 
 ## A cosa serve?

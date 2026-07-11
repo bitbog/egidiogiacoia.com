@@ -2,7 +2,7 @@
 import BaseLayout from '../../components/BaseLayout.astro';
 
 // CHI SONO — il tuo ritratto (lascia '' per il riquadro vuoto)
-const fotoChiSono = '/img/portfolio/profilo.jpg'; // es. '/img/portfolio/egidio.jpg'
+const fotoChiSono = '/img/portfolio/profilo.webp'; // es. '/img/portfolio/egidio.webp'
 const baseUrl = import.meta.env.BASE_URL;
 ---
 
@@ -18,7 +18,7 @@ const baseUrl = import.meta.env.BASE_URL;
     <div class="bio">
       <figure class="bio-photo">
         {fotoChiSono
-          ? <img src={fotoChiSono} alt="Egidio Giacoia" loading="lazy" decoding="async" />
+          ? <img src={fotoChiSono} alt="Egidio Giacoia" width="427" height="640" loading="lazy" decoding="async" />
           : <div class="frame frame-portrait"><span>ritratto</span></div>}
       </figure>
       <div class="bio-text">

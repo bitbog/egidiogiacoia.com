@@ -3,36 +3,36 @@ import BaseLayout from '../../components/BaseLayout.astro';
 
 // 01 · TURISMO E BRAND — Caso in evidenza: Visit Castelsaraceno
 // (wide: true => la foto fa da banner a tutta larghezza, sopra le tre colonne)
-const castelsaraceno: { cap: string; src: string; wide?: boolean }[] = [
-  { cap: 'Vista panoramica di Castelsaraceno', src: '/img/portfolio/vista-panoramica-castelsaraceno.jpg', wide: true },
-  { cap: 'Bosco Favino', src: '/img/portfolio/bosco-favino.jpg' },
-  { cap: 'Castelsaraceno di notte', src: '/img/portfolio/castelsaraceno-di-notte.jpg' },
-  { cap: 'Ciaspole sul Monte Armizzone', src: '/img/portfolio/ciaspole-sul-monte-armizzone.jpg' },
-  { cap: 'Monte Armizzone al tramonto', src: '/img/portfolio/monte-armizzone-al-tramonto.jpg' },
-  { cap: 'Pino Loricato', src: '/img/portfolio/pino-loricato.jpg' },
-  { cap: 'Ponte tra i Due Parchi', src: '/img/portfolio/ponte-tra-i-due-parchi.JPG' },
-  { cap: 'Mountain bike al Bosco Favino', src: '/img/portfolio/mountain-bike-al-bosco-favino.jpg' },
+const castelsaraceno: { cap: string; src: string; w: number; h: number; wide?: boolean }[] = [
+  { cap: 'Vista panoramica di Castelsaraceno', src: '/img/portfolio/vista-panoramica-castelsaraceno.webp', w: 1600, h: 644, wide: true },
+  { cap: 'Bosco Favino', src: '/img/portfolio/bosco-favino.webp', w: 600, h: 800 },
+  { cap: 'Castelsaraceno di notte', src: '/img/portfolio/castelsaraceno-di-notte.webp', w: 600, h: 450 },
+  { cap: 'Ciaspole sul Monte Armizzone', src: '/img/portfolio/ciaspole-sul-monte-armizzone.webp', w: 600, h: 400 },
+  { cap: 'Monte Armizzone al tramonto', src: '/img/portfolio/monte-armizzone-al-tramonto.webp', w: 600, h: 900 },
+  { cap: 'Pino Loricato', src: '/img/portfolio/pino-loricato.webp', w: 600, h: 450 },
+  { cap: 'Ponte tra i Due Parchi', src: '/img/portfolio/ponte-tra-i-due-parchi.webp', w: 600, h: 400 },
+  { cap: 'Mountain bike al Bosco Favino', src: '/img/portfolio/mountain-bike-al-bosco-favino.webp', w: 600, h: 400 },
 ];
 
 // 01 · Grafiche e materiale promozionale (formato verticale)
 const grafiche = [
-  { cap: 'Poster · Per Aspera ad Astra', src: '/img/portfolio/poster-per-aspera-ad-astra.png' },
-  { cap: 'Poster · Festa della Montagna 2022', src: '/img/portfolio/poster-festa-della-montagna-2022.jpg' },
-  { cap: 'Biglietto · Per Aspera ad Astra', src: '/img/portfolio/biglietto-per-aspera-ad-astra.png' },
+  { cap: 'Poster · Per Aspera ad Astra', src: '/img/portfolio/poster-per-aspera-ad-astra.webp', w: 600, h: 849 },
+  { cap: 'Poster · Festa della Montagna 2022', src: '/img/portfolio/poster-festa-della-montagna-2022.webp', w: 600, h: 750 },
+  { cap: 'Biglietto · Per Aspera ad Astra', src: '/img/portfolio/biglietto-per-aspera-ad-astra.webp', w: 600, h: 282 },
 ];
 
 // 01 · Hospitality — Leukòs B&B
 const leukos = [
-  { cap: 'Camera matrimoniale', src: '/img/portfolio/camera-matrimoniale.png' },
-  { cap: 'Dettaglio sulla colazione', src: '/img/portfolio/dettaglio-sulla-colazione.png' },
-  { cap: 'Esterni ed esperienze', src: '/img/portfolio/esterni-ed-esperienze.png' },
+  { cap: 'Camera matrimoniale', src: '/img/portfolio/camera-matrimoniale.webp', w: 600, h: 400 },
+  { cap: 'Dettaglio sulla colazione', src: '/img/portfolio/dettaglio-sulla-colazione.webp', w: 600, h: 400 },
+  { cap: 'Esterni ed esperienze', src: '/img/portfolio/esterni-ed-esperienze.webp', w: 600, h: 400 },
 ];
 
 // 01 · Hospitality — A casa di Carla
 const carla = [
-  { cap: 'Dettaglio sulla cucina', src: '/img/portfolio/dettaglio-sulla-cucina.png' },
-  { cap: "Arredamento d'autunno", src: '/img/portfolio/arredamento-d-autunno.png' },
-  { cap: 'Tavola per la colazione', src: '/img/portfolio/tavola-per-la-colazione.jpg' },
+  { cap: 'Dettaglio sulla cucina', src: '/img/portfolio/dettaglio-sulla-cucina.webp', w: 600, h: 400 },
+  { cap: "Arredamento d'autunno", src: '/img/portfolio/arredamento-d-autunno.webp', w: 600, h: 400 },
+  { cap: 'Tavola per la colazione', src: '/img/portfolio/tavola-per-la-colazione.webp', w: 600, h: 400 },
 ];
 
 const email = 'scrivimiegidio@gmail.com';
@@ -77,7 +77,7 @@ const baseUrl = import.meta.env.BASE_URL;
       {castelsaraceno.map((s) => (
         <figure class={s.wide ? 'shot shot-wide' : 'shot'}>
           {s.src
-            ? <img src={s.src} alt={s.cap || 'Castelsaraceno — Egidio Giacoia'} loading="lazy" decoding="async" />
+            ? <img src={s.src} alt={s.cap || 'Castelsaraceno — Egidio Giacoia'} width={s.w} height={s.h} loading="lazy" decoding="async" />
             : <div class="frame"><span>foto</span></div>}
           {s.cap && <figcaption>{s.cap}</figcaption>}
         </figure>
@@ -89,7 +89,7 @@ const baseUrl = import.meta.env.BASE_URL;
       {grafiche.map((s) => (
         <figure class="shot">
           {s.src
-            ? <img src={s.src} alt={s.cap || 'Grafica — Egidio Giacoia'} loading="lazy" decoding="async" />
+            ? <img src={s.src} alt={s.cap || 'Grafica — Egidio Giacoia'} width={s.w} height={s.h} loading="lazy" decoding="async" />
             : <div class="frame"><span>grafica</span></div>}
           {s.cap && <figcaption>{s.cap}</figcaption>}
         </figure>
@@ -104,7 +104,7 @@ const baseUrl = import.meta.env.BASE_URL;
       {leukos.map((s) => (
         <figure class="shot">
           {s.src
-            ? <img src={s.src} alt={s.cap || 'Leukòs B&B — Egidio Giacoia'} loading="lazy" decoding="async" />
+            ? <img src={s.src} alt={s.cap || 'Leukòs B&B — Egidio Giacoia'} width={s.w} height={s.h} loading="lazy" decoding="async" />
             : <div class="frame"><span>foto</span></div>}
           {s.cap && <figcaption>{s.cap}</figcaption>}
         </figure>
@@ -116,7 +116,7 @@ const baseUrl = import.meta.env.BASE_URL;
       {carla.map((s) => (
         <figure class="shot">
           {s.src
-            ? <img src={s.src} alt={s.cap || 'A casa di Carla — Egidio Giacoia'} loading="lazy" decoding="async" />
+            ? <img src={s.src} alt={s.cap || 'A casa di Carla — Egidio Giacoia'} width={s.w} height={s.h} loading="lazy" decoding="async" />
             : <div class="frame"><span>foto</span></div>}
           {s.cap && <figcaption>{s.cap}</figcaption>}
         </figure>

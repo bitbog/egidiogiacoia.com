@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../components/BaseLayout.astro';
+
+const baseUrl = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title="Pagina non trovata | Egidio Giacoia" description="La pagina che cerchi non esiste o è stata spostata.">
+  <section class="not-found">
+    <p class="code">404</p>
+    <h1>Pagina non trovata</h1>
+    <p class="message">
+      La pagina che cerchi non esiste o è stata spostata.
+    </p>
+    <a href={baseUrl} class="home-link">← Torna alla home</a>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    padding: var(--s8) 0;
+    text-align: center;
+    border-top: none;
+  }
+
+  .code {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+    margin-bottom: var(--s3);
+  }
+
+  .message {
+    color: var(--text-muted);
+    margin: 0 auto var(--s6);
+  }
+
+  .home-link {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+    transition: border-color var(--transition-fast);
+  }
+
+  .home-link:hover {
+    border-color: var(--accent);
+  }
+</style>
