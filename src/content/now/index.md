@@ -1,5 +1,5 @@
 ---
-lastUpdated: 2026-07-11 # AGGIORNA SEMPRE LA DATA!!!!
+lastUpdated: 2026-07-14 # AGGIORNA SEMPRE LA DATA!!!!
 ---
 
 ## Cosa sto studiando
@@ -9,7 +9,6 @@ Java e Kotlin.
 + Ho iniziato a sviluppare [DispensAPP](https://egidiogiacoia.com/diario/pagina-2-dispensapp).
 
 ## Cosa sto leggendo
-+ ***La Luna e i falò*** di Cesare Pavese
 + ***21 lezioni per il XXI secolo*** di Yuval Noah Harari
 
 
@@ -20,6 +19,7 @@ Java e Kotlin.
 Questi sono i libri che ho letto dall'inizio dell'anno. Quelli con la stellina vicino
 sono quelli che mi sono piaciuti di più. 
 
++ ***La Luna e i falò*** di Cesare Pavese ⭐
 + ***Workshop di storytelling fotografico*** di Finn Beales
 + ***Fahrenheit 451*** - Ray Bradbury ⭐
 + ***Le non cose*** - Byung-Chul Han
