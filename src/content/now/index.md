@@ -19,8 +19,8 @@ Java e Kotlin.
 Questi sono i libri che ho letto dall'inizio dell'anno. Quelli con la stellina vicino
 sono quelli che mi sono piaciuti di più. 
 
-+ ***La Luna e i falò*** di Cesare Pavese ⭐
-+ ***Workshop di storytelling fotografico*** di Finn Beales
++ ***La Luna e i falò*** - Cesare Pavese ⭐
++ ***Workshop di storytelling fotografico*** - Finn Beales
 + ***Fahrenheit 451*** - Ray Bradbury ⭐
 + ***Le non cose*** - Byung-Chul Han
 + ***Il gabbiano Jonathan Livingstone*** - Richard Bach
