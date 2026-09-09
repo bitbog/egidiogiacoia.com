@@ -1,15 +1,16 @@
 ---
-lastUpdated: 2026-07-14 # AGGIORNA SEMPRE LA DATA!!!!
+lastUpdated: 2026-09-09 # AGGIORNA SEMPRE LA DATA!!!!
 ---
 
 ## Cosa sto studiando
-Java e Kotlin.
+Docker.
 
 ## Progetti in corso
-+ Ho iniziato a sviluppare [DispensAPP](https://egidiogiacoia.com/diario/pagina-2-dispensapp).
++ Sto continuando a sviluppare [DispensAPP](https://egidiogiacoia.com/diario/pagina-2-dispensapp).
 
 ## Cosa sto leggendo
 + ***21 lezioni per il XXI secolo*** di Yuval Noah Harari
++ ***Qiet*** di Susan Cain
 
 
 ## A cosa sto giocando

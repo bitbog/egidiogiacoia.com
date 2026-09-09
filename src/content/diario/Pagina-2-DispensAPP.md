@@ -40,5 +40,5 @@ Questa è una piccola parte di codice usata. Sono delle frasi che cambiano casua
 - Inserire la quantità degli elementi.
 
 ## Perchè usarla?
-Con questa app  vorrei che si riesca a risolvere il problema degli sprechi di cibo e magarei anche migliorare a livello economico evitando di comprare cose inutili.
+Con questa app vorrei che si riesca a risolvere il problema degli sprechi di cibo e magari anche migliorare a livello economico evitando di comprare cose inutili.
 
