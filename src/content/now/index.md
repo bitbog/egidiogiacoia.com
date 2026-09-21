@@ -1,20 +1,21 @@
 ---
-lastUpdated: 2026-09-09 # AGGIORNA SEMPRE LA DATA!!!!
+lastUpdated: 2026-09-21 # AGGIORNA SEMPRE LA DATA!!!!
 ---
 
 ## Cosa sto studiando
 Docker.
 
 ## Progetti in corso
-+ Sto continuando a sviluppare [DispensAPP](https://egidiogiacoia.com/diario/pagina-2-dispensapp).
++ Sto continuando a sviluppare [DispensAPP](https://egidiogiacoia.com/diario/pagina-2-dispensapp). Dovrei pubblicarla alla fine del mese su Android.
 
 ## Cosa sto leggendo
 + ***21 lezioni per il XXI secolo*** di Yuval Noah Harari
-+ ***Qiet*** di Susan Cain
++ ***Il metodo ikigai*** di Héctoe Garcìa Francesc Miralles
 
 
 ## A cosa sto giocando
 + ***Replaced*** 
++ ***Civiliaztion 7***
 
 ## Libri letti nel 2026, dal più recente
 Questi sono i libri che ho letto dall'inizio dell'anno. Quelli con la stellina vicino
