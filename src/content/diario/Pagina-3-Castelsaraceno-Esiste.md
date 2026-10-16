@@ -17,7 +17,7 @@ Rispetto a prima, sono molto più rilassato perchè non devo preparare nulla. Qu
 
 È curioso perchè quattro anni fa cercavo di raccontare Castelsaraceno attraverso un obiettivo, scegliendo le immagini e le parole giuste per farlo conoscere. Oggi posso raccontarlo direttamente alle persone che incontro, condividendo quello che conosco, quello che ho vissuto e ciò che rende questo piccolo paese così particolare.
 
-> «Un paese ci vuole, non fosse che per il gusto di andarsene via. Un paese vuol dire non essere soli, sapere che nella gente, nelle piante, nella terra c’è qualcosa di tuo, che anche quando non ci sei resta ad aspettarti».
+> "Un paese ci vuole, non fosse che per il gusto di andarsene via. Un paese vuol dire non essere soli, sapere che nella gente, nelle piante, nella terra c’è qualcosa di tuo, che anche quando non ci sei resta ad aspettarti".
 -Cesare Pavese, La Luna e i falò
 
 Raccontare di essere andato via, di essere tornato e di aver contribuito alla nascita e alla crescita di questo brand turistico mi ha fatto riflettere su quanto sia cambiato, nel tempo, il mio rapporto con Castelsaraceno.

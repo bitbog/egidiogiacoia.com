@@ -87,13 +87,15 @@ La galleria e gli scatti fotografici si gestiscono nella cartella: `src/content/
 
 ---
 
-## 💻 Comandi Locali Utili (Terminale)
+## 💻 Comandi Locali Utili (Docker)
 
 Se desideri testare il sito sul tuo computer prima di pubblicarlo, apri il terminale nella cartella del progetto ed esegui:
 
-- **`npm install`** (solo la prima volta) per installare i componenti necessari.
-- **`npm run dev`** per far partire il server di sviluppo. Apri il browser all'indirizzo `http://localhost:4321` per vedere le modifiche in tempo reale.
-- **`npm run build`** per testare che il sito si compili senza errori.
+- **`docker compose up --build -d --wait`** per installare le dipendenze nel container e avviare il sito. Apri `http://localhost:4321` per vedere le modifiche in tempo reale.
+- **`docker compose run --rm --no-deps site npm run build`** per verificare la compilazione dentro un container temporaneo.
+- **`docker compose down`** per fermare il sito.
+
+Node.js e i pacchetti del progetto rimangono nel container. Per installare Docker su Windows LTSC tramite WSL2 e usare i comandi da PowerShell, segui [la guida Docker](DOCKER.md).
 
 ---
 
@@ -112,8 +114,8 @@ Prima di eseguire i comandi per inviare le modifiche su GitHub, ti consigliamo d
 4. **Verifica che i file siano salvati**:
    - Salva tutte le modifiche apportate nei file Markdown sul tuo editor (es. VS Code) prima di procedere.
 5. **Esegui un test locale**:
-   - È un'ottima abitudine lanciare `npm run dev` nel terminale e aprire `http://localhost:4321` nel browser per controllare visivamente che tutto sia formattato ed impaginato come desideri.
-   - Puoi anche lanciare `npm run build` per verificare che non ci siano errori bloccanti nella compilazione di Astro.
+   - È un'ottima abitudine lanciare `docker compose up --build -d --wait` nel terminale e aprire `http://localhost:4321` nel browser per controllare visivamente che tutto sia formattato ed impaginato come desideri.
+   - Puoi anche lanciare `docker compose run --rm --no-deps site npm run build` per verificare che non ci siano errori bloccanti nella compilazione di Astro.
 
 ---
 
