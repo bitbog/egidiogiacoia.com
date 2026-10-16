@@ -6,11 +6,4 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://egidiogiacoia.com',
   integrations: [sitemap()],
-  vite: {
-    server: {
-      watch: process.env.DOCKER_POLLING === 'true'
-        ? { usePolling: true, interval: 300 }
-        : undefined,
-    },
-  },
 });

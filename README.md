@@ -87,15 +87,16 @@ La galleria e gli scatti fotografici si gestiscono nella cartella: `src/content/
 
 ---
 
-## 💻 Comandi Locali Utili (Docker)
+## 💻 Comandi Locali Utili
 
 Se desideri testare il sito sul tuo computer prima di pubblicarlo, apri il terminale nella cartella del progetto ed esegui:
 
-- **`docker compose up --build -d --wait`** per installare le dipendenze nel container e avviare il sito. Apri `http://localhost:4321` per vedere le modifiche in tempo reale.
-- **`docker compose run --rm --no-deps site npm run build`** per verificare la compilazione dentro un container temporaneo.
-- **`docker compose down`** per fermare il sito.
+- **`npm ci`** per installare le dipendenze del progetto dal lockfile.
+- **`npm run dev`** per avviare il sito. Apri `http://localhost:4321` per vedere le modifiche in tempo reale. Premi `Ctrl+C` nel terminale per fermarlo.
+- **`npm run build`** per verificare la compilazione e generare il sito in `dist`.
+- **`npm run preview`** per visualizzare in locale il sito compilato.
 
-Node.js e i pacchetti del progetto rimangono nel container. Per installare Docker su Windows LTSC tramite WSL2 e usare i comandi da PowerShell, segui [la guida Docker](DOCKER.md).
+È richiesto Node.js 22.12.0 o successivo, con npm disponibile sul computer.
 
 ---
 
@@ -114,8 +115,8 @@ Prima di eseguire i comandi per inviare le modifiche su GitHub, ti consigliamo d
 4. **Verifica che i file siano salvati**:
    - Salva tutte le modifiche apportate nei file Markdown sul tuo editor (es. VS Code) prima di procedere.
 5. **Esegui un test locale**:
-   - È un'ottima abitudine lanciare `docker compose up --build -d --wait` nel terminale e aprire `http://localhost:4321` nel browser per controllare visivamente che tutto sia formattato ed impaginato come desideri.
-   - Puoi anche lanciare `docker compose run --rm --no-deps site npm run build` per verificare che non ci siano errori bloccanti nella compilazione di Astro.
+   - È un'ottima abitudine lanciare `npm run dev` nel terminale e aprire `http://localhost:4321` nel browser per controllare visivamente che tutto sia formattato ed impaginato come desideri.
+   - Puoi anche lanciare `npm run build` per verificare che non ci siano errori bloccanti nella compilazione di Astro.
 
 ---
 
