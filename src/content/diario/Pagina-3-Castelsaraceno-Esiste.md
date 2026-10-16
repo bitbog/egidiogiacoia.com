@@ -7,6 +7,8 @@ description: "Dopo qualche anno dalla mia prima volta ad una fiera del turismo, 
 Sono passati orami quattro anni da quando sono stato al [TTG di Rimini](https://www.ttgexpo.it/it), una delle più importanti fiere del turismo in Italia. 
 AI tempi ero quello che si occupava della comunicazione del brand [Visit Castelsarecno](https://visitcastelsaraceno.info/). Erano giorni impegnativi. Bisognava pianificare la comunicazione, scegliere cosa raccontare e come farlo, cercando di trasmettere attraverso immagini e contenuti quello che stavamo vivendo.
 
+<img src="/img/diario/TTG_Rimini_Stand.jpeg" alt="Foto di gruppo del team presente in fiera" loading="lazy" decoding="async">
+
 Nel caos della fiera, tutto diventava più complicato. Preparare l'attrezzatura giusta, individuare il momento migliore da immortalare, documentare le reazioni e la partecipazione del pubblico al nostro stand. Era frenetico, stancante ma anche gratificante.
 
 Pensavo che quella sarebbe stata la mia ultima partecipazione (anche prima) e nel cosro degli anni ho ripensato più volte a quei momenti, anche vedendo le foto dei miei vecchi colleghi che hanno partecipato alle edizioni successive.
