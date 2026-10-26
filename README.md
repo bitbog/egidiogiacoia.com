@@ -87,13 +87,16 @@ La galleria e gli scatti fotografici si gestiscono nella cartella: `src/content/
 
 ---
 
-## 💻 Comandi Locali Utili (Terminale)
+## 💻 Comandi Locali Utili
 
 Se desideri testare il sito sul tuo computer prima di pubblicarlo, apri il terminale nella cartella del progetto ed esegui:
 
-- **`npm install`** (solo la prima volta) per installare i componenti necessari.
-- **`npm run dev`** per far partire il server di sviluppo. Apri il browser all'indirizzo `http://localhost:4321` per vedere le modifiche in tempo reale.
-- **`npm run build`** per testare che il sito si compili senza errori.
+- **`npm ci`** per installare le dipendenze del progetto dal lockfile.
+- **`npm run dev`** per avviare il sito. Apri `http://localhost:4321` per vedere le modifiche in tempo reale. Premi `Ctrl+C` nel terminale per fermarlo.
+- **`npm run build`** per verificare la compilazione e generare il sito in `dist`.
+- **`npm run preview`** per visualizzare in locale il sito compilato.
+
+È richiesto Node.js 22.12.0 o successivo, con npm disponibile sul computer.
 
 ---
 
