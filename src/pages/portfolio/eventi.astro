@@ -1,5 +1,7 @@
 ---
 import BaseLayout from '../../components/BaseLayout.astro';
+import PortfolioSubnav from '../../components/PortfolioSubnav.astro';
+import { getInstagramUrl } from '../../data/site';
 
 // 02 · EVENTI — Feste private
 const festePrivate = [
@@ -17,64 +19,99 @@ const concerti = [
   { cap: 'Il Maestro', src: '/img/portfolio/il-maestro.webp', w: 600, h: 400 },
   { cap: 'Il bassista', src: '/img/portfolio/il-bassista.webp', w: 600, h: 400 },
   { cap: 'Il batterista', src: '/img/portfolio/il-batterista.webp', w: 600, h: 400 },
-  { cap: 'il sassofonista', src: '/img/portfolio/il-sassofonista.webp', w: 600, h: 900 },
+  { cap: 'Il sassofonista', src: '/img/portfolio/il-sassofonista.webp', w: 600, h: 900 },
   { cap: 'Dettagli', src: '/img/portfolio/dettagli.webp', w: 600, h: 900 },
 ];
 
-const email = 'scrivimiegidio@gmail.com';
-const mailto = `mailto:${email}?subject=Lavoriamo%20insieme`;
 const baseUrl = import.meta.env.BASE_URL;
+const instagramUrl = getInstagramUrl();
+const contactHref = instagramUrl || `${baseUrl}contatti`;
+
+const eventiSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: 'Fotografia Eventi a Potenza e in Basilicata',
+  provider: {
+    '@type': 'Person',
+    name: 'Egidio Giacoia',
+    url: 'https://egidiogiacoia.com'
+  },
+  areaServed: {
+    '@type': 'AdministrativeArea',
+    name: 'Basilicata'
+  },
+  serviceType: ['Fotografia Eventi Privati', 'Fotografo Concerti e Live', 'Reportage Festival'],
+  description:
+    'Servizi fotografici reportage per concerti, spettacoli live, festival e feste private a Potenza e in tutta la Basilicata.'
+};
 ---
 
 <BaseLayout
-  title="Eventi | Portfolio | Egidio Giacoia"
-  description="Servizi fotografici reportage per concerti, festival e feste private a Potenza e in Basilicata."
+  title="Fotografia Eventi a Potenza e in Basilicata | Concerti e Feste | Egidio Giacoia"
+  description="Fotografo per eventi a Potenza e in Basilicata: servizi fotografici in stile reportage per concerti, festival, serate live e feste private."
+  keywords="fotografo eventi Potenza, fotografia eventi Basilicata, fotografo concerti Basilicata, fotografo feste private Potenza, reportage eventi lucania"
+  schema={eventiSchema}
 >
-  <a href={`${baseUrl}portfolio`} class="back-link">&larr; Torna al portfolio</a>
+  <PortfolioSubnav active="eventi" />
 
-  <!-- ===================== 02 · EVENTI ===================== -->
+  <!-- ===================== 03 · FOTOGRAFIA EVENTI ===================== -->
   <section id="eventi">
-    <div class="kicker"><span class="num">02</span><span class="lab">Eventi</span></div>
+    <div class="kicker"><span class="num">03</span><span class="lab">Fotografia Eventi</span></div>
     <h1>L'energia di una serata, prima che svanisca.</h1>
     <p class="section-intro-text">
-      Ogni evento è un'esplosione di momenti irripetibili. Il mio lavoro è coglierne l'essenza
+      Ogni evento è un'esplosione di momenti irripetibili. Il mio lavoro a Potenza e in tutta la Basilicata è coglierne l'essenza
       con uno stile reportagistico: presente quando serve, mai invadente.
     </p>
 
-    <h3 class="sub">Feste private</h3>
-    <p class="sub-desc">Con discrezione e attenzione ai dettagli, catturo sorrisi, abbracci e allegria. Diciottesimi, anniversari, ricorrenze a Potenza e dintorni — ricordi che non sbiadiscono.</p>
-    <div class="gallery g-3">
-      {festePrivate.map((s) => (
-        <figure class="shot">
-          {s.src
-            ? <img src={s.src} alt={s.cap || 'Evento — Egidio Giacoia'} width={s.w} height={s.h} loading="lazy" decoding="async" />
-            : <div class="frame"><span>foto</span></div>}
-          {s.cap && <figcaption>{s.cap}</figcaption>}
-        </figure>
-      ))}
+    <div class="reveal-on-scroll">
+      <h3 class="sub">Feste private</h3>
+      <p class="sub-desc">Con discrezione e attenzione ai dettagli, catturo sorrisi, abbracci e allegria. Diciottesimi, anniversari, ricorrenze a Potenza e dintorni — ricordi che non sbiadiscono.</p>
+      <div class="gallery g-3">
+        {festePrivate.map((s) => (
+          <figure class="shot">
+            {s.src
+              ? <img src={s.src} alt={`${s.cap} — Fotografia eventi e feste private in Basilicata`} width={s.w} height={s.h} loading="lazy" decoding="async" />
+              : <div class="frame"><span>foto</span></div>}
+            {s.cap && <figcaption>{s.cap}</figcaption>}
+          </figure>
+        ))}
+      </div>
     </div>
 
-    <h3 class="sub">Concerti e spettacoli live</h3>
-    <p class="sub-desc">Sul palco e tra il pubblico, l'energia pura della musica dal vivo: concerti, band e festival in tutta la Basilicata.</p>
-    <div class="gallery g-3">
-      {concerti.map((s) => (
-        <figure class="shot">
-          {s.src
-            ? <img src={s.src} alt={s.cap || 'Live — Egidio Giacoia'} width={s.w} height={s.h} loading="lazy" decoding="async" />
-            : <div class="frame"><span>foto</span></div>}
-          {s.cap && <figcaption>{s.cap}</figcaption>}
-        </figure>
-      ))}
+    <div class="reveal-on-scroll">
+      <h3 class="sub">Concerti e spettacoli live</h3>
+      <p class="sub-desc">Sul palco e tra il pubblico, l'energia pura della musica dal vivo: concerti, band e festival in tutta la Basilicata.</p>
+      <div class="gallery g-3">
+        {concerti.map((s) => (
+          <figure class="shot">
+            {s.src
+              ? <img src={s.src} alt={`${s.cap} — Fotografo concerti live Basilicata`} width={s.w} height={s.h} loading="lazy" decoding="async" />
+              : <div class="frame"><span>foto</span></div>}
+            {s.cap && <figcaption>{s.cap}</figcaption>}
+          </figure>
+        ))}
+      </div>
     </div>
 
-    <h3 class="sub">Come lavoro</h3>
-    <ul class="howto">
-      <li><div><strong>Discrezione e professionalità.</strong><span>Durante l'evento sono una presenza quasi invisibile, pronta a cogliere ogni attimo senza disturbare.</span></div></li>
-      <li><div><strong>Focus sull'autenticità.</strong><span>Stile reportagistico, scatti spontanei: racconto la vera atmosfera, non una posa.</span></div></li>
-      <li><div><strong>Consegna veloce.</strong><span>Una selezione dei migliori scatti, post-prodotti in alta risoluzione, nei tempi concordati.</span></div></li>
-    </ul>
+    <div class="reveal-on-scroll">
+      <h3 class="sub">Come lavoro</h3>
+      <ul class="howto">
+        <li><div><strong>Discrezione e professionalità.</strong><span>Durante l'evento sono una presenza quasi invisibile, pronta a cogliere ogni attimo senza disturbare.</span></div></li>
+        <li><div><strong>Focus sull'autenticità.</strong><span>Stile reportagistico, scatti spontanei: racconto la vera atmosfera, non una posa.</span></div></li>
+        <li><div><strong>Consegna veloce.</strong><span>Una selezione dei migliori scatti, post-prodotti in alta risoluzione, nei tempi concordati.</span></div></li>
+      </ul>
+    </div>
 
-    <p class="area-cta">Stai organizzando un evento? <a href={mailto}>Verifica la disponibilità</a>.</p>
+    <p class="area-cta reveal-on-scroll">
+      Stai organizzando un evento a Potenza o in Basilicata?{' '}
+      <a
+        href={contactHref}
+        target={instagramUrl ? '_blank' : undefined}
+        rel={instagramUrl ? 'noopener noreferrer' : undefined}
+      >
+        {instagramUrl ? 'Verifica la disponibilità su Instagram ↗' : 'Verifica la disponibilità'}
+      </a>.
+    </p>
   </section>
 </BaseLayout>
 
@@ -115,13 +152,11 @@ const baseUrl = import.meta.env.BASE_URL;
     margin-bottom: var(--s4);
   }
 
-  /* ---------- GALLERY (masonry) ---------- */
+  /* ---------- GALLERY (masonry, allineata al contenitore Studio 1180px) ---------- */
   .gallery {
-    width: min(1040px, 90vw);
-    margin-left: 50%;
-    transform: translateX(-50%);
+    width: 100%;
     column-count: 3;
-    column-gap: 12px;
+    column-gap: 14px;
     margin-top: var(--s4);
     margin-bottom: var(--s4);
   }

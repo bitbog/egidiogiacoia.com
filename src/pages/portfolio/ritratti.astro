@@ -1,43 +1,90 @@
 ---
 import BaseLayout from '../../components/BaseLayout.astro';
+import PortfolioSubnav from '../../components/PortfolioSubnav.astro';
+import { getInstagramUrl } from '../../data/site';
 
-// 03 · RITRATTI (formato verticale, didascalie libere)
+// 03 · FOTOGRAFIA RITRATTISTICA (formato verticale, didascalie libere)
 const ritratti = [
-  { cap: 'Come su Vogue', src: '/img/portfolio/come-su-vogue.webp', w: 600, h: 900 },
-  { cap: 'La scalata', src: '/img/portfolio/la-scalata.webp', w: 600, h: 800 },
-  { cap: 'Danza e passione', src: '/img/portfolio/danza-e-passione.webp', w: 600, h: 900 },
-  { cap: 'la montagna è vita', src: '/img/portfolio/la-montagna-è-vita.webp', w: 600, h: 400 },
-  { cap: 'Sono il King', src: '/img/portfolio/sono-il-king.webp', w: 600, h: 750 },
-  { cap: 'In studio', src: '/img/portfolio/in-studio.webp', w: 600, h: 900 },
+  { cap: 'Luce e movimento al tramonto', alt: 'Ritratto fotografico outdoor con danza al tramonto tra le montagne della Basilicata — Egidio Giacoia', src: '/img/portfolio/ritratto-danza-tramonto-montagna.webp', w: 900, h: 1350 },
+  { cap: 'Equilibrio tra le vette', alt: 'Ritratto artistico all’aperto al tramonto con la montagna lucana sullo sfondo, Basilicata', src: '/img/portfolio/ritratto-danza-monte-basilicata.webp', w: 1200, h: 800 },
+  { cap: 'Verso la luce', alt: 'Fotografia ritrattistica outdoor al tramonto con luce naturale e movimento in Basilicata', src: '/img/portfolio/ritratto-respiro-montagna.webp', w: 900, h: 1350 },
+  { cap: 'Come su Vogue', alt: 'Come su Vogue — Fotografia ritrattistica editoriale a Potenza, Basilicata', src: '/img/portfolio/come-su-vogue.webp', w: 600, h: 900 },
+  { cap: 'La scalata', alt: 'La scalata — Ritratto fotografico all’aperto in Basilicata', src: '/img/portfolio/la-scalata.webp', w: 600, h: 800 },
+  { cap: 'Danza e passione', alt: 'Danza e passione — Ritratto artistico in movimento', src: '/img/portfolio/danza-e-passione.webp', w: 600, h: 900 },
+  { cap: 'La montagna è vita', alt: 'La montagna è vita — Ritratto outdoor tra le montagne della Basilicata', src: '/img/portfolio/la-montagna-è-vita.webp', w: 600, h: 400 },
+  { cap: 'Sono il King', alt: 'Sono il King — Ritratto spontaneo e caratteriale', src: '/img/portfolio/sono-il-king.webp', w: 600, h: 750 },
+  { cap: 'In studio', alt: 'In studio — Ritratto fotografico professionale in studio a Potenza', src: '/img/portfolio/in-studio.webp', w: 600, h: 900 },
 ];
 
 const baseUrl = import.meta.env.BASE_URL;
+const instagramUrl = getInstagramUrl();
+const contactHref = instagramUrl || `${baseUrl}contatti`;
+
+const ritrattiSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: 'Fotografia Ritrattistica a Potenza e in Basilicata',
+  provider: {
+    '@type': 'Person',
+    name: 'Egidio Giacoia',
+    url: 'https://egidiogiacoia.com'
+  },
+  areaServed: {
+    '@type': 'AdministrativeArea',
+    name: 'Basilicata'
+  },
+  serviceType: ['Ritratti Professionali', 'Ritratti in Studio', 'Ritratti Outdoor e Storytelling'],
+  description:
+    'Servizi fotografici di ritratto professionale, creativo e personale in studio o in esterna a Potenza e in tutta la Basilicata.'
+};
 ---
 
 <BaseLayout
-  title="Ritratti | Portfolio | Egidio Giacoia"
-  description="Servizi fotografici di ritratto in studio o all'aperto a Potenza e in Basilicata."
+  title="Fotografia Ritrattistica a Potenza e in Basilicata | Studio ed Esterni | Egidio Giacoia"
+  description="Servizi di fotografia ritrattistica a Potenza e in Basilicata: ritratti professionali, editoriali e personali in studio o all'aperto."
+  keywords="fotografo ritratti Potenza, fotografia ritrattistica Basilicata, book fotografico Potenza, ritratti professionali Basilicata"
+  schema={ritrattiSchema}
 >
-  <a href={`${baseUrl}portfolio`} class="back-link">&larr; Torna al portfolio</a>
+  <PortfolioSubnav active="ritratti" />
 
-  <!-- ===================== 03 · RITRATTI ===================== -->
+  <!-- ===================== 04 · FOTOGRAFIA RITRATTISTICA ===================== -->
   <section id="ritratti">
-    <div class="kicker"><span class="num">03</span><span class="lab">Ritratti</span></div>
+    <div class="kicker"><span class="num">04</span><span class="lab">Fotografia Ritrattistica</span></div>
     <h1>Un ritratto che parli davvero di chi sei.</h1>
     <p class="section-intro-text">
-      Ritratti professionali e personali: un'immagine che non si limita a posare, ma racconta.
-      Per una foto profilo che funzioni davvero, o per un ritratto da tenere.
+      Ritratti professionali e personali a Potenza e in Basilicata: un'immagine che non si limita a posare,
+      ma racconta carattere, storia e luce. Per un profilo professionale che funzioni davvero, o per un ritratto da tenere.
     </p>
-    <div class="gallery g-3 g-portrait">
+    <div class="gallery g-3 g-portrait reveal-on-scroll">
       {ritratti.map((s) => (
         <figure class="shot">
           {s.src
-            ? <img src={s.src} alt={s.cap || 'Ritratto — Egidio Giacoia'} width={s.w} height={s.h} loading="lazy" decoding="async" />
+            ? <img src={s.src} alt={s.alt} width={s.w} height={s.h} loading="lazy" decoding="async" />
             : <div class="frame"><span>foto</span></div>}
           {s.cap && <figcaption>{s.cap}</figcaption>}
         </figure>
       ))}
     </div>
+
+    <div class="reveal-on-scroll">
+      <h3 class="sub">Come funziona una sessione di ritratto</h3>
+      <ul class="howto">
+        <li><div><strong>Scelta di luce e location.</strong><span>Decidiamo insieme se scattare in studio o in esterna in Basilicata in base all'atmosfera che vuoi trasmettere.</span></div></li>
+        <li><div><strong>Guida naturale davanti all'obiettivo.</strong><span>Nessuna posa forzata: ti accompagno passo dopo passo per farti sentire a tuo agio e ottenere espressioni autentiche.</span></div></li>
+        <li><div><strong>Selezione curata e post-produzione.</strong><span>Ricevi gli scatti migliori lavorati con attenzione al colore e alla luce naturale, pronti per web e stampa.</span></div></li>
+      </ul>
+    </div>
+
+    <p class="area-cta reveal-on-scroll">
+      Vuoi prenotare una sessione di ritratto a Potenza o in Basilicata?{' '}
+      <a
+        href={contactHref}
+        target={instagramUrl ? '_blank' : undefined}
+        rel={instagramUrl ? 'noopener noreferrer' : undefined}
+      >
+        {instagramUrl ? 'Scrivimi su Instagram ↗' : 'Scrivimi per fissare una data'}
+      </a>.
+    </p>
   </section>
 </BaseLayout>
 
@@ -67,13 +114,17 @@ const baseUrl = import.meta.env.BASE_URL;
     padding-top: 0;
   }
 
-  /* ---------- GALLERY (masonry) ---------- */
+  /* ---------- SUB HEADINGS ---------- */
+  .sub {
+    margin-top: var(--s7);
+    margin-bottom: var(--s2);
+  }
+
+  /* ---------- GALLERY (masonry, allineata al contenitore Studio 1180px) ---------- */
   .gallery {
-    width: min(1040px, 90vw);
-    margin-left: 50%;
-    transform: translateX(-50%);
+    width: 100%;
     column-count: 3;
-    column-gap: 12px;
+    column-gap: 14px;
     margin-top: var(--s4);
     margin-bottom: var(--s4);
   }
@@ -152,4 +203,43 @@ const baseUrl = import.meta.env.BASE_URL;
     margin-top: 8px;
     line-height: 1.4;
   }
+
+  /* ---------- COME FUNZIONA ---------- */
+  .howto {
+    list-style: none;
+    margin: var(--s4) 0 0;
+    padding: 0;
+  }
+  .howto li {
+    display: grid;
+    grid-template-columns: 18px 1fr;
+    gap: 14px;
+    padding: 13px 0;
+    border-top: 1px solid var(--border);
+  }
+  .howto li:first-child { border-top: none; }
+  .howto li::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    margin-top: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+  .howto strong { font-weight: 600; }
+  .howto span { display: block; color: var(--muted); font-size: 0.95rem; margin-top: 2px; }
+
+  /* ---------- AREA CTA ---------- */
+  .area-cta {
+    margin-top: var(--s6);
+    font-size: 1.02rem;
+    color: var(--text);
+  }
+  .area-cta a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+    transition: border-color var(--transition-fast);
+  }
+  .area-cta a:hover { border-color: var(--accent); }
 </style>

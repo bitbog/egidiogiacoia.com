@@ -1,0 +1,1129 @@
+---
+import BaseLayout from '../../../components/BaseLayout.astro';
+import PortfolioSubnav from '../../../components/PortfolioSubnav.astro';
+import {
+  progettiBrandTurismo,
+  getProjectBadges,
+  type ProgettoPortfolio
+} from '../../../data/progetti-brand-turismo';
+import { siteConfig, getInstagramUrl } from '../../../data/site';
+
+export function getStaticPaths() {
+  const totalProjects = progettiBrandTurismo.length;
+
+  return progettiBrandTurismo.map((progetto, projectIndex) => {
+    const prevProject = totalProjects > 1 ? progettiBrandTurismo[(projectIndex - 1 + totalProjects) % totalProjects] : null;
+    const nextProject = totalProjects > 1 ? progettiBrandTurismo[(projectIndex + 1) % totalProjects] : null;
+
+    return {
+      params: { slug: progetto.id },
+      props: {
+        progetto,
+        projectIndex,
+        totalProjects,
+        prevProject,
+        nextProject
+      }
+    };
+  });
+}
+
+interface Props {
+  progetto: ProgettoPortfolio;
+  projectIndex: number;
+  totalProjects: number;
+  prevProject: ProgettoPortfolio | null;
+  nextProject: ProgettoPortfolio | null;
+}
+
+const { progetto, projectIndex, totalProjects, prevProject, nextProject } = Astro.props;
+
+const projectShortTitle = progetto.titoloBreve || progetto.titolo;
+const baseUrl = import.meta.env.BASE_URL;
+const instagramUrl = getInstagramUrl();
+const contactHref = instagramUrl || `${baseUrl}contatti`;
+
+const badges = getProjectBadges(progetto);
+const screenshotAttrs = progetto.sitoWeb?.screenshot
+  ? {
+      src: progetto.sitoWeb.screenshot,
+      alt: `Anteprima sito web ${progetto.sitoWeb.dominio}`,
+      width: progetto.sitoWeb.screenshotW,
+      height: progetto.sitoWeb.screenshotH,
+      loading: 'lazy' as const,
+      decoding: 'async' as const
+    }
+  : null;
+
+const mediaGalleries = [
+  ...(progetto.foto && progetto.foto.length > 0
+    ? [{ title: 'Servizio fotografico', items: progetto.foto, galleryClass: 'gallery g-3', fallbackLabel: 'foto' }]
+    : []),
+  ...(progetto.grafiche && progetto.grafiche.length > 0
+    ? [{ title: 'Grafiche e materiale promozionale', items: progetto.grafiche, galleryClass: 'gallery g-3 g-portrait', fallbackLabel: 'grafica' }]
+    : [])
+];
+
+const pagerItems = [
+  prevProject ? { dir: 'prev' as const, label: '← Progetto precedente', project: prevProject } : null,
+  nextProject ? { dir: 'next' as const, label: 'Progetto successivo →', project: nextProject } : null
+].filter((item): item is NonNullable<typeof item> => item !== null);
+
+const pageDescription = progetto.seoDescription || progetto.sottotitolo || progetto.riassuntoCard;
+const siteUrl = Astro.site?.toString().replace(/\/$/, '') || siteConfig.siteUrl;
+const canonicalPageUrl = `${siteUrl}/portfolio/brand-turismo/${progetto.id}`;
+const coverAbsoluteUrl = new URL(progetto.cover.src, siteUrl).toString();
+
+const projectSchema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'CreativeWork',
+      name: progetto.titolo,
+      description: pageDescription,
+      image: coverAbsoluteUrl,
+      url: canonicalPageUrl,
+      creator: {
+        '@type': 'Person',
+        name: siteConfig.siteName,
+        url: siteUrl
+      },
+      locationCreated: {
+        '@type': 'Place',
+        name: progetto.localita
+      }
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Portfolio',
+          item: `${siteUrl}/portfolio`
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Brand, Turismo & Web',
+          item: `${siteUrl}/portfolio/brand-turismo`
+        },
+        {
+          '@type': 'ListItem',
+          position: 3,
+          name: projectShortTitle,
+          item: canonicalPageUrl
+        }
+      ]
+    }
+  ]
+};
+---
+
+<BaseLayout
+  title={`${progetto.titolo} | Brand, Turismo & Web | Egidio Giacoia`}
+  description={pageDescription}
+  ogImage={progetto.cover.src}
+  keywords={`${projectShortTitle}, ${progetto.localita}, portfolio Egidio Giacoia, Basilicata`}
+  schema={projectSchema}
+>
+  <PortfolioSubnav active="brand-turismo" />
+  <a href={`${baseUrl}portfolio/brand-turismo`} class="back-link">&larr; Tutti i progetti Brand &amp; Web</a>
+
+  <article class="project-detail">
+    <header class="project-detail-header">
+      <div class="kicker">
+        <span class="num">{String(projectIndex + 1).padStart(2, '0')} / {String(totalProjects).padStart(2, '0')}</span>
+        <span class="lab">{progetto.localita}</span>
+      </div>
+      <h1>{progetto.titolo}</h1>
+      <p class="section-intro-text">{progetto.sottotitolo || progetto.riassuntoCard}</p>
+
+      <div class="project-meta-bar">
+        <ul class="service-badges" aria-label="Servizi realizzati">
+          {badges.map((badge) => (
+            <li class="badge-pill">{badge}</li>
+          ))}
+        </ul>
+
+        {progetto.sitoWeb?.url && (
+          <a
+            class="quick-visit-btn"
+            href={progetto.sitoWeb.url}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Visita {progetto.sitoWeb.dominio} &#8599;
+          </a>
+        )}
+      </div>
+    </header>
+
+    {progetto.caseStudy && (
+      <section class="case reveal-on-scroll" aria-label="Sintesi del progetto">
+        <p class="case-tag">{progetto.caseStudy.tag || 'Caso in evidenza'}</p>
+        <div class={`case-grid ${progetto.caseStudy.risultato ? 'has-result' : ''}`}>
+          <div>
+            <span class="case-k">Obiettivo</span>
+            <p>{progetto.caseStudy.obiettivo}</p>
+          </div>
+          <div>
+            <span class="case-k">Soluzione</span>
+            <p>{progetto.caseStudy.soluzione}</p>
+          </div>
+          {progetto.caseStudy.risultato && (
+            <div>
+              <span class="case-k">Risultato</span>
+              <p>{progetto.caseStudy.risultato}</p>
+            </div>
+          )}
+        </div>
+      </section>
+    )}
+
+    {/* Sotto-sezione Sito Web */}
+    {progetto.sitoWeb && (
+      <section class="media-subsection reveal-on-scroll" aria-label="Sito Web realizzato">
+        <div class="web-showcase-card">
+          <div class="web-browser-preview">
+            <div class="browser-chrome">
+              <div class="browser-dots" aria-hidden="true">
+                <span></span><span></span><span></span>
+              </div>
+              <span class="browser-url">{progetto.sitoWeb.dominio}</span>
+              <span class={`browser-status ${progetto.sitoWeb.stato === 'Online' ? 'status-online' : 'status-wip'}`}>
+                {progetto.sitoWeb.stato}
+              </span>
+            </div>
+
+            {screenshotAttrs ? (
+              progetto.sitoWeb.url ? (
+                <a
+                  href={progetto.sitoWeb.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="browser-screenshot-link"
+                  aria-label={`Apri il sito ${progetto.sitoWeb.dominio}`}
+                >
+                  <img class="browser-screenshot" {...screenshotAttrs} />
+                </a>
+              ) : (
+                <img class="browser-screenshot" {...screenshotAttrs} />
+              )
+            ) : (
+              <div class="browser-wireframe" aria-hidden="true">
+                <div class="wf-hero"></div>
+                <div class="wf-row">
+                  <div class="wf-card"></div>
+                  <div class="wf-card"></div>
+                  <div class="wf-card"></div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div class="web-showcase-body">
+            <div class="web-showcase-main">
+              <span class="case-tag">{progetto.sitoWeb.etichetta || 'Sito Web & Presenza Digitale'}</span>
+              <h2>{progetto.sitoWeb.titolo || progetto.sitoWeb.dominio}</h2>
+              <p>{progetto.sitoWeb.descrizione}</p>
+
+              {progetto.sitoWeb.pacchettoDettagli && (
+                <div class="package-grid">
+                  {progetto.sitoWeb.pacchettoDettagli.map((item) => (
+                    <div class="package-item">
+                      <strong>{item.title}</strong>
+                      <span>{item.desc}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <ul class="tech-tags">
+                {progetto.sitoWeb.caratteristiche.map((tag) => (
+                  <li>{tag}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div class="web-showcase-action">
+              {progetto.sitoWeb.url ? (
+                <a class="web-visit-btn" href={progetto.sitoWeb.url} target="_blank" rel="noopener noreferrer">
+                  Visita {progetto.sitoWeb.dominio} &#8599;
+                </a>
+              ) : (
+                <a
+                  class="web-visit-btn"
+                  href={contactHref}
+                  target={instagramUrl ? '_blank' : undefined}
+                  rel={instagramUrl ? 'noopener noreferrer' : undefined}
+                >
+                  Richiedi un progetto simile &rarr;
+                </a>
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
+    )}
+
+    {/* Sotto-sezioni Fotografia e Grafica (collegate al Lightbox globale via .gallery .shot img) */}
+    {mediaGalleries.map((section) => (
+      <section class="media-subsection reveal-on-scroll">
+        <h2 class="sub">{section.title}</h2>
+        <div class={section.galleryClass}>
+          {section.items.map((s) => (
+            <figure class={s.wide ? 'shot shot-wide' : 'shot'}>
+              {s.src ? (
+                <img src={s.src} alt={s.alt} width={s.w} height={s.h} loading="lazy" decoding="async" />
+              ) : (
+                <div class="frame"><span>{s.cap || section.fallbackLabel}</span></div>
+              )}
+              {s.cap && <figcaption>{s.cap}</figcaption>}
+            </figure>
+          ))}
+        </div>
+      </section>
+    ))}
+
+    {/* Sotto-sezione Progettazione & Stampa 3D */}
+    {progetto.stampa3d && progetto.stampa3d.length > 0 && (
+      <section class="media-subsection reveal-on-scroll">
+        <h2 class="sub">Progettazione &amp; Stampa 3D</h2>
+        <p class="sub-desc">Oggetti fisici e supporti su misura progettati in CAD per completare la presenza del brand.</p>
+        <div class="print3d-grid">
+          {progetto.stampa3d.map((item) => (
+            <article class="print3d-card">
+              <div class="print3d-card-head">
+                <span class="print3d-cat">{item.category}</span>
+                {item.material && <span class="print3d-mat">{item.material}</span>}
+              </div>
+
+              {item.imgSrc && (
+                <div class="gallery print3d-gallery">
+                  <figure class="shot">
+                    <img
+                      src={item.imgSrc}
+                      alt={item.imgAlt || item.title}
+                      width={item.w}
+                      height={item.h}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </figure>
+                </div>
+              )}
+
+              <h3>{item.title}</h3>
+              <p>{item.desc}</p>
+
+              <ul class="tech-tags">
+                {item.deliverables.map((d) => <li>{d}</li>)}
+              </ul>
+            </article>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {/* Testimonianza opzionale */}
+    {progetto.testimonianza && (
+      <section class="testimonial-section reveal-on-scroll" aria-label="Testimonianza del cliente">
+        <blockquote class="testimonial-quote">
+          <p>“{progetto.testimonianza.testo}”</p>
+          <cite>
+            {progetto.testimonianza.autore}
+            {progetto.testimonianza.ruolo ? ` · ${progetto.testimonianza.ruolo}` : ''}
+          </cite>
+        </blockquote>
+      </section>
+    )}
+
+    {/* Navigazione tra progetti */}
+    {pagerItems.length > 0 && (
+      <nav class="project-pager reveal-on-scroll" aria-label="Altri progetti Brand, Turismo & Web">
+        <div class="project-pager-grid">
+          {pagerItems.map((item) => (
+            <a
+              href={`${baseUrl}portfolio/brand-turismo/${item.project.id}`}
+              class={`pager-card pager-${item.dir}`}
+            >
+              <span class="pager-dir">{item.label}</span>
+              <strong class="pager-title">{item.project.titoloBreve || item.project.titolo}</strong>
+              <span class="pager-loc">{item.project.localita}</span>
+            </a>
+          ))}
+        </div>
+        <div class="pager-all-wrap">
+          <a href={`${baseUrl}portfolio/brand-turismo`} class="pager-all-link">
+            Tutti i progetti Brand &amp; Web
+          </a>
+        </div>
+      </nav>
+    )}
+
+    {/* Box CTA Finale */}
+    <aside class="final-cta-box reveal-on-scroll">
+      <div>
+        <h2>Vuoi realizzare un progetto simile per la tua attività?</h2>
+        <p>
+          Raccontami cosa ti serve tra fotografia, sito web o stampa 3D su misura: costruiamo insieme una presenza
+          online e fisica chiara, autentica e pensata per portare contatti reali.
+        </p>
+      </div>
+      <a
+        class="cta-primary-btn"
+        href={contactHref}
+        target={instagramUrl ? '_blank' : undefined}
+        rel={instagramUrl ? 'noopener noreferrer' : undefined}
+      >
+        {instagramUrl ? 'Scrivimi su Instagram ↗' : 'Scrivimi e parliamone →'}
+      </a>
+    </aside>
+  </article>
+</BaseLayout>
+
+<style>
+  .back-link {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    margin-bottom: var(--s4);
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+  .back-link:hover {
+    color: var(--accent);
+  }
+
+  .project-detail-header {
+    padding-bottom: var(--s6);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .project-detail-header h1 {
+    margin-bottom: var(--s4);
+  }
+
+  .section-intro-text {
+    font-size: 1.12rem;
+    color: var(--muted);
+    max-width: 64ch;
+    margin-bottom: var(--s5);
+  }
+
+  .project-meta-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px var(--s4);
+  }
+
+  .service-badges {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 0;
+    margin: 0;
+  }
+
+  .badge-pill {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: var(--accent-2);
+    color: var(--accent);
+    border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+    white-space: nowrap;
+  }
+
+  .quick-visit-btn {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--paper);
+    background: var(--accent);
+    text-decoration: none;
+    padding: 9px 16px;
+    border-radius: 9px;
+    white-space: nowrap;
+    transition: opacity var(--transition-fast), transform var(--transition-fast);
+  }
+
+  .quick-visit-btn:hover {
+    opacity: 0.92;
+    transform: translateY(-1.5px);
+    color: var(--paper);
+  }
+
+  .project-detail section {
+    border-top: none;
+    padding: 0;
+  }
+
+  /* ---------- CASE STUDY ---------- */
+  .project-detail .case {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+    padding: 22px 26px;
+    margin: var(--s6) 0 0;
+  }
+
+  .case-tag {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: var(--s2);
+  }
+
+  .case-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s5);
+  }
+
+  .case-grid.has-result {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .case-k {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: var(--s1);
+  }
+
+  .case-grid p {
+    margin: 0;
+    font-size: 0.96rem;
+    line-height: 1.58;
+  }
+
+  /* ---------- MEDIA SUBSECTIONS ---------- */
+  .media-subsection {
+    margin-top: var(--s7);
+  }
+
+  .sub {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 var(--s2);
+  }
+
+  .sub-desc {
+    color: var(--muted);
+    font-size: 0.98rem;
+    margin-bottom: var(--s4);
+  }
+
+  /* ---------- WEB SHOWCASE + BROWSER MOCKUP ---------- */
+  .web-showcase-card {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--surface);
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr 1.15fr;
+    align-items: stretch;
+    transition: border-color var(--transition-fast);
+  }
+
+  .web-showcase-card:hover {
+    border-color: var(--accent);
+  }
+
+  .web-browser-preview {
+    border-right: 1px solid var(--border);
+    background: var(--paper);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .browser-chrome {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s3);
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    background: color-mix(in srgb, var(--surface) 75%, var(--paper));
+  }
+
+  .browser-dots {
+    display: flex;
+    gap: 6px;
+  }
+
+  .browser-dots span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--line);
+  }
+
+  .browser-url {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--muted);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 2px 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 260px;
+  }
+
+  .browser-status {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 3px 9px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  .status-online {
+    background: var(--accent-2);
+    color: var(--accent);
+  }
+
+  .status-wip {
+    background: var(--badge-completed-bg);
+    color: var(--muted);
+  }
+
+  .browser-screenshot-link {
+    display: block;
+    flex: 1;
+    overflow: hidden;
+    line-height: 0;
+  }
+
+  .browser-screenshot {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 240px;
+    max-height: 360px;
+    object-fit: cover;
+    object-position: top;
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .browser-screenshot-link:hover .browser-screenshot {
+    transform: scale(1.025);
+  }
+
+  .browser-wireframe {
+    padding: 22px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 14px;
+    min-height: 220px;
+    background: linear-gradient(135deg, color-mix(in srgb, var(--accent-2) 55%, var(--paper)), var(--paper));
+  }
+
+  .wf-hero {
+    height: 74px;
+    border-radius: 8px;
+    border: 1px dashed color-mix(in srgb, var(--accent) 30%, var(--border));
+    background: color-mix(in srgb, var(--surface) 70%, transparent);
+  }
+
+  .wf-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .wf-card {
+    height: 54px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .web-showcase-body {
+    padding: 24px 26px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: var(--s4);
+  }
+
+  .web-showcase-main {
+    width: 100%;
+  }
+
+  .web-showcase-main h2 {
+    font-family: var(--font-serif);
+    font-size: 1.35rem;
+    letter-spacing: -0.01em;
+    text-transform: none;
+    color: var(--text);
+    margin: 0 0 var(--s2);
+  }
+
+  .web-showcase-main p {
+    font-size: 0.96rem;
+    color: var(--muted);
+    margin-bottom: var(--s4);
+  }
+
+  .web-showcase-action {
+    display: flex;
+    align-items: center;
+    align-self: flex-start;
+  }
+
+  .web-visit-btn {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--paper);
+    background: var(--accent);
+    text-decoration: none;
+    padding: 11px 18px;
+    border-radius: 10px;
+    white-space: nowrap;
+    transition: opacity var(--transition-fast), transform var(--transition-fast);
+  }
+
+  .web-visit-btn:hover {
+    opacity: 0.92;
+    transform: translateY(-1.5px);
+    color: var(--paper);
+  }
+
+  .package-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: var(--s3);
+    margin-bottom: var(--s4);
+  }
+
+  .package-item {
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--paper);
+  }
+
+  .package-item strong {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .package-item span {
+    display: block;
+    font-size: 0.84rem;
+    color: var(--muted);
+    line-height: 1.45;
+  }
+
+  .tech-tags {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 0;
+    margin: 0;
+  }
+
+  .tech-tags li {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    background: var(--paper);
+    border-radius: 6px;
+    padding: 3px 9px;
+  }
+
+  /* ---------- STAMPA 3D CARDS ---------- */
+  .print3d-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s4);
+    margin-top: var(--s3);
+  }
+
+  .print3d-card {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--s2);
+    transition: border-color var(--transition-fast);
+  }
+
+  .print3d-card:hover {
+    border-color: var(--accent);
+  }
+
+  .print3d-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .print3d-cat {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .print3d-mat {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    color: var(--muted);
+    background: var(--paper);
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 999px;
+  }
+
+  .print3d-gallery {
+    column-count: 1;
+    margin: 6px 0;
+  }
+
+  .print3d-gallery .shot {
+    margin: 0;
+  }
+
+  .print3d-card h3 {
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    text-transform: none;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    margin: 4px 0 0;
+  }
+
+  .print3d-card p {
+    font-size: 0.92rem;
+    color: var(--muted);
+    margin: 0 0 var(--s2);
+    line-height: 1.5;
+  }
+
+  /* ---------- GALLERY (masonry + Lightbox globale) ---------- */
+  .gallery {
+    width: 100%;
+    column-count: 3;
+    column-gap: 14px;
+    margin-top: var(--s4);
+    margin-bottom: var(--s2);
+  }
+
+  .shot {
+    margin: 0 0 12px;
+    break-inside: avoid;
+    -webkit-column-break-inside: avoid;
+  }
+
+  .shot img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+
+  .frame {
+    aspect-ratio: var(--ar, 3 / 2);
+    width: 100%;
+    border-radius: 8px;
+    border: 1px dashed color-mix(in srgb, var(--accent) 35%, var(--border));
+    display: grid;
+    place-items: center;
+    padding: 16px;
+    text-align: center;
+    background: linear-gradient(135deg, var(--accent-2), color-mix(in srgb, var(--accent) 16%, var(--surface)));
+  }
+
+  .frame span {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+  }
+
+  .g-portrait {
+    --ar: 3 / 4;
+  }
+
+  .shot-wide {
+    column-span: all;
+    margin-bottom: 16px;
+  }
+
+  figcaption {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--muted);
+    margin-top: 8px;
+    line-height: 1.4;
+  }
+
+  /* ---------- TESTIMONIANZA ---------- */
+  .testimonial-section {
+    margin-top: var(--s7);
+  }
+
+  .testimonial-quote {
+    border-left: 2px solid var(--accent);
+    padding: var(--s2) 0 var(--s2) var(--s5);
+    margin: 0;
+  }
+
+  .testimonial-quote p {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.2rem;
+    line-height: 1.5;
+    color: var(--text);
+    margin: 0;
+  }
+
+  .testimonial-quote cite {
+    display: block;
+    margin-top: 10px;
+    font-family: var(--font-mono);
+    font-style: normal;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* ---------- NAVIGAZIONE TRA PROGETTI ---------- */
+  .project-pager {
+    margin-top: var(--s8);
+    padding-top: var(--s6);
+    border-top: 1px solid var(--border);
+  }
+
+  .project-pager-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s4);
+  }
+
+  .pager-card {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+    padding: 18px 22px;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    transition: border-color var(--transition-fast), background-color var(--transition-fast), transform var(--transition-fast);
+  }
+
+  .pager-next {
+    text-align: right;
+    align-items: flex-end;
+  }
+
+  .pager-card:hover {
+    border-color: var(--accent);
+    background: var(--accent-2);
+    transform: translateY(-2px);
+    color: inherit;
+  }
+
+  .pager-dir {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+  }
+
+  .pager-title {
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .pager-loc {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .pager-all-wrap {
+    margin-top: var(--s4);
+    text-align: center;
+  }
+
+  .pager-all-link {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 2px;
+    transition: color var(--transition-fast), border-color var(--transition-fast);
+  }
+
+  .pager-all-link:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  /* ---------- CTA FINALE ---------- */
+  .final-cta-box {
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--border));
+    border-radius: 14px;
+    background: var(--accent-2);
+    padding: 26px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--s5);
+    flex-wrap: wrap;
+    margin-top: var(--s7);
+  }
+
+  .final-cta-box h2 {
+    font-size: 1.4rem;
+    margin: 0 0 var(--s2);
+  }
+
+  .final-cta-box p {
+    margin: 0;
+    font-size: 0.96rem;
+    color: var(--text);
+    max-width: 52ch;
+  }
+
+  .cta-primary-btn {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 13.5px;
+    color: var(--paper);
+    background: var(--accent);
+    text-decoration: none;
+    padding: 13px 22px;
+    border-radius: 10px;
+    white-space: nowrap;
+    transition: opacity var(--transition-fast), transform var(--transition-fast);
+  }
+
+  .cta-primary-btn:hover {
+    opacity: 0.92;
+    transform: translateY(-1.5px);
+    color: var(--paper);
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 900px) {
+    .gallery:not(.print3d-gallery) {
+      column-count: 2;
+    }
+
+    .web-showcase-card {
+      grid-template-columns: 1fr;
+    }
+
+    .web-browser-preview {
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .browser-screenshot {
+      height: auto;
+      min-height: 0;
+      max-height: 420px;
+      aspect-ratio: 16 / 10;
+    }
+
+    .case-grid.has-result {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .gallery:not(.print3d-gallery) {
+      display: flex;
+      flex-direction: row;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      column-count: auto;
+      column-gap: normal;
+      width: auto;
+      margin-left: -22px;
+      margin-right: -22px;
+      transform: none;
+      padding: 4px 22px 16px 22px;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      -webkit-overflow-scrolling: touch;
+      gap: 16px;
+    }
+    .gallery:not(.print3d-gallery)::-webkit-scrollbar {
+      display: none;
+    }
+    .gallery:not(.print3d-gallery) .shot {
+      flex: 0 0 280px;
+      max-width: 80vw;
+      scroll-snap-align: start;
+      margin: 0;
+    }
+    .gallery:not(.print3d-gallery) .shot-wide {
+      flex: 0 0 320px;
+      max-width: 90vw;
+    }
+    .gallery:not(.print3d-gallery) .shot img,
+    .gallery:not(.print3d-gallery) .shot .frame {
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(0, 0, 0, 0.04);
+    }
+  }
+
+  @media (max-width: 720px) {
+    .print3d-grid,
+    .package-grid,
+    .case-grid,
+    .project-pager-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .pager-next {
+      text-align: left;
+      align-items: flex-start;
+    }
+  }
+</style>

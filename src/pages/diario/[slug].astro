@@ -1,6 +1,6 @@
 ---
-import { getCollection, render } from 'astro:content';
-import BaseLayout from '../../components/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import RedirectPage from '../../components/RedirectPage.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('diario');
@@ -11,63 +11,7 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const { Content } = await render(post);
-
-const formatDate = (date: Date) => {
-  return date.toLocaleDateString('it-IT', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric'
-  });
-};
-
 const baseUrl = import.meta.env.BASE_URL;
 ---
 
-<BaseLayout title={`${post.data.title} | Diario`} description={post.data.description || `Leggi "${post.data.title}" sul diario di Egidio Giacoia.`}>
-  <article class="post-container">
-    <div class="post-header">
-      <a href={`${baseUrl}diario`} class="back-link">← Torna al diario</a>
-      <time datetime={post.data.pubDate.toISOString()} class="post-date">
-        {formatDate(post.data.pubDate)}
-      </time>
-      <h1>{post.data.title}</h1>
-    </div>
-    
-    <div class="prose" id="post-content">
-      <Content />
-    </div>
-  </article>
-</BaseLayout>
-
-<style>
-  .post-container {
-    padding: var(--s2) 0;
-  }
-
-  .post-header {
-    margin-bottom: var(--s6);
-  }
-
-  .back-link {
-    display: inline-block;
-    font-family: var(--font-mono);
-    font-size: 13px;
-    text-decoration: none;
-    color: var(--text-muted);
-    margin-bottom: var(--s4);
-    transition: color var(--transition-fast);
-  }
-
-  .back-link:hover {
-    color: var(--accent);
-  }
-
-  .post-date {
-    display: block;
-    font-family: var(--font-mono);
-    font-size: 13px;
-    color: var(--text-muted);
-    margin-bottom: var(--s2);
-  }
-</style>
+<RedirectPage to={`${baseUrl}blog/${post.id}`} title={post.data.title} />

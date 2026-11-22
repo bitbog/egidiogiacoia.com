@@ -1,22 +1,22 @@
 ---
-lastUpdated: 2026-10-28 # AGGIORNA SEMPRE LA DATA!!!!
+lastUpdated: 2026-11-20 # AGGIORNA SEMPRE LA DATA!!!!
 ---
 
+<!-- 
 ## Cosa sto studiando
-Elettrotecnica.
+-->
 
 ## Progetti in corso
++ Rebrand e creazione sito per [inRoad](https://inroad.it).
 + Sto continuando a sviluppare [DispensAPP](https://egidiogiacoia.com/diario/pagina-2-dispensapp). Dovrei pubblicarla nel mese di ottobre su Android.
-+ Rebrand e creazione sito per Giovanni, tour in e-bike.
 
 ## Cosa sto leggendo
-+ ***21 lezioni per il XXI secolo*** di Yuval Noah Harari
-+ ***Il metodo ikigai*** di Héctor Garcìa Francesc Miralles
++ ***Guida galattica per gli autostoppisti*** di Douglas Adams
+
 
 
 ## A cosa sto giocando
-+ ***Replaced*** 
-+ ***Civilization 7***
++ ***Pokémon Bianco*** 
 
 ## Libri letti nel 2026, dal più recente
 Questi sono i libri che ho letto dall'inizio dell'anno. Quelli con la stellina vicino

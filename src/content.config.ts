@@ -1,5 +1,6 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
+import { z } from 'astro/zod';
 
 const diario = defineCollection({
   loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: './src/content/diario' }),
@@ -7,6 +8,8 @@ const diario = defineCollection({
     title: z.string(),
     pubDate: z.coerce.date(),
     description: z.string().optional(),
+    category: z.string().optional(),
+    tags: z.array(z.string()).optional(),
   }),
 });
 
@@ -22,9 +25,9 @@ const portfolio = defineCollection({
   schema: ({ image }) => z.object({
     title: z.string(),
     pubDate: z.coerce.date(),
-    cover: image(), // Validates that the cover path points to a valid image
+    cover: image(),
     location: z.string().optional(),
-    gear: z.string().optional(), // Camera gear used (e.g. "Leica M6, Portra 400")
+    gear: z.string().optional(),
   }),
 });
 

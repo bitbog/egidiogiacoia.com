@@ -1,0 +1,594 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../components/BaseLayout.astro';
+import { siteConfig } from '../../data/site';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('diario');
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const formatDate = (date: Date) => {
+  return date.toLocaleDateString('it-IT', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  });
+};
+
+const baseUrl = import.meta.env.BASE_URL;
+const description = post.data.description || `Leggi "${post.data.title}" sul blog di Egidio Giacoia.`;
+const canonicalPostUrl = `${siteConfig.siteUrl}/blog/${post.id}`;
+
+const blogPostSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description,
+  datePublished: post.data.pubDate.toISOString(),
+  mainEntityOfPage: canonicalPostUrl,
+  author: {
+    '@type': 'Person',
+    name: siteConfig.siteName,
+    url: siteConfig.siteUrl
+  },
+  publisher: {
+    '@type': 'Person',
+    name: siteConfig.siteName,
+    url: siteConfig.siteUrl
+  },
+  ...(post.data.category ? { articleSection: post.data.category } : {}),
+  ...(post.data.tags && post.data.tags.length > 0 ? { keywords: post.data.tags.join(', ') } : {})
+};
+---
+
+<BaseLayout
+  title={`${post.data.title} | Blog | Egidio Giacoia`}
+  description={description}
+  keywords={post.data.tags?.join(', ')}
+  schema={blogPostSchema}
+>
+  <article class="post-container reading-width">
+    <div class="post-header">
+      <a href={`${baseUrl}blog`} class="back-link">&larr; Torna al blog</a>
+      <div class="post-meta-row">
+        <div class="post-meta-left">
+          <time datetime={post.data.pubDate.toISOString()} class="post-date">
+            {formatDate(post.data.pubDate)}
+          </time>
+          {post.data.category && (
+            <span class="post-category-pill">{post.data.category}</span>
+          )}
+        </div>
+        <button type="button" id="toggle-live-typing" class="live-typing-toggle">
+          Mostra tutto subito
+        </button>
+      </div>
+      <h1 id="diary-post-title">{post.data.title}</h1>
+    </div>
+
+    <div class="prose" id="post-content">
+      <Content />
+    </div>
+
+    <aside class="post-cta-box reveal-on-scroll" aria-label="Contatti e portfolio">
+      <div>
+        <span class="post-cta-kicker">Lavoriamo insieme in Basilicata</span>
+        <p>
+          Hai un progetto tra <strong>fotografia</strong>, <strong>sito web</strong> o <strong>stampa 3D</strong>?
+          Scrivimi o dai un'occhiata ai lavori realizzati.
+        </p>
+      </div>
+      <div class="post-cta-actions">
+        <a href={`${baseUrl}contatti`} class="post-cta-primary">Parliamone &rarr;</a>
+        <a href={`${baseUrl}portfolio`} class="post-cta-secondary">Vedi il portfolio</a>
+      </div>
+    </aside>
+  </article>
+</BaseLayout>
+
+<style>
+  .post-container {
+    padding: var(--s2) 0;
+  }
+
+  .post-header {
+    margin-bottom: var(--s6);
+  }
+
+  .back-link {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    text-decoration: none;
+    color: var(--text-muted);
+    margin-bottom: var(--s4);
+    transition: color var(--transition-fast);
+  }
+
+  .back-link:hover {
+    color: var(--accent);
+  }
+
+  .post-meta-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--s3);
+    margin-bottom: var(--s2);
+  }
+
+  .post-meta-left {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .post-date {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  .post-category-pill {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+    background: var(--accent-2);
+    border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+    border-radius: 999px;
+    padding: 2px 9px;
+  }
+
+  .live-typing-toggle {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--accent);
+    background: var(--accent-2);
+    border: 1px solid color-mix(in srgb, var(--accent) 28%, transparent);
+    border-radius: 999px;
+    padding: 4px 12px;
+    cursor: pointer;
+    transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), opacity var(--transition-fast);
+  }
+
+  .live-typing-toggle:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 16%, var(--surface));
+  }
+
+  .live-typing-toggle:disabled {
+    color: var(--text-muted);
+    background: var(--surface);
+    border-color: var(--border);
+    cursor: default;
+    opacity: 0.78;
+  }
+
+  .post-cta-box {
+    margin-top: var(--s8);
+    padding: 22px 24px;
+    border-radius: 14px;
+    border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--border));
+    background: var(--accent-2);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s4);
+  }
+
+  .post-cta-kicker {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+
+  .post-cta-box p {
+    margin: 0;
+    font-size: 0.96rem;
+    color: var(--text);
+    max-width: 44ch;
+  }
+
+  .post-cta-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .post-cta-primary,
+  .post-cta-secondary {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    text-decoration: none;
+    padding: 10px 16px;
+    border-radius: 9px;
+    white-space: nowrap;
+    transition: opacity var(--transition-fast), transform var(--transition-fast), border-color var(--transition-fast);
+  }
+
+  .post-cta-primary {
+    background: var(--accent);
+    color: var(--paper);
+  }
+
+  .post-cta-primary:hover {
+    opacity: 0.92;
+    transform: translateY(-1px);
+    color: var(--paper);
+  }
+
+  .post-cta-secondary {
+    background: var(--paper);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  .post-cta-secondary:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .live-typing-toggle {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  let diaryTimerIds: number[] = [];
+  let diaryObserver: IntersectionObserver | null = null;
+
+  function clearDiaryState() {
+    diaryTimerIds.forEach((id) => window.clearTimeout(id));
+    diaryTimerIds = [];
+    if (diaryObserver) {
+      diaryObserver.disconnect();
+      diaryObserver = null;
+    }
+  }
+
+  function splitElementIntoChars(root: HTMLElement): HTMLSpanElement[] {
+    const chars: HTMLSpanElement[] = [];
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode(node) {
+        if (!node.nodeValue || node.nodeValue.length === 0) return NodeFilter.FILTER_REJECT;
+        const parent = node.parentElement;
+        if (parent && parent.closest('pre')) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      },
+    });
+
+    const textNodes: Text[] = [];
+    let current = walker.nextNode();
+    while (current) {
+      textNodes.push(current as Text);
+      current = walker.nextNode();
+    }
+
+    textNodes.forEach((textNode) => {
+      const value = textNode.nodeValue || '';
+      const frag = document.createDocumentFragment();
+      const tokens = value.split(/(\s+)/);
+
+      tokens.forEach((token) => {
+        if (!token) return;
+        if (/^\s+$/.test(token)) {
+          frag.appendChild(document.createTextNode(token));
+          return;
+        }
+
+        const container: HTMLElement | DocumentFragment =
+          token.length <= 24
+            ? (() => {
+                const w = document.createElement('span');
+                w.style.whiteSpace = 'nowrap';
+                return w;
+              })()
+            : frag;
+
+        for (const ch of token) {
+          const span = document.createElement('span');
+          span.className = 'tw-char';
+          span.textContent = ch;
+          container.appendChild(span);
+          chars.push(span);
+        }
+
+        if (container !== frag) {
+          frag.appendChild(container);
+        }
+      });
+
+      textNode.parentNode?.replaceChild(frag, textNode);
+    });
+
+    return chars;
+  }
+
+  function initDiaryTypewriter() {
+    clearDiaryState();
+
+    const titleEl = document.getElementById('diary-post-title');
+    const postContent = document.getElementById('post-content');
+    const toggleBtn = document.getElementById('toggle-live-typing') as HTMLButtonElement | null;
+    if (!titleEl || !postContent) return;
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) {
+      if (toggleBtn) {
+        toggleBtn.textContent = 'Scrittura completata';
+        toggleBtn.disabled = true;
+      }
+      return;
+    }
+
+    if (postContent.dataset.twInit === '1') return;
+    postContent.dataset.twInit = '1';
+
+    interface TypingBlock {
+      el: HTMLElement;
+      chars: HTMLSpanElement[];
+      cursorIndex: number;
+      queued: boolean;
+      done: boolean;
+      isHeading: boolean;
+    }
+
+    const titleChars = splitElementIntoChars(titleEl);
+    const titleBlock: TypingBlock = {
+      el: titleEl,
+      chars: titleChars,
+      cursorIndex: 0,
+      queued: true,
+      done: titleChars.length === 0,
+      isHeading: true,
+    };
+
+    const blocks: TypingBlock[] = [];
+    const topChildren = Array.from(postContent.children) as HTMLElement[];
+
+    topChildren.forEach((child) => {
+      const tag = child.tagName;
+      if (tag === 'PRE' || tag === 'HR' || tag === 'FIGURE' || child.classList.contains('image-row')) {
+        child.classList.add('reveal-on-scroll');
+        return;
+      }
+
+      if (tag === 'UL' || tag === 'OL') {
+        const items = Array.from(child.children) as HTMLElement[];
+        items.forEach((li) => {
+          const chars = splitElementIntoChars(li);
+          if (chars.length > 0) {
+            blocks.push({ el: li, chars, cursorIndex: 0, queued: false, done: false, isHeading: false });
+          }
+        });
+        return;
+      }
+
+      if (tag === 'P' && child.querySelector('img') && (child.textContent || '').trim() === '') {
+        child.classList.add('reveal-on-scroll');
+        return;
+      }
+
+      const chars = splitElementIntoChars(child);
+      if (chars.length > 0) {
+        blocks.push({
+          el: child,
+          chars,
+          cursorIndex: 0,
+          queued: false,
+          done: false,
+          isHeading: tag === 'H2' || tag === 'H3' || tag === 'H4',
+        });
+      }
+    });
+
+    if ('IntersectionObserver' in window) {
+      const mediaEls = Array.from(postContent.querySelectorAll<HTMLElement>('.reveal-on-scroll'));
+      const mediaObs = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              mediaObs.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.1 }
+      );
+      mediaEls.forEach((m) => mediaObs.observe(m));
+    }
+
+    const queue: TypingBlock[] = [];
+    let activeCursorSpan: HTMLSpanElement | null = null;
+    let isRunning = false;
+    let titleDone = titleBlock.done;
+    let allFinished = false;
+
+    const clearCursor = () => {
+      if (activeCursorSpan) {
+        activeCursorSpan.classList.remove('tw-cursor');
+        activeCursorSpan = null;
+      }
+    };
+
+    const revealBlockInstant = (block: TypingBlock) => {
+      block.chars.forEach((span) => span.classList.add('tw-visible'));
+      block.cursorIndex = block.chars.length;
+      block.done = true;
+    };
+
+    const markComplete = () => {
+      if (allFinished) return;
+      allFinished = true;
+      clearCursor();
+      if (toggleBtn) {
+        toggleBtn.textContent = 'Scrittura completata';
+        toggleBtn.disabled = true;
+      }
+    };
+
+    const revealAllNow = () => {
+      clearDiaryState();
+      revealBlockInstant(titleBlock);
+      blocks.forEach((b) => revealBlockInstant(b));
+      postContent.querySelectorAll('.reveal-on-scroll').forEach((el) => el.classList.add('is-visible'));
+      queue.length = 0;
+      markComplete();
+    };
+
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', revealAllNow, { once: true });
+    }
+
+    const checkIfAllBlocksDone = () => {
+      if (titleDone && blocks.every((b) => b.done)) {
+        markComplete();
+      }
+    };
+
+    const processQueue = () => {
+      if (allFinished) return;
+
+      if (!titleDone) {
+        if (titleBlock.cursorIndex < titleBlock.chars.length) {
+          clearCursor();
+          const chSpan = titleBlock.chars[titleBlock.cursorIndex];
+          chSpan.classList.add('tw-visible', 'tw-cursor');
+          activeCursorSpan = chSpan;
+          titleBlock.cursorIndex += 1;
+          const t = window.setTimeout(processQueue, 32);
+          diaryTimerIds.push(t);
+          return;
+        }
+        titleDone = true;
+        titleBlock.done = true;
+        clearCursor();
+      }
+
+      while (queue.length > 0 && queue[0].done) {
+        queue.shift();
+      }
+
+      if (queue.length === 0) {
+        isRunning = false;
+        clearCursor();
+        checkIfAllBlocksDone();
+        return;
+      }
+
+      isRunning = true;
+      const current = queue[0];
+
+      const rect = current.el.getBoundingClientRect();
+      if (rect.bottom < 0 && queue.length > 1) {
+        revealBlockInstant(current);
+        queue.shift();
+        const t = window.setTimeout(processQueue, 4);
+        diaryTimerIds.push(t);
+        return;
+      }
+
+      const pendingCount = queue.length;
+      const step = pendingCount >= 4 ? 5 : pendingCount >= 2 ? 2 : 1;
+      const delay = pendingCount >= 4 ? 6 : pendingCount >= 2 ? 8 : current.isHeading ? 20 : 14;
+
+      clearCursor();
+      const endIndex = Math.min(current.cursorIndex + step, current.chars.length);
+      for (let i = current.cursorIndex; i < endIndex; i++) {
+        current.chars[i].classList.add('tw-visible');
+      }
+      current.cursorIndex = endIndex;
+
+      if (current.cursorIndex > 0) {
+        const last = current.chars[current.cursorIndex - 1];
+        last.classList.add('tw-cursor');
+        activeCursorSpan = last;
+      }
+
+      if (current.cursorIndex >= current.chars.length) {
+        current.done = true;
+        queue.shift();
+      }
+
+      const t = window.setTimeout(processQueue, delay);
+      diaryTimerIds.push(t);
+    };
+
+    const enqueueBlock = (block: TypingBlock) => {
+      if (block.queued || block.done) return;
+      block.queued = true;
+      queue.push(block);
+      if (titleDone && !isRunning) {
+        processQueue();
+      }
+    };
+
+    if ('IntersectionObserver' in window) {
+      diaryObserver = new IntersectionObserver(
+        (entries) => {
+          const intersecting = entries
+            .filter((entry) => entry.isIntersecting)
+            .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+
+          intersecting.forEach((entry) => {
+            const targetBlock = blocks.find((b) => b.el === entry.target);
+            if (targetBlock) {
+              enqueueBlock(targetBlock);
+              diaryObserver?.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.12, rootMargin: '0px 0px -6% 0px' }
+      );
+
+      blocks.forEach((b) => diaryObserver?.observe(b.el));
+
+      const onFastScroll = () => {
+        if (allFinished) {
+          window.removeEventListener('scroll', onFastScroll);
+          return;
+        }
+        blocks.forEach((b) => {
+          if (!b.done && !b.queued && b.el.getBoundingClientRect().bottom < 0) {
+            revealBlockInstant(b);
+            diaryObserver?.unobserve(b.el);
+          }
+        });
+        checkIfAllBlocksDone();
+      };
+      window.addEventListener('scroll', onFastScroll, { passive: true });
+    } else {
+      revealAllNow();
+      return;
+    }
+
+    isRunning = true;
+    const startTimer = window.setTimeout(processQueue, 100);
+    diaryTimerIds.push(startTimer);
+  }
+
+  initDiaryTypewriter();
+  document.addEventListener('astro:page-load', initDiaryTypewriter);
+  document.addEventListener('astro:after-swap', initDiaryTypewriter);
+</script>

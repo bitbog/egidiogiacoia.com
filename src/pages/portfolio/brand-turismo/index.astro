@@ -1,0 +1,689 @@
+---
+import BaseLayout from '../../../components/BaseLayout.astro';
+import PortfolioSubnav from '../../../components/PortfolioSubnav.astro';
+import {
+  progettiBrandTurismo,
+  getProjectServices,
+  getProjectBadges,
+  getProjectMediaSummary
+} from '../../../data/progetti-brand-turismo';
+import { siteConfig, getInstagramUrl } from '../../../data/site';
+
+const baseUrl = import.meta.env.BASE_URL;
+const instagramUrl = getInstagramUrl();
+const contactHref = instagramUrl || `${baseUrl}contatti`;
+const hasStampa3d = progettiBrandTurismo.some((p) => p.stampa3d && p.stampa3d.length > 0);
+
+const serviceSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: 'Fotografia, Sviluppo Siti Web e Stampa 3D per Brand e Turismo in Basilicata',
+  provider: {
+    '@type': 'Person',
+    name: siteConfig.siteName,
+    url: siteConfig.siteUrl
+  },
+  areaServed: {
+    '@type': 'AdministrativeArea',
+    name: 'Basilicata'
+  },
+  serviceType: [
+    'Fotografia Commerciale, Social e Turistica',
+    'Sviluppo Siti Web e SEO Locale per B&B, Hotel e Aziende',
+    'Progettazione CAD e Stampa 3D per Strutture Ricettive e Brand'
+  ],
+  description:
+    'Servizi integrati di fotografia commerciale e per i social, creazione siti web su misura e progettazione/stampa 3D per B&B, destinazioni turistiche e aziende a Potenza e in Basilicata.'
+};
+---
+
+<BaseLayout
+  title="Brand, Turismo & Sviluppo Siti Web in Basilicata | Egidio Giacoia"
+  description="Servizi fotografici commerciali e social, sviluppo siti web e integrazione stampa 3D per B&B, hotel, destinazioni turistiche e aziende a Potenza e in Basilicata."
+  keywords="fotografia turistica Basilicata, fotografia social B&B Basilicata, sviluppo siti web B&B Basilicata, fotografo hotel Potenza, stampa 3D B&B Basilicata, Visit Castelsaraceno, inRoad"
+  schema={serviceSchema}
+>
+  <PortfolioSubnav active="brand-turismo" />
+
+  <!-- ===================== 01 · BRAND, TURISMO & SVILUPPO WEB ===================== -->
+  <section id="turismo">
+    <div class="kicker"><span class="num">01</span><span class="lab">Brand, Turismo &amp; Sviluppo Web</span></div>
+    <h1>Raccontare un luogo o un'attività finché non viene voglia di andarci.</h1>
+    <p class="section-intro-text">
+      Unisco <strong>fotografia, sviluppo web e progettazione 3D</strong> per trasformare l'identità di una destinazione,
+      di una struttura ricettiva o di un brand in Basilicata in una presenza online e fisica curata nei dettagli.
+    </p>
+
+    <!-- I 3 Pilastri del Servizio (compatti per dare subito spazio ai progetti) -->
+    <div class="service-pillars" aria-label="I pilastri del servizio">
+      <article class="pillar-card reveal-on-scroll">
+        <span class="pillar-num">01 · Fotografia</span>
+        <h2>Fotografia Commerciale &amp; Social</h2>
+        <p>Shooting per destinazioni, borghi, B&amp;B, hotel ed esperienze pensati per sito web, portali turistici e canali social.</p>
+      </article>
+      <article id="sviluppo-web" class="pillar-card reveal-on-scroll" style="--reveal-delay: 70ms;">
+        <span class="pillar-num">02 · Web &amp; SEO</span>
+        <h2>Sviluppo Siti Web &amp; SEO</h2>
+        <p>Realizzazione di siti web veloci, moderni, mobile-first e ottimizzati per farsi trovare su Google da turisti e clienti locali.</p>
+      </article>
+      <article class="pillar-card reveal-on-scroll" style="--reveal-delay: 140ms;">
+        <span class="pillar-num">03 · Manifattura Additiva</span>
+        <h2>Progettazione &amp; Stampa 3D</h2>
+        <p>
+          Portachiavi, targhette e supporti QR/NFC su misura per B&amp;B e brand.
+          <a href={`${baseUrl}portfolio/stampa-3d`} class="pillar-inline-link">Scopri la sezione 3D &rarr;</a>
+        </p>
+      </article>
+    </div>
+
+    <!-- Barra Filtri Interattiva + Contatore -->
+    <div class="filter-bar-wrap reveal-on-scroll" aria-label="Filtra progetti per tipologia di servizio">
+      <span class="filter-label">Filtra per servizio:</span>
+      <div class="portfolio-filter-bar" role="group" aria-label="Filtri servizio">
+        <button type="button" class="filter-btn is-active" data-filter="all">Tutti i lavori</button>
+        <button type="button" class="filter-btn" data-filter="foto">Fotografia</button>
+        <button type="button" class="filter-btn" data-filter="web">Siti Web</button>
+        {hasStampa3d && <button type="button" class="filter-btn" data-filter="stampa3d">Stampa 3D</button>}
+        <button type="button" class="filter-btn" data-filter="grafica">Grafica</button>
+      </div>
+      <span class="filter-count" id="projects-count" aria-live="polite">
+        {progettiBrandTurismo.length === 1 ? '1 progetto' : `${progettiBrandTurismo.length} progetti`}
+      </span>
+    </div>
+
+    <!-- ===================== LISTA CARD GRANDI DINAMICHE ===================== -->
+    <div class="project-cards-stack">
+      {progettiBrandTurismo.map((progetto, idx) => {
+        const services = getProjectServices(progetto);
+        const badges = getProjectBadges(progetto);
+        const mediaSummary = getProjectMediaSummary(progetto);
+        const cardNum = String(idx + 1).padStart(2, '0');
+
+        return (
+          <a
+            href={`${baseUrl}portfolio/brand-turismo/${progetto.id}`}
+            class="project-banner-card reveal-on-scroll"
+            data-services={services.join(' ')}
+            style={`--reveal-delay: ${Math.min(idx * 65, 260)}ms;`}
+          >
+            <div class="project-card-media">
+              {progetto.cover.isBrowserMockup && (
+                <div class="mini-browser-chrome" aria-hidden="true">
+                  <div class="mini-browser-dots">
+                    <span></span><span></span><span></span>
+                  </div>
+                  <span class="mini-browser-url">{progetto.sitoWeb?.dominio || progetto.titoloBreve}</span>
+                  {progetto.sitoWeb && (
+                    <span class={`mini-browser-status ${progetto.sitoWeb.stato === 'Online' ? 'is-online' : 'is-wip'}`}>
+                      {progetto.sitoWeb.stato}
+                    </span>
+                  )}
+                </div>
+              )}
+
+              <div class="project-cover-frame">
+                <img
+                  src={progetto.cover.src}
+                  alt={progetto.cover.alt}
+                  width={progetto.cover.w}
+                  height={progetto.cover.h}
+                  loading={idx < 2 ? 'eager' : 'lazy'}
+                  decoding="async"
+                  class="project-cover-img"
+                  style={`object-position: ${progetto.cover.objectPosition || 'center'};`}
+                />
+                <span class="project-index-badge" aria-hidden="true">{cardNum}</span>
+              </div>
+            </div>
+
+            <div class="project-card-body">
+              <div class="project-card-top">
+                <span class="project-location">{progetto.localita}</span>
+                {mediaSummary && <span class="project-media-summary">{mediaSummary}</span>}
+              </div>
+
+              <h2 class="project-card-title">{progetto.titolo}</h2>
+              <p class="project-card-desc">{progetto.riassuntoCard}</p>
+
+              <div class="project-card-footer">
+                <ul class="service-badges" aria-label="Servizi realizzati">
+                  {badges.map((badge) => (
+                    <li class="badge-pill">{badge}</li>
+                  ))}
+                </ul>
+                <span class="project-card-cta">
+                  Apri progetto <span class="card-cta-arrow" aria-hidden="true">&rarr;</span>
+                </span>
+              </div>
+            </div>
+          </a>
+        );
+      })}
+    </div>
+
+    <!-- Box CTA Finale -->
+    <aside class="final-cta-box reveal-on-scroll">
+      <div>
+        <h2>Hai un'attività, un B&amp;B o un progetto turistico in Basilicata?</h2>
+        <p>
+          Possiamo lavorare su un singolo servizio (fotografia, sito web o stampa 3D) oppure costruire insieme
+          l'intero pacchetto coordinato per la tua presenza online e fisica.
+        </p>
+      </div>
+      <a
+        class="cta-primary-btn"
+        href={contactHref}
+        target={instagramUrl ? '_blank' : undefined}
+        rel={instagramUrl ? 'noopener noreferrer' : undefined}
+      >
+        {instagramUrl ? 'Scrivimi su Instagram ↗' : 'Scrivimi e parliamone →'}
+      </a>
+    </aside>
+  </section>
+</BaseLayout>
+
+<style>
+  .section-intro-text {
+    font-size: 1.1rem;
+    color: var(--muted);
+    max-width: 62ch;
+    margin-bottom: var(--s5);
+  }
+  .section-intro-text strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  section {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  /* ---------- 3 PILASTRI COMPATTI ---------- */
+  .service-pillars {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--s3);
+    margin-bottom: var(--s5);
+  }
+
+  .pillar-card {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+    padding: 14px 18px;
+    transition: border-color var(--transition-fast), transform var(--transition-fast);
+  }
+
+  .pillar-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .pillar-num {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+
+  .pillar-card h2 {
+    font-family: var(--font-serif);
+    font-size: 1.08rem;
+    margin: 0 0 6px;
+    line-height: 1.25;
+  }
+
+  .pillar-card p {
+    font-size: 0.87rem;
+    color: var(--muted);
+    margin: 0;
+    line-height: 1.48;
+  }
+
+  .pillar-inline-link {
+    display: inline-block;
+    margin-top: 4px;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  }
+
+  .pillar-inline-link:hover {
+    border-color: var(--accent);
+  }
+
+  /* ---------- BARRA FILTRI ---------- */
+  .filter-bar-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--s3);
+    padding: 12px 18px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+    margin-bottom: var(--s5);
+  }
+
+  .filter-label {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+
+  .portfolio-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .filter-btn {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text);
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 6px 14px;
+    cursor: pointer;
+    transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+  }
+
+  .filter-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .filter-btn.is-active {
+    background: var(--accent);
+    color: var(--paper);
+    border-color: var(--accent);
+  }
+
+  .filter-count {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  /* ---------- STACK VERTICALE DI CARD GRANDI ---------- */
+  .project-cards-stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s5);
+    margin-bottom: var(--s7);
+  }
+
+  .project-banner-card {
+    display: grid;
+    grid-template-columns: minmax(300px, 390px) 1fr;
+    min-height: 235px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: var(--surface);
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    transition:
+      border-color var(--transition-fast),
+      transform var(--transition-fast),
+      box-shadow var(--transition-fast),
+      background-color var(--transition-fast);
+  }
+
+  .project-banner-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-3px);
+    box-shadow: 0 18px 40px -18px color-mix(in srgb, var(--accent) 30%, transparent);
+    color: inherit;
+  }
+
+  .project-banner-card.is-filtered-out {
+    display: none;
+  }
+
+  .project-card-media {
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--border);
+    background: var(--paper);
+    min-width: 0;
+  }
+
+  .mini-browser-chrome {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--border);
+    background: color-mix(in srgb, var(--surface) 75%, var(--paper));
+    flex-shrink: 0;
+  }
+
+  .mini-browser-dots {
+    display: flex;
+    gap: 5px;
+  }
+
+  .mini-browser-dots span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--line);
+  }
+
+  .mini-browser-url {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .mini-browser-status {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 2px 8px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  .mini-browser-status.is-online {
+    background: var(--accent-2);
+    color: var(--accent);
+  }
+
+  .mini-browser-status.is-wip {
+    background: var(--badge-completed-bg);
+    color: var(--muted);
+  }
+
+  .project-cover-frame {
+    position: relative;
+    flex: 1;
+    overflow: hidden;
+    min-height: 200px;
+  }
+
+  .project-cover-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .project-banner-card:hover .project-cover-img {
+    transform: scale(1.045);
+  }
+
+  .project-index-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: #ffffff;
+    background: rgba(15, 22, 24, 0.64);
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 4px 10px;
+    border-radius: 999px;
+    pointer-events: none;
+  }
+
+  .project-card-body {
+    padding: 24px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--s3);
+    min-width: 0;
+  }
+
+  .project-card-top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 14px;
+  }
+
+  .project-location {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0;
+  }
+
+  .project-media-summary {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 3px 10px;
+    white-space: nowrap;
+  }
+
+  .project-card-title {
+    font-family: var(--font-serif);
+    font-size: clamp(22px, 2.8vw, 30px);
+    line-height: 1.18;
+    margin: 0;
+    color: var(--text);
+    transition: color var(--transition-fast);
+  }
+
+  .project-banner-card:hover .project-card-title {
+    color: var(--accent);
+  }
+
+  .project-card-desc {
+    color: var(--muted);
+    font-size: 0.98rem;
+    line-height: 1.55;
+    margin: 0;
+    max-width: 60ch;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .project-card-footer {
+    margin-top: auto;
+    padding-top: var(--s3);
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px 16px;
+  }
+
+  .service-badges {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 0;
+    margin: 0;
+  }
+
+  .badge-pill {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    padding: 4px 11px;
+    border-radius: 999px;
+    background: var(--accent-2);
+    color: var(--accent);
+    border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+    white-space: nowrap;
+  }
+
+  .project-card-cta {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--accent);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+  }
+
+  .card-cta-arrow {
+    display: inline-block;
+    transition: transform var(--transition-fast);
+  }
+
+  .project-banner-card:hover .card-cta-arrow {
+    transform: translateX(5px);
+  }
+
+  /* ---------- CTA FINALE ---------- */
+  .final-cta-box {
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--border));
+    border-radius: 14px;
+    background: var(--accent-2);
+    padding: 26px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--s5);
+    flex-wrap: wrap;
+  }
+
+  .final-cta-box h2 {
+    font-size: 1.4rem;
+    margin: 0 0 var(--s2);
+  }
+
+  .final-cta-box p {
+    margin: 0;
+    font-size: 0.96rem;
+    color: var(--text);
+    max-width: 52ch;
+  }
+
+  .cta-primary-btn {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 13.5px;
+    color: var(--paper);
+    background: var(--accent);
+    text-decoration: none;
+    padding: 13px 22px;
+    border-radius: 10px;
+    white-space: nowrap;
+    transition: opacity var(--transition-fast), transform var(--transition-fast);
+  }
+
+  .cta-primary-btn:hover {
+    opacity: 0.92;
+    transform: translateY(-1.5px);
+    color: var(--paper);
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 820px) {
+    .project-banner-card {
+      grid-template-columns: 1fr;
+      min-height: auto;
+    }
+
+    .project-card-media {
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .project-cover-frame {
+      min-height: 0;
+      aspect-ratio: 16 / 10;
+    }
+
+    .project-card-body {
+      padding: 20px;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .service-pillars {
+      grid-template-columns: 1fr;
+    }
+
+    .filter-count {
+      margin-left: 0;
+      width: 100%;
+    }
+  }
+</style>
+
+<script>
+  function initBrandTurismoFilters() {
+    const filterButtons = Array.from(document.querySelectorAll<HTMLButtonElement>('.portfolio-filter-bar .filter-btn'));
+    const projectCards = Array.from(document.querySelectorAll<HTMLElement>('.project-banner-card'));
+    const countEl = document.getElementById('projects-count');
+    if (filterButtons.length === 0 || projectCards.length === 0) return;
+
+    const applyFilter = (filter: string) => {
+      filterButtons.forEach((btn) => {
+        btn.classList.toggle('is-active', btn.dataset.filter === filter);
+      });
+
+      let visibleCount = 0;
+      projectCards.forEach((card) => {
+        const services = (card.dataset.services || '').split(/\s+/).filter(Boolean);
+        const matches = filter === 'all' || services.includes(filter);
+        card.classList.toggle('is-filtered-out', !matches);
+
+        if (matches) {
+          visibleCount += 1;
+          card.classList.add('is-visible');
+        }
+      });
+
+      if (countEl) {
+        countEl.textContent = visibleCount === 1 ? '1 progetto' : `${visibleCount} progetti`;
+      }
+    };
+
+    filterButtons.forEach((btn) => {
+      if (btn.dataset.filterBound === '1') return;
+      btn.dataset.filterBound = '1';
+      btn.addEventListener('click', () => {
+        applyFilter(btn.dataset.filter || 'all');
+      });
+    });
+
+    // Supporto opzionale ?servizio=foto|web|stampa3d|grafica
+    const initialService = new URLSearchParams(window.location.search).get('servizio');
+    if (initialService && filterButtons.some((btn) => btn.dataset.filter === initialService)) {
+      applyFilter(initialService);
+    }
+  }
+
+  initBrandTurismoFilters();
+  document.addEventListener('astro:page-load', initBrandTurismoFilters);
+  document.addEventListener('astro:after-swap', initBrandTurismoFilters);
+</script>

@@ -1,0 +1,353 @@
+---
+import BaseLayout from '../components/BaseLayout.astro';
+import {
+  siteConfig,
+  getWhatsAppChatUrl,
+  getInstagramUrl
+} from '../data/site';
+
+const whatsappChatUrl = getWhatsAppChatUrl();
+const instagramUrl = getInstagramUrl();
+---
+
+<BaseLayout
+  title="Contatti | Fotografia, Sviluppo Web & Stampa 3D in Basilicata | Egidio Giacoia"
+  description="Contatta Egidio Giacoia per servizi fotografici, sviluppo siti web, progettazione e stampa 3D, eventi e ritratti a Potenza e in Basilicata."
+  keywords="contatti Egidio Giacoia, preventivo sito web Basilicata, fotografo Potenza contatti, stampa 3D Basilicata contatti"
+>
+  <section id="contatti" class="contact">
+    <div class="kicker"><span class="num">—</span><span class="lab">Contatti</span></div>
+    <h1>Lavoriamo insieme.</h1>
+    <p class="section-intro-text">
+      Hai un progetto in Basilicata — un luogo o un B&amp;B da fotografare, un nuovo sito web da costruire,
+      un oggetto su misura da progettare in 3D, un evento o un ritratto? Raccontamelo: ascolto, pianifico e studio una soluzione su misura.
+    </p>
+
+    <!-- Griglia Canali Diretti -->
+    <div class="contact-cards-grid reveal-on-scroll">
+      <!-- 1. Instagram (canale attivo) -->
+      <article class="contact-card is-primary">
+        <div class="contact-card-head">
+          <span class="contact-kicker">01 · Messaggio diretto &amp; Social</span>
+          <span class={`contact-status ${instagramUrl ? 'is-active' : 'is-soon'}`}>
+            {instagramUrl ? 'Attivo' : 'In arrivo'}
+          </span>
+        </div>
+        <h2>Scrivimi su Instagram</h2>
+        <p class="contact-card-desc">
+          Il canale attivo per scrivermi in DM: raccontami il tuo progetto tra fotografia, siti web o stampa 3D e scopri i miei ultimi lavori.
+        </p>
+        {siteConfig.instagramHandle && <p class="contact-value">{siteConfig.instagramHandle}</p>}
+        <div class="contact-card-actions">
+          {instagramUrl ? (
+            <a class="btn-contact-primary" href={instagramUrl} target="_blank" rel="noopener noreferrer">
+              Scrivimi su Instagram &#8599;
+            </a>
+          ) : (
+            <span class="btn-contact-disabled" aria-disabled="true">
+              Profilo in collegamento
+            </span>
+          )}
+        </div>
+      </article>
+
+      <!-- 2. WhatsApp Diretto -->
+      <article class="contact-card">
+        <div class="contact-card-head">
+          <span class="contact-kicker">02 · Chat veloce</span>
+          <span class={`contact-status ${whatsappChatUrl ? 'is-active' : 'is-soon'}`}>
+            {whatsappChatUrl ? 'Attivo' : 'In arrivo'}
+          </span>
+        </div>
+        <h2>WhatsApp Diretto</h2>
+        <p class="contact-card-desc">
+          Per domande rapide, disponibilità su una data o per fissare una chiacchierata telefonica sul tuo progetto.
+        </p>
+        <div class="contact-card-actions">
+          {whatsappChatUrl ? (
+            <a class="btn-contact-primary" href={whatsappChatUrl} target="_blank" rel="noopener noreferrer">
+              Scrivimi su WhatsApp &#8599;
+            </a>
+          ) : (
+            <span class="btn-contact-disabled" aria-disabled="true">
+              Numero diretto in arrivo
+            </span>
+          )}
+        </div>
+      </article>
+    </div>
+
+    <!-- Come partire subito + Canale Blog -->
+    <div class="contact-extra-grid reveal-on-scroll">
+      <aside class="brief-box">
+        <span class="brief-kicker">Come scrivermi per partire subito</span>
+        <h2>Tre informazioni utili nel primo messaggio</h2>
+        <ul class="brief-list">
+          <li><strong>Di cosa hai bisogno:</strong> fotografia, sito web, progettazione/stampa 3D oppure un pacchetto combinato.</li>
+          <li><strong>Dove e quando:</strong> località in Basilicata (o altrove) e periodo indicativo.</li>
+          <li><strong>Obiettivo:</strong> cosa vuoi raccontare o migliorare per la tua attività, struttura o evento.</li>
+        </ul>
+      </aside>
+
+      <aside class="channel-box">
+        <span class="brief-kicker">Aggiornamenti &amp; Blog</span>
+        <h2>Canale WhatsApp</h2>
+        <p>
+          Se ti fa piacere leggere i nuovi articoli che pubblico sul blog e seguire gli aggiornamenti personali, puoi unirti al canale broadcast.
+        </p>
+        <a href={siteConfig.whatsappChannelUrl} target="_blank" rel="noopener noreferrer" class="channel-link">
+          Unisciti al Canale WhatsApp &#8599;
+        </a>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  section {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  .contact h1 {
+    font-size: clamp(30px, 5vw, 44px);
+    margin-bottom: var(--s4);
+  }
+
+  .section-intro-text {
+    font-size: 1.12rem;
+    color: var(--muted);
+    max-width: 62ch;
+    margin-bottom: var(--s6);
+  }
+
+  /* ---------- GRIGLIA CANALI DI CONTATTO ---------- */
+  .contact-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--s4);
+    margin-bottom: var(--s6);
+  }
+
+  .contact-card {
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: var(--surface);
+    padding: 22px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--s3);
+    transition: border-color var(--transition-fast), transform var(--transition-fast);
+  }
+
+  .contact-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .contact-card.is-primary {
+    border-color: color-mix(in srgb, var(--accent) 34%, var(--border));
+    background: linear-gradient(155deg, var(--surface) 0%, color-mix(in srgb, var(--accent-2) 55%, var(--surface)) 100%);
+  }
+
+  .contact-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .contact-kicker {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+  }
+
+  .contact-status {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 2px 9px;
+    border-radius: 999px;
+  }
+
+  .contact-status.is-active {
+    background: var(--accent-2);
+    color: var(--accent);
+  }
+
+  .contact-status.is-soon {
+    background: var(--badge-completed-bg);
+    color: var(--muted);
+  }
+
+  .contact-card h2 {
+    font-family: var(--font-serif);
+    font-size: 1.35rem;
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .contact-card-desc {
+    font-size: 0.92rem;
+    color: var(--muted);
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  .contact-value {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text);
+    margin: 0;
+    word-break: break-word;
+  }
+
+  .contact-card-actions {
+    margin-top: auto;
+    padding-top: var(--s2);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .btn-contact-primary,
+  .btn-contact-secondary,
+  .btn-contact-disabled {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 9px;
+    white-space: nowrap;
+    transition: opacity var(--transition-fast), transform var(--transition-fast), border-color var(--transition-fast), background-color var(--transition-fast), color var(--transition-fast);
+  }
+
+  .btn-contact-primary {
+    background: var(--accent);
+    color: var(--paper);
+  }
+
+  .btn-contact-primary:hover {
+    opacity: 0.92;
+    transform: translateY(-1px);
+    color: var(--paper);
+  }
+
+  .btn-contact-secondary {
+    background: var(--paper);
+    color: var(--text);
+    border: 1px solid var(--border);
+    cursor: pointer;
+  }
+
+  .btn-contact-secondary:hover,
+  .btn-contact-secondary.is-copied {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-2);
+  }
+
+  .btn-contact-disabled {
+    background: var(--paper);
+    color: var(--muted);
+    border: 1px dashed var(--border);
+    cursor: default;
+  }
+
+  /* ---------- BRIEF & CANALE ---------- */
+  .contact-extra-grid {
+    display: grid;
+    grid-template-columns: 1.35fr 0.85fr;
+    gap: var(--s4);
+  }
+
+  .brief-box,
+  .channel-box {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--surface);
+    padding: 22px 24px;
+  }
+
+  .brief-kicker {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+
+  .brief-box h2,
+  .channel-box h2 {
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    margin: 0 0 var(--s3);
+  }
+
+  .brief-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .brief-list li {
+    font-size: 0.94rem;
+    color: var(--muted);
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+  }
+
+  .brief-list li:first-child {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  .brief-list strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .channel-box {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .channel-box p {
+    font-size: 0.94rem;
+    color: var(--muted);
+    margin: 0 0 var(--s4);
+  }
+
+  .channel-link {
+    margin-top: auto;
+    align-self: flex-start;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+    padding-bottom: 2px;
+  }
+
+  .channel-link:hover {
+    border-color: var(--accent);
+  }
+
+  @media (max-width: 900px) {
+    .contact-cards-grid,
+    .contact-extra-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

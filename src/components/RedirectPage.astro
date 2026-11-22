@@ -1,0 +1,47 @@
+---
+interface Props {
+  to: string;
+  title?: string;
+}
+
+const { to, title = 'Reindirizzamento in corso…' } = Astro.props;
+const siteOrigin = Astro.site?.toString() || 'https://egidiogiacoia.com';
+const absoluteTarget = new URL(to, siteOrigin).toString();
+---
+
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title} | Egidio Giacoia</title>
+    <meta name="robots" content="noindex, follow" />
+    <link rel="canonical" href={absoluteTarget} />
+    <meta http-equiv="refresh" content={`0;url=${to}`} />
+    <script is:inline define:vars={{ to }}>
+      window.location.replace(to);
+    </script>
+    <style>
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: #F2F2EF;
+        color: #1A1A1C;
+        display: grid;
+        place-items: center;
+        min-height: 100vh;
+        margin: 0;
+        padding: 24px;
+        text-align: center;
+      }
+      a {
+        color: #16545A;
+      }
+    </style>
+  </head>
+  <body>
+    <p>
+      Questa pagina si è spostata. Se non vieni reindirizzato automaticamente,
+      <a href={to}>clicca qui</a>.
+    </p>
+  </body>
+</html>

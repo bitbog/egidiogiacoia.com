@@ -1,0 +1,231 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../components/BaseLayout.astro';
+import { siteConfig } from '../../data/site';
+
+const posts = await getCollection('diario');
+const sortedPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const categories = Array.from(
+  new Set(
+    sortedPosts
+      .map((post) => post.data.category?.trim())
+      .filter((cat): cat is string => Boolean(cat))
+  )
+);
+
+const formatDate = (date: Date) => {
+  return date.toLocaleDateString('it-IT', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  });
+};
+
+const baseUrl = import.meta.env.BASE_URL;
+
+const blogSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Blog',
+  name: 'Blog di Egidio Giacoia',
+  description:
+    'Articoli, appunti e guide su fotografia, sviluppo web, turismo in Basilicata, stampa 3D e riflessioni dal mio spazio indipendente.',
+  url: `${siteConfig.siteUrl}/blog`,
+  author: {
+    '@type': 'Person',
+    name: siteConfig.siteName,
+    url: siteConfig.siteUrl
+  }
+};
+---
+
+<BaseLayout
+  title="Blog | Fotografia, Web, Stampa 3D & Appunti | Egidio Giacoia"
+  description="Articoli, guide pratiche e pensieri liberi di Egidio Giacoia: fotografia, sviluppo siti web, turismo in Basilicata, progettazione 3D e vita quotidiana."
+  keywords="blog Egidio Giacoia, fotografia Basilicata blog, sviluppo web turismo, stampa 3D Basilicata, diario digitale"
+  schema={blogSchema}
+>
+  <div class="reading-width">
+    <div class="kicker"><span class="num">—</span><span class="lab">Blog &amp; Appunti</span></div>
+    <h1>Blog</h1>
+    <p class="section-intro">
+      Guide pratiche su fotografia, sviluppo web, turismo in Basilicata e stampa 3D, insieme a pensieri liberi
+      e dietro le quinte dei miei progetti in questo spazio indipendente sul web.
+    </p>
+
+    {categories.length > 0 && (
+      <div class="blog-filter-bar" role="group" aria-label="Filtra articoli per categoria">
+        <button type="button" class="blog-filter-btn is-active" data-category="all">Tutti</button>
+        {categories.map((cat) => (
+          <button type="button" class="blog-filter-btn" data-category={cat}>{cat}</button>
+        ))}
+      </div>
+    )}
+
+    {sortedPosts.length === 0 ? (
+      <p class="empty-state">Nessun articolo pubblicato al momento.</p>
+    ) : (
+      <div class="diary-list" id="blog-list">
+        {sortedPosts.map((post, index) => (
+          <a
+            href={`${baseUrl}blog/${post.id}`}
+            class="diary-item-link reveal-on-scroll"
+            id={`post-link-${post.id}`}
+            data-category={post.data.category || ''}
+            style={`--reveal-delay: ${Math.min(index * 80, 320)}ms;`}
+          >
+            <article class="diary-item">
+              <div class="diary-item-top">
+                <div class="diary-meta-group">
+                  <time datetime={post.data.pubDate.toISOString()} class="diary-meta">
+                    {formatDate(post.data.pubDate)}
+                  </time>
+                  {post.data.category && (
+                    <span class="diary-category">{post.data.category}</span>
+                  )}
+                </div>
+                <span class="diary-arrow" aria-hidden="true">&rarr;</span>
+              </div>
+              <h2>{post.data.title}</h2>
+              {post.data.description && (
+                <p class="diary-summary">{post.data.description}</p>
+              )}
+            </article>
+          </a>
+        ))}
+      </div>
+    )}
+  </div>
+</BaseLayout>
+
+<style>
+  .section-intro {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    margin-bottom: var(--s6);
+    max-width: 62ch;
+  }
+
+  .blog-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: var(--s6);
+  }
+
+  .blog-filter-btn {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 5px 14px;
+    cursor: pointer;
+    transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+  }
+
+  .blog-filter-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .blog-filter-btn.is-active {
+    background: var(--accent);
+    color: var(--paper);
+    border-color: var(--accent);
+  }
+
+  .empty-state {
+    color: var(--text-muted);
+    margin-top: var(--s5);
+  }
+
+  .diary-item-link.is-filtered-out {
+    display: none;
+  }
+
+  .diary-item-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s3);
+  }
+
+  .diary-meta-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .diary-meta-group .diary-meta {
+    margin-bottom: 0;
+  }
+
+  .diary-category {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+    background: var(--accent-2);
+    border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+    border-radius: 999px;
+    padding: 2px 9px;
+  }
+
+  .diary-arrow {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: var(--text-muted);
+    opacity: 0;
+    transform: translateX(-6px);
+    transition: opacity var(--transition-fast), transform var(--transition-fast), color var(--transition-fast);
+  }
+
+  .diary-item h2 {
+    margin-top: var(--s2);
+    transition: transform var(--transition-fast), color var(--transition-fast);
+  }
+
+  .diary-item-link:hover .diary-item h2 {
+    transform: translateX(6px);
+    color: var(--accent);
+  }
+
+  .diary-item-link:hover .diary-arrow {
+    opacity: 1;
+    transform: translateX(0);
+    color: var(--accent);
+  }
+</style>
+
+<script>
+  function initBlogFilters() {
+    const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('.blog-filter-btn'));
+    const posts = Array.from(document.querySelectorAll<HTMLElement>('.diary-item-link'));
+    if (buttons.length === 0 || posts.length === 0) return;
+
+    buttons.forEach((btn) => {
+      if (btn.dataset.filterBound === '1') return;
+      btn.dataset.filterBound = '1';
+
+      btn.addEventListener('click', () => {
+        const selected = btn.dataset.category || 'all';
+        buttons.forEach((b) => b.classList.toggle('is-active', b.dataset.category === selected));
+
+        posts.forEach((post) => {
+          const cat = post.dataset.category || '';
+          const match = selected === 'all' || cat === selected;
+          post.classList.toggle('is-filtered-out', !match);
+          if (match) post.classList.add('is-visible');
+        });
+      });
+    });
+  }
+
+  initBlogFilters();
+  document.addEventListener('astro:page-load', initBlogFilters);
+  document.addEventListener('astro:after-swap', initBlogFilters);
+</script>

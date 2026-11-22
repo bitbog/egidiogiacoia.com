@@ -1,0 +1,954 @@
+---
+import BaseLayout from '../../components/BaseLayout.astro';
+import PortfolioSubnav from '../../components/PortfolioSubnav.astro';
+import ModelViewer3D from '../../components/ModelViewer3D.astro';
+import { siteConfig, getInstagramUrl, getWhatsAppChatUrl } from '../../data/site';
+import { progettiStampa3d, fotoStampa3d } from '../../data/progetti-stampa-3d';
+
+const useCases = [
+  {
+    kicker: '01 · Brand, Band & B&B',
+    title: 'Portachiavi, gadget e oggetti personalizzati',
+    desc: 'Portachiavi robusti e leggeri con logo o lettering in rilievo per B&B, band, aziende ed eventi, targhette camera, segnatavoli e merchandising su misura.'
+  },
+  {
+    kicker: '02 · Web + 3D Smart',
+    title: 'Portachiavi ed espositori con NFC & QR',
+    desc: 'Portachiavi con tag NFC integrato e supporti da banco con QR Code in rilievo: un tocco con lo smartphone per aprire sito web, menu digitale, Wi-Fi, Instagram o recensioni Google.'
+  },
+  {
+    kicker: '03 · Scansione 3D & Arredo',
+    title: 'Rilievi topografici, bomboniere e lampade',
+    desc: 'Rilievi 3D del territorio da dati satellitari come il Monte Alpi, bomboniere uniche ricavate dalla scansione 3D del volto e lampade luminose da arredo in litofania.'
+  },
+  {
+    kicker: '04 · CAD & Prototipi',
+    title: 'Progettazione CAD e pezzi tecnici su misura',
+    desc: "Modellazione parametrica 3D partendo da un'idea o da un componente rotto: supporti dedicati per attrezzatura, custodie, adattatori e piccole serie funzionali senza costi di stampo."
+  }
+];
+
+const processSteps = [
+  {
+    num: '01',
+    title: 'Brief, CAD o Scansione 3D',
+    desc: "Partiamo dall'esigenza concreta (dimensioni, logo, uso quotidiano o scansione 3D reale) e preparo il modello digitale ottimizzando estetica e resistenza."
+  },
+  {
+    num: '02',
+    title: 'Prototipo & Scelta Materiale',
+    desc: 'Valutiamo insieme colori, finiture opache o lucide, eventuale integrazione NFC/QR e materiale adatto prima della stampa definitiva.'
+  },
+  {
+    num: '03',
+    title: 'Stampa, Rifinitura & Consegna',
+    desc: 'Produco pezzi unici o piccole e medie serie in manifattura additiva con controllo qualità su ogni dettaglio, pronti per la tua attività o evento.'
+  }
+];
+
+const baseUrl = import.meta.env.BASE_URL;
+const instagramUrl = getInstagramUrl();
+const whatsappChatUrl = getWhatsAppChatUrl();
+
+const stampa3dSchema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'Progettazione CAD, Scansione 3D e Stampa 3D su Misura in Basilicata',
+    provider: {
+      '@type': 'Person',
+      name: siteConfig.siteName,
+      url: siteConfig.siteUrl
+    },
+    areaServed: {
+      '@type': 'AdministrativeArea',
+      name: 'Basilicata'
+    },
+    serviceType: [
+      'Progettazione e Modellazione 3D CAD',
+      'Scansione 3D del Volto e Oggetti',
+      'Manifattura Additiva e Stampa 3D',
+      'Portachiavi Personalizzati per Band, Aziende e B&B',
+      'Portachiavi Smart con Tag NFC Integrato',
+      'Lampade Luminose e Litofanie 3D da Arredo',
+      'Rilievi Topografici 3D del Territorio',
+      'Espositori da Banco QR Code e NFC'
+    ],
+    description:
+      'Servizi di progettazione 3D CAD, scansione 3D e stampa 3D a Castelsaraceno, Potenza e in Basilicata: portachiavi NFC personalizzati, lampade luminose da arredo in litofania, bomboniere da scansione del volto e rilievo 3D Monte Alpi.'
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Progetti e prototipi realizzati in stampa 3D',
+    numberOfItems: progettiStampa3d.length,
+    itemListElement: progettiStampa3d.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      item: {
+        '@type': 'CreativeWork',
+        name: item.titolo,
+        description: item.descrizione,
+        genre: item.categoria,
+        material: item.materialeLabel,
+        creator: {
+          '@type': 'Person',
+          name: siteConfig.siteName
+        }
+      }
+    }))
+  }
+];
+---
+
+<BaseLayout
+  title="Progettazione, Scansione & Stampa 3D in Basilicata | Egidio Giacoia"
+  description="Progetti reali di modellazione CAD, scansione 3D e stampa 3D in Basilicata e a Castelsaraceno: rilievo 3D del Monte Alpi, portachiavi con tag NFC, lampade luminose da arredo, bomboniere da scansione del volto e gadget su misura."
+  keywords="stampa 3D Basilicata, stampa 3D Castelsaraceno, progettazione 3D CAD Potenza, scansione 3D volto bomboniera, rilievo 3D Monte Alpi, portachiavi NFC stampa 3D, lampada luna 3D arredo, gadget band aziende 3D"
+  schema={stampa3dSchema}
+>
+  <PortfolioSubnav active="stampa-3d" />
+
+  <!-- ===================== PROGETTAZIONE & STAMPA 3D ===================== -->
+  <section id="stampa-3d">
+    <!-- Hero compatto a 2 colonne -->
+    <header class="stampa-hero">
+      <div class="stampa-hero-copy">
+        <div class="kicker"><span class="num">02</span><span class="lab">Progettazione, Scansione &amp; Stampa 3D</span></div>
+        <h1>Dal file digitale all'oggetto reale, su misura.</h1>
+        <p class="section-intro-text">
+          Progetto in <strong>CAD 3D</strong>, realizzo <strong>scansioni 3D</strong> e produco oggetti in manifattura additiva:
+          rilievi topografici, portachiavi con tag NFC, bomboniere personalizzate e lampade d'arredo.
+        </p>
+      </div>
+
+      <div class="hero-side-actions">
+        <a href={`${baseUrl}contatti`} class="btn-3d-primary">Richiedi un progetto &rarr;</a>
+        <span class="hero-meta-line">CAD 3D · Scansione 3D · NFC/QR · Basilicata</span>
+      </div>
+    </header>
+
+    <!-- Barra di navigazione rapida interna -->
+    <nav class="page-jump-nav" aria-label="Indice della pagina Stampa 3D">
+      <a href="#modelli-3d" class="jump-pill">Modelli 3D ({progettiStampa3d.length})</a>
+      <a href="#stampe-reali" class="jump-pill">Stampe reali ({fotoStampa3d.length})</a>
+      <a href="#servizi-3d" class="jump-pill">Cosa realizzo</a>
+      <a href="#processo-3d" class="jump-pill">Come funziona</a>
+    </nav>
+
+    <!-- 01. Galleria Modelli 3D Interattivi -->
+    <div id="modelli-3d" class="gallery-section">
+      <div class="section-head-row">
+        <div>
+          <span class="section-kicker">01 · Esplora in 3D</span>
+          <h2>Progetti &amp; modelli 3D interattivi</h2>
+        </div>
+        <span class="section-hint-pill">Trascina · Espandi</span>
+      </div>
+
+      <div class="models-grid">
+        {progettiStampa3d.map((item, idx) => (
+          <article class:list={['model-card', { 'is-featured': item.featured }]} id={item.id}>
+            <div class="model-card-viewer">
+              <ModelViewer3D
+                modelSrc={`${baseUrl}${item.modelSrc}`}
+                title={item.titolo}
+                color={item.coloreFilamento}
+                theta={item.camera?.theta}
+                phi={item.camera?.phi}
+                distance={item.camera?.distance}
+                featured={item.featured}
+              />
+            </div>
+
+            <div class="model-card-body">
+              <div class="model-card-head">
+                <span class="model-card-kicker">{item.categoria}</span>
+                <span class="model-card-num" aria-hidden="true">{String(idx + 1).padStart(2, '0')}</span>
+              </div>
+              <h3>{item.titolo}</h3>
+              <p class="model-card-desc">{item.descrizione}</p>
+
+              <ul class="model-specs" aria-label={`Specifiche tecniche ${item.titolo}`}>
+                <li>
+                  <span class="spec-label">Tecnica</span>
+                  <span class="spec-value">{item.tecnica}</span>
+                </li>
+                <li>
+                  <span class="spec-label">Dimensioni</span>
+                  <span class="spec-value">{item.dimensioni}</span>
+                </li>
+                <li>
+                  <span class="spec-label">Finitura</span>
+                  <span class="spec-value">
+                    <span class="filament-dot" style={`background-color: ${item.coloreFilamento};`} aria-hidden="true"></span>
+                    {item.materialeLabel}
+                  </span>
+                </li>
+              </ul>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+
+    <!-- 02. Galleria Fotografica Stampe Reali -->
+    <div id="stampe-reali" class="stampa-block real-photos-section reveal-on-scroll">
+      <div class="section-head-row">
+        <div>
+          <span class="section-kicker">02 · Oggetti reali</span>
+          <h2>Dal file alla stampa reale</h2>
+        </div>
+        <span class="section-hint-pill">Clicca per ingrandire</span>
+      </div>
+
+      <div class="gallery real-3d-grid">
+        {fotoStampa3d.map((foto) => (
+          <figure class="shot real-3d-shot">
+            <div class="real-3d-frame">
+              <img
+                src={foto.src}
+                alt={foto.alt}
+                width={foto.w}
+                height={foto.h}
+                style={foto.objectPosition ? `object-position: ${foto.objectPosition};` : undefined}
+                loading="lazy"
+                decoding="async"
+              />
+              <span class="real-3d-zoom" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M15 3h6v6" />
+                  <path d="M9 21H3v-6" />
+                  <path d="M21 3l-7 7" />
+                  <path d="M3 21l7-7" />
+                </svg>
+              </span>
+              <span class="real-3d-tag">{foto.tag}</span>
+            </div>
+            <figcaption>
+              <strong>{foto.titolo}</strong>
+              <span>{foto.cap}</span>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+
+    <!-- 03. Griglia Casi d'Uso -->
+    <div id="servizi-3d" class="stampa-block usecases-section reveal-on-scroll">
+      <div class="section-head-row">
+        <div>
+          <span class="section-kicker">03 · Applicazioni</span>
+          <h2>Cosa posso progettare e stampare</h2>
+        </div>
+      </div>
+
+      <div class="usecases-grid">
+        {useCases.map((item) => (
+          <article class="usecase-card">
+            <span class="usecase-kicker">{item.kicker}</span>
+            <h3>{item.title}</h3>
+            <p>{item.desc}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+
+    <!-- 04. Processo in 3 Step -->
+    <div id="processo-3d" class="stampa-block process-section reveal-on-scroll">
+      <div class="section-head-row">
+        <div>
+          <span class="section-kicker">04 · Processo</span>
+          <h2>Come nasce un oggetto</h2>
+        </div>
+      </div>
+
+      <ol class="process-steps">
+        {processSteps.map((step) => (
+          <li class="process-step-card">
+            <span class="process-step-num">{step.num}</span>
+            <h3>{step.title}</h3>
+            <p>{step.desc}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+
+    <!-- Call to Action finale -->
+    <aside class="empty-3d-box reveal-on-scroll" aria-label="Richiedi un progetto in stampa 3D">
+      <div class="empty-3d-copy">
+        <span class="empty-3d-badge">Progetti su misura</span>
+        <h3>Hai un'idea per un oggetto, un gadget NFC o una scansione 3D?</h3>
+        <p>
+          Dal portachiavi personalizzato per la tua attività o band, fino a lampade, bomboniere e rilievi 3D su misura:
+          raccontami cosa vuoi realizzare e progettiamo insieme il prototipo.
+        </p>
+      </div>
+      <div class="empty-3d-actions">
+        <a href={`${baseUrl}contatti`} class="btn-3d-primary">Parliamo della tua idea &rarr;</a>
+        {instagramUrl && (
+          <a href={instagramUrl} target="_blank" rel="noopener noreferrer" class="btn-3d-secondary">
+            Scrivimi su Instagram &#8599;
+          </a>
+        )}
+        {whatsappChatUrl && (
+          <a href={whatsappChatUrl} target="_blank" rel="noopener noreferrer" class="btn-3d-ghost">
+            WhatsApp &#8599;
+          </a>
+        )}
+      </div>
+    </aside>
+  </section>
+</BaseLayout>
+
+<script>
+  let viewerModulePromise: Promise<typeof import('../../scripts/model-viewer-3d')> | null = null;
+  const loadViewers = () => {
+    viewerModulePromise ??= import('../../scripts/model-viewer-3d');
+    viewerModulePromise.then((m) => m.initModelViewers3D());
+  };
+
+  loadViewers();
+  document.addEventListener('astro:page-load', loadViewers);
+  document.addEventListener('astro:before-swap', () => {
+    viewerModulePromise?.then((m) => m.destroyModelViewers3D());
+  });
+</script>
+
+<style>
+  section {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  /* ---------- HERO COMPATTO ---------- */
+  .stampa-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) auto;
+    gap: var(--s5);
+    align-items: end;
+    margin-bottom: var(--s4);
+  }
+
+  .stampa-hero h1 {
+    margin-bottom: var(--s3);
+  }
+
+  .section-intro-text {
+    font-size: 1.05rem;
+    color: var(--muted);
+    max-width: 60ch;
+    margin: 0;
+    line-height: 1.58;
+  }
+
+  .section-intro-text strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .hero-side-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+  }
+
+  .hero-meta-line {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  /* ---------- INDICE RAPIDO INTERNO ---------- */
+  .page-jump-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-bottom: var(--s5);
+    margin-bottom: var(--s5);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .page-jump-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .jump-pill {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--muted);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 5px 13px;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: border-color var(--transition-fast), color var(--transition-fast), background-color var(--transition-fast);
+  }
+
+  .jump-pill:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-2);
+  }
+
+  /* ---------- SEZIONI & INTESTAZIONI ---------- */
+  #modelli-3d,
+  #stampe-reali,
+  #servizi-3d,
+  #processo-3d {
+    scroll-margin-top: 96px;
+  }
+
+  .stampa-block {
+    margin-top: var(--s7);
+    padding-top: var(--s6);
+    border-top: 1px solid var(--border);
+  }
+
+  .section-head-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: var(--s3);
+    flex-wrap: wrap;
+    margin-bottom: var(--s4);
+  }
+
+  .section-kicker {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+
+  .section-head-row h2 {
+    font-family: var(--font-serif);
+    font-size: clamp(22px, 2.6vw, 28px);
+    letter-spacing: -0.015em;
+    color: var(--text);
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .section-hint-pill {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 4px 11px;
+    white-space: nowrap;
+  }
+
+  /* ---------- GRIGLIA MODELLI 3D INTERATTIVI (2x2) ---------- */
+  .models-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s5);
+  }
+
+  .model-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: var(--surface);
+    padding: 16px;
+    gap: 16px;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  .model-card:hover {
+    border-color: color-mix(in srgb, var(--accent) 48%, var(--border));
+    box-shadow: 0 14px 34px -22px color-mix(in srgb, var(--accent) 42%, transparent);
+  }
+
+  .model-card-viewer {
+    min-width: 0;
+  }
+
+  .model-card-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 2px 4px 4px;
+  }
+
+  .model-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .model-card-kicker {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .model-card-num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .model-card-body h3 {
+    font-family: var(--font-serif);
+    font-size: 1.3rem;
+    line-height: 1.24;
+    letter-spacing: -0.015em;
+    text-transform: none;
+    color: var(--text);
+    margin: 0;
+  }
+
+  .model-card-desc {
+    font-size: 0.93rem;
+    line-height: 1.58;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .model-specs {
+    list-style: none;
+    margin: auto 0 0;
+    padding: 12px 0 0;
+    border-top: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .model-specs li {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .spec-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .spec-value {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 11.2px;
+    line-height: 1.35;
+    color: var(--text);
+  }
+
+  .filament-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.18);
+    flex-shrink: 0;
+  }
+
+  /* ---------- GALLERIA FOTO STAMPE REALI ---------- */
+  .real-3d-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--s4);
+  }
+
+  .real-3d-shot {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .real-3d-frame {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  .real-3d-shot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    cursor: zoom-in;
+    transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .real-3d-shot:hover .real-3d-frame {
+    border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
+    box-shadow: 0 14px 32px -16px color-mix(in srgb, var(--accent) 32%, transparent);
+  }
+
+  .real-3d-shot:hover img {
+    transform: scale(1.04);
+  }
+
+  .real-3d-zoom {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    color: #ffffff;
+    background: rgba(14, 18, 22, 0.58);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    opacity: 0.85;
+    transition: opacity var(--transition-fast), transform var(--transition-fast);
+  }
+
+  .real-3d-shot:hover .real-3d-zoom {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+
+  .real-3d-tag {
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    pointer-events: none;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.05em;
+    color: #ffffff;
+    background: rgba(14, 18, 22, 0.72);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    padding: 4px 10px;
+  }
+
+  .real-3d-shot figcaption {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 0 2px;
+  }
+
+  .real-3d-shot figcaption strong {
+    font-family: var(--font-serif);
+    font-size: 1.02rem;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.28;
+  }
+
+  .real-3d-shot figcaption span {
+    font-size: 0.86rem;
+    line-height: 1.48;
+    color: var(--muted);
+  }
+
+  /* ---------- USE CASES GRID (2x2) ---------- */
+  .usecases-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s4);
+  }
+
+  .usecase-card {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--surface);
+    padding: 22px 24px;
+    transition: border-color var(--transition-fast), transform var(--transition-fast);
+  }
+
+  .usecase-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .usecase-kicker {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .usecase-card h3 {
+    font-family: var(--font-serif);
+    font-size: 1.24rem;
+    letter-spacing: -0.01em;
+    text-transform: none;
+    color: var(--text);
+    margin: 0 0 8px;
+  }
+
+  .usecase-card p {
+    font-size: 0.94rem;
+    color: var(--muted);
+    line-height: 1.58;
+    margin: 0;
+  }
+
+  /* ---------- PROCESSO IN 3 STEP ---------- */
+  .process-steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--s4);
+  }
+
+  .process-step-card {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--surface);
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .process-step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--accent);
+    background: var(--accent-2);
+    border: 1px solid color-mix(in srgb, var(--accent) 24%, transparent);
+    margin-bottom: 4px;
+  }
+
+  .process-step-card h3 {
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    line-height: 1.25;
+    color: var(--text);
+    margin: 0;
+  }
+
+  .process-step-card p {
+    font-size: 0.91rem;
+    line-height: 1.55;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  /* ---------- CTA FINALE ---------- */
+  .empty-3d-box {
+    margin-top: var(--s7);
+    border: 1px dashed color-mix(in srgb, var(--accent) 36%, var(--border));
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--surface) 0%, color-mix(in srgb, var(--accent-2) 55%, var(--surface)) 100%);
+    padding: 28px 30px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s5);
+  }
+
+  .empty-3d-copy {
+    max-width: 56ch;
+  }
+
+  .empty-3d-badge {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    background: var(--accent-2);
+    border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+    border-radius: 999px;
+    padding: 4px 11px;
+    margin-bottom: var(--s3);
+  }
+
+  .empty-3d-copy h3 {
+    font-family: var(--font-serif);
+    font-size: 1.4rem;
+    letter-spacing: -0.01em;
+    text-transform: none;
+    color: var(--text);
+    margin: 0 0 8px;
+  }
+
+  .empty-3d-copy p {
+    margin: 0;
+    font-size: 0.96rem;
+    color: var(--muted);
+    line-height: 1.58;
+  }
+
+  .empty-3d-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .btn-3d-primary,
+  .btn-3d-secondary,
+  .btn-3d-ghost {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    text-decoration: none;
+    padding: 11px 18px;
+    border-radius: 10px;
+    white-space: nowrap;
+    text-align: center;
+    transition: opacity var(--transition-fast), transform var(--transition-fast), border-color var(--transition-fast), background-color var(--transition-fast), color var(--transition-fast);
+  }
+
+  .btn-3d-primary {
+    background: var(--accent);
+    color: var(--paper);
+  }
+
+  .btn-3d-primary:hover {
+    opacity: 0.92;
+    transform: translateY(-1.5px);
+    color: var(--paper);
+  }
+
+  .btn-3d-secondary {
+    background: var(--paper);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  .btn-3d-secondary:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .btn-3d-ghost {
+    background: var(--accent-2);
+    color: var(--accent);
+    border: 1px solid color-mix(in srgb, var(--accent) 26%, transparent);
+  }
+
+  .btn-3d-ghost:hover {
+    background: var(--accent);
+    color: var(--paper);
+  }
+
+  /* ---------- RESPONSIVE DESKTOP/TABLET/MOBILE ---------- */
+  @media (max-width: 900px) {
+    .stampa-hero {
+      grid-template-columns: 1fr;
+      align-items: start;
+      gap: var(--s4);
+    }
+
+    .hero-side-actions {
+      align-items: flex-start;
+    }
+
+    .real-3d-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .models-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .process-steps {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 780px) {
+    .usecases-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .model-card {
+      padding: 14px;
+    }
+
+    .empty-3d-box {
+      padding: 22px;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .section-hint-pill {
+      display: none;
+    }
+
+    .real-3d-shot figcaption strong {
+      font-size: 0.94rem;
+    }
+
+    .real-3d-shot figcaption span {
+      font-size: 0.8rem;
+      line-height: 1.42;
+    }
+
+    .empty-3d-actions {
+      width: 100%;
+    }
+
+    .empty-3d-actions a {
+      flex: 1 1 100%;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .model-specs {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .model-specs li:first-child {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 350px) {
+    .real-3d-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

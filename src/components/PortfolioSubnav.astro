@@ -1,0 +1,96 @@
+---
+interface Props {
+  active: 'overview' | 'brand-turismo' | 'stampa-3d' | 'eventi' | 'ritratti';
+}
+
+const { active } = Astro.props;
+const baseUrl = import.meta.env.BASE_URL;
+
+const items = [
+  { key: 'overview', label: 'Panoramica', href: `${baseUrl}portfolio` },
+  { key: 'brand-turismo', label: 'Brand, Turismo & Web', href: `${baseUrl}portfolio/brand-turismo` },
+  { key: 'stampa-3d', label: 'Stampa 3D', href: `${baseUrl}portfolio/stampa-3d` },
+  { key: 'eventi', label: 'Eventi', href: `${baseUrl}portfolio/eventi` },
+  { key: 'ritratti', label: 'Ritratti', href: `${baseUrl}portfolio/ritratti` },
+] as const;
+---
+
+<nav class="portfolio-subnav" aria-label="Sezioni del portfolio">
+  <span class="subnav-label">Portfolio:</span>
+  <div class="subnav-pills">
+    {items.map((item) => (
+      <a
+        href={item.href}
+        class={`subnav-pill ${active === item.key ? 'is-active' : ''}`}
+        aria-current={active === item.key ? 'page' : undefined}
+      >
+        {item.label}
+      </a>
+    ))}
+  </div>
+</nav>
+
+<style>
+  .portfolio-subnav {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: var(--s5);
+    padding-bottom: var(--s4);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .subnav-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+
+  .subnav-pills {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: 2px 0;
+  }
+
+  .subnav-pills::-webkit-scrollbar {
+    display: none;
+  }
+
+  .subnav-pill {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 6px 14px;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: border-color var(--transition-fast), background-color var(--transition-fast), color var(--transition-fast);
+  }
+
+  .subnav-pill:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-2);
+  }
+
+  .subnav-pill.is-active {
+    background: var(--accent);
+    color: var(--paper);
+    border-color: var(--accent);
+  }
+
+  @media (max-width: 640px) {
+    .subnav-label {
+      display: none;
+    }
+  }
+</style>

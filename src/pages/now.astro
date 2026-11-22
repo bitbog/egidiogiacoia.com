@@ -2,7 +2,6 @@
 import { getEntry, render } from 'astro:content';
 import BaseLayout from '../components/BaseLayout.astro';
 
-// Retrieve the single 'index' entry from the 'now' collection
 const entry = await getEntry('now', 'index');
 
 let Content = null;
@@ -21,12 +20,15 @@ const formatDate = (date: Date) => {
     year: 'numeric'
   });
 };
+
+const baseUrl = import.meta.env.BASE_URL;
 ---
 
-<BaseLayout title="Now | Egidio Giacoia" description="Cosa sto facendo in questo momento della mia vita. Pagina ispirata al movimento /now di Derek Sivers.">
-  <div class="now-container">
+<BaseLayout title="Now | Cosa sto facendo ora | Egidio Giacoia" description="Cosa sto facendo in questo momento della mia vita: progetti, studi, letture e passioni. Pagina ispirata al movimento /now.">
+  <div class="now-container reading-width">
+    <div class="kicker"><span class="num">—</span><span class="lab">Day in the life · Now</span></div>
     <h1>Cosa sto facendo ora</h1>
-    
+
     {entry && lastUpdated && (
       <div class="last-updated">
         Ultimo aggiornamento: <time datetime={lastUpdated.toISOString()}>{formatDate(lastUpdated)}</time>
@@ -40,6 +42,17 @@ const formatDate = (date: Date) => {
     ) : (
       <p class="empty-state">La pagina now non è ancora stata configurata.</p>
     )}
+
+    <aside class="now-footer-note reveal-on-scroll">
+      <p>
+        Vuoi vedere i progetti conclusi o leggere gli ultimi appunti?
+      </p>
+      <div class="now-footer-links">
+        <a href={`${baseUrl}portfolio`}>Portfolio &rarr;</a>
+        <a href={`${baseUrl}blog`}>Blog &rarr;</a>
+        <a href={`${baseUrl}contatti`}>Contatti &rarr;</a>
+      </div>
+    </aside>
   </div>
 </BaseLayout>
 
@@ -57,5 +70,42 @@ const formatDate = (date: Date) => {
 
   .empty-state {
     color: var(--text-muted);
+  }
+
+  .now-footer-note {
+    margin-top: var(--s7);
+    padding: 18px 22px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px 18px;
+  }
+
+  .now-footer-note p {
+    margin: 0;
+    font-size: 0.94rem;
+    color: var(--muted);
+  }
+
+  .now-footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  .now-footer-links a {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  }
+
+  .now-footer-links a:hover {
+    border-color: var(--accent);
   }
 </style>

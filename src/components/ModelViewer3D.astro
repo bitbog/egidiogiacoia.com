@@ -1,0 +1,381 @@
+---
+interface Props {
+  modelSrc: string;
+  title: string;
+  color: string;
+  theta?: number;
+  phi?: number;
+  distance?: number;
+  featured?: boolean;
+}
+
+const {
+  modelSrc,
+  title,
+  color,
+  theta = 0.35,
+  phi = 1.35,
+  distance = 3.0,
+  featured = false
+} = Astro.props;
+---
+
+<div
+  class:list={['viewer-3d-stage', { 'is-featured': featured }]}
+  data-model-viewer
+  data-src={modelSrc}
+  data-color={color}
+  data-theta={theta}
+  data-phi={phi}
+  data-distance={distance}
+>
+  <div
+    class="viewer-3d-canvas-wrap"
+    data-viewer-canvas
+    role="img"
+    aria-label={`Modello 3D interattivo: ${title}`}
+  ></div>
+
+  <div class="viewer-3d-loader" data-viewer-loader>
+    <span class="viewer-3d-spinner" aria-hidden="true"></span>
+    <span>Caricamento modello 3D…</span>
+  </div>
+
+  <span class="viewer-3d-expanded-title">{title}</span>
+
+  <div class="viewer-3d-toolbar" aria-label="Controlli modello 3D">
+    <button
+      type="button"
+      class="viewer-3d-btn is-active"
+      data-viewer-spin
+      aria-pressed="true"
+      aria-label="Attiva o sospendi rotazione automatica"
+      title="Rotazione automatica"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" />
+        <path d="M21 3v5h-5" />
+      </svg>
+    </button>
+    <button
+      type="button"
+      class="viewer-3d-btn"
+      data-viewer-reset
+      aria-label="Ripristina vista iniziale"
+      title="Ripristina vista"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="3" />
+        <path d="M3 12h3" />
+        <path d="M18 12h3" />
+        <path d="M12 3v3" />
+        <path d="M12 18v3" />
+      </svg>
+    </button>
+    <button
+      type="button"
+      class="viewer-3d-btn"
+      data-viewer-expand
+      aria-expanded="false"
+      aria-label="Espandi modello 3D a schermo intero"
+      title="Espandi in 3D"
+    >
+      <svg class="icon-expand" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M15 3h6v6" />
+        <path d="M9 21H3v-6" />
+        <path d="M21 3l-7 7" />
+        <path d="M3 21l7-7" />
+      </svg>
+      <svg class="icon-collapse" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M18 6 6 18" />
+        <path d="m6 6 12 12" />
+      </svg>
+    </button>
+  </div>
+
+  <div class="viewer-3d-hint" data-viewer-hint>
+    <span class="hint-inline">Trascina per ruotare</span>
+    <span class="hint-expanded">Trascina per ruotare · Scroll o pizzica per zoom</span>
+  </div>
+</div>
+
+<style>
+  .viewer-3d-stage {
+    position: relative;
+    width: 100%;
+    height: 290px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background:
+      radial-gradient(
+        circle at 50% 42%,
+        color-mix(in srgb, var(--accent-2) 70%, var(--paper)) 0%,
+        var(--paper) 78%
+      );
+    user-select: none;
+    touch-action: pan-y;
+  }
+
+  .viewer-3d-stage.is-featured {
+    height: 100%;
+    min-height: 340px;
+  }
+
+  .viewer-3d-canvas-wrap {
+    width: 100%;
+    height: 100%;
+    cursor: grab;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+
+  .viewer-3d-stage.is-ready .viewer-3d-canvas-wrap {
+    opacity: 1;
+  }
+
+  .viewer-3d-canvas-wrap:active {
+    cursor: grabbing;
+  }
+
+  .viewer-3d-canvas-wrap :global(canvas) {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+    outline: none;
+  }
+
+  .viewer-3d-loader {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--muted);
+    background: color-mix(in srgb, var(--paper) 75%, transparent);
+    backdrop-filter: blur(2px);
+    padding: 16px;
+    text-align: center;
+    transition: opacity 0.25s ease;
+    pointer-events: none;
+  }
+
+  .viewer-3d-stage.is-ready .viewer-3d-loader {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .viewer-3d-stage.has-error .viewer-3d-loader {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .viewer-3d-stage.has-error .viewer-3d-spinner {
+    display: none;
+  }
+
+  .viewer-3d-spinner {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid color-mix(in srgb, var(--accent) 22%, var(--border));
+    border-top-color: var(--accent);
+    animation: viewerSpin 0.8s linear infinite;
+  }
+
+  @keyframes viewerSpin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .viewer-3d-expanded-title {
+    display: none;
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    z-index: 3;
+    pointer-events: none;
+    max-width: calc(100% - 170px);
+    font-family: var(--font-serif);
+    font-size: 1.05rem;
+    line-height: 1.25;
+    color: var(--text);
+    background: color-mix(in srgb, var(--surface) 88%, transparent);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 7px 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .viewer-3d-toolbar {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 3;
+    display: flex;
+    gap: 6px;
+  }
+
+  .viewer-3d-btn {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: color-mix(in srgb, var(--surface) 88%, transparent);
+    backdrop-filter: blur(8px);
+    color: var(--muted);
+    cursor: pointer;
+    transition: color var(--transition-fast), border-color var(--transition-fast), background-color var(--transition-fast), transform var(--transition-fast);
+  }
+
+  .viewer-3d-btn:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+    transform: translateY(-1px);
+  }
+
+  .viewer-3d-btn.is-active {
+    color: var(--accent);
+    border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+    background: color-mix(in srgb, var(--accent-2) 70%, var(--surface));
+  }
+
+  .viewer-3d-btn .icon-collapse {
+    display: none;
+  }
+
+  .viewer-3d-hint {
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    z-index: 2;
+    pointer-events: none;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    padding: 4px 9px;
+    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
+    background: color-mix(in srgb, var(--surface) 82%, transparent);
+    backdrop-filter: blur(6px);
+  }
+
+  .hint-expanded {
+    display: none;
+  }
+
+  /* ---------- MODALITÀ ESPANSA A SCHERMO INTERO ---------- */
+  .viewer-3d-stage.is-expanded {
+    position: fixed;
+    inset: 18px;
+    width: auto;
+    height: auto;
+    min-height: 0;
+    z-index: 1200;
+    border-radius: 16px;
+    border-color: color-mix(in srgb, var(--accent) 35%, var(--border));
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.42);
+    background:
+      radial-gradient(
+        circle at 50% 45%,
+        color-mix(in srgb, var(--accent-2) 75%, var(--surface)) 0%,
+        var(--paper) 80%
+      );
+    touch-action: none;
+  }
+
+  .viewer-3d-stage.is-expanded .viewer-3d-expanded-title {
+    display: block;
+  }
+
+  .viewer-3d-stage.is-expanded .viewer-3d-toolbar {
+    top: 16px;
+    right: 16px;
+  }
+
+  .viewer-3d-stage.is-expanded .viewer-3d-btn {
+    width: 38px;
+    height: 38px;
+  }
+
+  .viewer-3d-stage.is-expanded .viewer-3d-btn .icon-expand {
+    display: none;
+  }
+
+  .viewer-3d-stage.is-expanded .viewer-3d-btn .icon-collapse {
+    display: block;
+  }
+
+  .viewer-3d-stage.is-expanded .viewer-3d-hint {
+    left: 16px;
+    bottom: 16px;
+    font-size: 11px;
+    padding: 5px 11px;
+  }
+
+  .viewer-3d-stage.is-expanded .hint-inline {
+    display: none;
+  }
+
+  .viewer-3d-stage.is-expanded .hint-expanded {
+    display: inline;
+  }
+
+  :global(body.viewer-expanded) {
+    overflow: hidden;
+  }
+
+  :global(.viewer-3d-backdrop) {
+    position: fixed;
+    inset: 0;
+    z-index: 1190;
+    background: rgba(15, 16, 20, 0.72);
+    backdrop-filter: blur(6px);
+  }
+
+  @media (max-width: 780px) {
+    .viewer-3d-stage {
+      height: 235px;
+    }
+
+    .viewer-3d-stage.is-featured {
+      min-height: 250px;
+      height: 250px;
+    }
+
+    .viewer-3d-btn {
+      width: 36px;
+      height: 36px;
+    }
+
+    .viewer-3d-stage.is-expanded {
+      inset: 10px;
+    }
+
+    .viewer-3d-stage.is-expanded .viewer-3d-expanded-title {
+      top: 12px;
+      left: 12px;
+      max-width: calc(100% - 148px);
+      font-size: 0.94rem;
+      padding: 6px 11px;
+    }
+
+    .viewer-3d-stage.is-expanded .viewer-3d-toolbar {
+      top: 12px;
+      right: 12px;
+    }
+  }
+</style>

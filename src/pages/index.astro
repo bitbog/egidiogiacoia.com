@@ -1,32 +1,58 @@
 ---
-// Importa le funzioni necessarie da Astro per caricare le collezioni e gli elementi singoli
 import { getCollection, getEntry } from 'astro:content';
 import BaseLayout from '../components/BaseLayout.astro';
+import { progettiBrandTurismo } from '../data/progetti-brand-turismo';
+import {
+  siteConfig,
+  getWhatsAppChatUrl,
+  getInstagramUrl
+} from '../data/site';
 
-// Recupera le collezioni dei contenuti
 const diaryEntries = await getCollection('diario');
-const portfolioEntries = await getCollection('portfolio');
+const latestPosts = diaryEntries
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
+  .slice(0, 3);
 
-// Ordina gli elementi del Diario per data decrescente (pubDate) per trovare l'ultimo pubblicato
-const latestDiary = diaryEntries
-  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())[0];
-
-// Ordina gli elementi del Portfolio per data decrescente per trovare l'ultimo caricato
-const latestPortfolio = portfolioEntries
-  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())[0];
-
-const baseUrl = import.meta.env.BASE_URL;
-
-// Costruisce i link dinamici per puntare all'ultimo articolo caricato (o alla pagina indice di fallback)
-const diaryLink = latestDiary ? `${baseUrl}diario/${latestDiary.id}` : `${baseUrl}diario`;
-const portfolioLink = latestPortfolio ? `${baseUrl}portfolio/${latestPortfolio.id}` : `${baseUrl}portfolio`;
-const nowLink = `${baseUrl}now`;
-
-// Recupera la pagina "now" per estrarre la data dell'ultimo aggiornamento generale
 const nowEntry = await getEntry('now', 'index');
 const nowLastUpdated = nowEntry?.data.lastUpdated;
 
-// Helper per formattare la data nel formato leggibile italiano (es. "16 giugno 2026")
+function extractNowHighlights(markdownBody: string, limit = 3): { label: string; value: string }[] {
+  if (!markdownBody) return [];
+  const sections = markdownBody.split(/^##\s+/m).slice(1);
+  const highlights: { label: string; value: string }[] = [];
+
+  for (const section of sections) {
+    if (highlights.length >= limit) break;
+    const lines = section.split('\n').map((l) => l.trim());
+    const heading = lines[0]?.replace(/\*+/g, '').trim();
+    if (!heading) continue;
+
+    const firstContentLine = lines
+      .slice(1)
+      .find((line) => line.length > 0 && !line.startsWith('#') && !line.startsWith('---'));
+
+    if (!firstContentLine) continue;
+
+    const cleanValue = firstContentLine
+      .replace(/^[-+*]\s+/, '')
+      .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+      .replace(/[*_`]+/g, '')
+      .trim();
+
+    if (cleanValue) {
+      highlights.push({ label: heading, value: cleanValue });
+    }
+  }
+
+  return highlights;
+}
+
+const nowHighlights = extractNowHighlights(nowEntry?.body || '', 3);
+const fallbackNowHighlights = [
+  { label: 'Focus attuale', value: 'Siti web locali, fotografia in Basilicata e nuovi prototipi in stampa 3D.' }
+];
+const displayedNowHighlights = nowHighlights.length > 0 ? nowHighlights : fallbackNowHighlights;
+
 const formatDate = (date: Date) => {
   return date.toLocaleDateString('it-IT', {
     day: 'numeric',
@@ -34,345 +60,1179 @@ const formatDate = (date: Date) => {
     year: 'numeric'
   });
 };
+
+const baseUrl = import.meta.env.BASE_URL;
+const whatsappChatUrl = getWhatsAppChatUrl();
+const instagramUrl = getInstagramUrl();
+
+const featuredCases = progettiBrandTurismo.map((p) => ({
+  name: p.titoloBreve || p.titolo,
+  tags: p.sitoWeb
+    ? `Sito Web (${p.sitoWeb.dominio}) · Rebrand`
+    : p.grafiche?.length
+      ? 'Fotografia · Grafica'
+      : p.fotoLabel || 'Fotografia'
+}));
+
+const homeSchema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Person',
+      '@id': `${siteConfig.siteUrl}/#person`,
+      name: siteConfig.siteName,
+      url: siteConfig.siteUrl,
+      image: `${siteConfig.siteUrl}/img/portfolio/profilo.webp`,
+      jobTitle: 'Fotografo, Sviluppatore Web e Progettista 3D',
+      sameAs: [siteConfig.instagramUrl],
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Potenza',
+        addressRegion: 'Basilicata',
+        addressCountry: 'IT'
+      }
+    },
+    {
+      '@type': ['ProfessionalService', 'Photographer'],
+      '@id': `${siteConfig.siteUrl}/#service`,
+      name: 'Egidio Giacoia — Fotografia, Sviluppo Web & Stampa 3D in Basilicata',
+      url: siteConfig.siteUrl,
+      provider: { '@id': `${siteConfig.siteUrl}/#person` },
+      areaServed: {
+        '@type': 'AdministrativeArea',
+        name: 'Basilicata'
+      },
+      serviceType: [
+        'Fotografia Commerciale, Social, Eventi e Ritratti',
+        'Sviluppo Siti Web Veloci e SEO Locale',
+        'Progettazione CAD e Stampa 3D'
+      ]
+    }
+  ]
+};
 ---
 
-<BaseLayout title="Egidio Giacoia | Home" description="Sito personale, blog e portfolio di Egidio Giacoia. Fotografo e creativo.">
-  <section class="intro-section">
-    <h1>Ciao, questo è il mio spazio personale.</h1>
-    
-    <div class="prose">
-      <p>
-          Mi chiamo Egidio, sono uno studente di Informatica. Dall'inizio del 2026 ho tolto tutti i
-          social dalla mia vita e nel mese di maggio 2026 ho deciso di creare questo sito per avere
-          uno spazio su internet in cui scrivo quello che voglio liberamente e senza i limiti che impongono
-          le piattaforme social. Inoltre, curo un portfolio di immagini.
+<BaseLayout
+  title="Egidio Giacoia | Fotografia, Sviluppo Web, Stampa 3D & Blog in Basilicata"
+  description="Portfolio, blog e progetti di Egidio Giacoia a Potenza e in Basilicata: fotografia commerciale e social, sviluppo siti web su misura, progettazione e stampa 3D."
+  keywords="Egidio Giacoia, fotografo Basilicata, sviluppo siti web, stampa 3D, portfolio fotografo, blog Basilicata"
+  schema={homeSchema}
+>
+  <!-- ===================== HERO UNIFICATA ===================== -->
+  <section class="home-hero" id="top">
+    <div class="home-hero-main">
+      <p class="eyebrow">Potenza &amp; Basilicata · Fotografia, Sviluppo Web &amp; Stampa 3D</p>
+      <h1>Immagini, siti web e stampa 3D con un <em>obiettivo</em>.</h1>
+      <p class="lede">
+        Sono <strong>Egidio Giacoia</strong>, studente di Informatica, fotografo e progettista 3D in Basilicata.
+        Aiuto strutture ricettive, brand e persone a raccontarsi online e nel mondo fisico, coltivando allo stesso
+        tempo questo spazio indipendente tra blog, progetti e vita quotidiana.
       </p>
-      <p>
-        Puoi leggere l'ultimo articolo usando i link qui sotto o per un indice generale, usare il menù:
-      </p>
+      <div class="hero-actions">
+        <a href={`${baseUrl}portfolio`} class="hero-btn-primary">Esplora il Portfolio &rarr;</a>
+        <a href={`${baseUrl}contatti`} class="hero-btn-secondary">Contattami</a>
+        {whatsappChatUrl && (
+          <a href={whatsappChatUrl} target="_blank" rel="noopener noreferrer" class="hero-btn-ghost">
+            Scrivimi su WhatsApp &#8599;
+          </a>
+        )}
+      </div>
     </div>
 
-    <!-- Griglia di Navigazione Principale -->
-    <div class="navigation-grid">
-      <!-- Scheda Diario: Dispone di un alone morbido retroilluminato per la profondità -->
-      <a href={diaryLink} class="nav-card diario-card">
-        <div class="card-header">
-          <span class="section-title">Diario</span>
+    <aside class="home-identity-card reveal-on-scroll" aria-label="Profilo e ambiti di lavoro">
+      <div class="identity-top">
+        <img
+          src="/img/portfolio/profilo.webp"
+          alt="Egidio Giacoia"
+          width="427"
+          height="640"
+          class="identity-avatar"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+        />
+        <div>
+          <span class="identity-kicker">Un unico referente</span>
+          <h2>Egidio Giacoia</h2>
+          <p class="identity-role">Fotografia · Web &amp; SEO · Stampa 3D</p>
         </div>
-        <div class="card-body">
-          {latestDiary ? (
-            <span class="latest-title">{latestDiary.data.title}</span>
-          ) : (
-            <p class="card-desc">Pensieri liberi, note e riflessioni senza una scadenza o una categoria precisa.</p>
+      </div>
+
+      <ul class="identity-pillars">
+        <li>
+          <span class="pillar-idx">01</span>
+          <span>Fotografia Commerciale, Social, Eventi &amp; Ritratti</span>
+        </li>
+        <li>
+          <span class="pillar-idx">02</span>
+          <span>Sviluppo Siti Web veloci &amp; SEO Locale</span>
+        </li>
+        <li>
+          <span class="pillar-idx">03</span>
+          <span>Progettazione CAD &amp; Stampa 3D su misura</span>
+        </li>
+      </ul>
+
+      <div class="identity-footer">
+        <span class="identity-location">{siteConfig.location}</span>
+        <a href={`${baseUrl}chi-sono`} class="identity-more">Chi sono &rarr;</a>
+      </div>
+    </aside>
+  </section>
+
+  <!-- ===================== 01 · PORTFOLIO & LAVORI ===================== -->
+  <section class="home-section" aria-labelledby="home-portfolio-title">
+    <div class="section-head reveal-on-scroll">
+      <div>
+        <div class="kicker"><span class="num">01</span><span class="lab">Portfolio &amp; Servizi</span></div>
+        <h2 id="home-portfolio-title">Progetti realizzati e aree di lavoro</h2>
+      </div>
+      <a href={`${baseUrl}portfolio`} class="section-all-link">Panoramica completa &rarr;</a>
+    </div>
+
+    <div class="home-bento">
+      <!-- Hero Card: Brand, Turismo & Web -->
+      <a href={`${baseUrl}portfolio/brand-turismo`} class="bento-card bento-hero brand-turismo-card reveal-on-scroll">
+        <div class="card-bg-overlay hero-overlay"></div>
+        <div class="bento-hero-grid">
+          <div class="bento-hero-left">
+            <span class="hero-badge">Area Principale · Basilicata</span>
+            <h3>Brand, Turismo &amp; Sviluppo Web</h3>
+            <p>
+              Shooting fotografici commerciali e social, siti web veloci su misura e integrazioni in stampa 3D
+              per destinazioni, B&amp;B e attività locali.
+            </p>
+            <ul class="service-pills" aria-label="Servizi inclusi">
+              <li>Fotografia &amp; Social</li>
+              <li>Siti Web &amp; SEO</li>
+              <li>Rebrand &amp; Grafica</li>
+              <li>Stampa 3D</li>
+            </ul>
+          </div>
+
+          <div class="bento-hero-right">
+            <span class="cases-label">Ultimi casi studio</span>
+            <ul class="cases-list">
+              {featuredCases.map((c) => (
+                <li>
+                  <strong>{c.name}</strong>
+                  <span>{c.tags}</span>
+                </li>
+              ))}
+            </ul>
+            <span class="cases-cta">Apri i casi studio &rarr;</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- 3 Card Sotto-sezioni -->
+      <a href={`${baseUrl}portfolio/stampa-3d`} class="bento-card bento-sub stampa-3d-card reveal-on-scroll" style="--reveal-delay: 60ms;">
+        <div class="card-bg-overlay stampa-3d-overlay"></div>
+        <div class="bento-sub-inner">
+          <span class="sub-kicker">02 · Manifattura Additiva</span>
+          <h3>Progettazione &amp; Stampa 3D</h3>
+          <p>Rilievi 3D, scansioni del volto, portachiavi NFC, lampade d'arredo e prototipi CAD.</p>
+          <span class="sub-more">Scopri il 3D &rarr;</span>
+        </div>
+      </a>
+
+      <a href={`${baseUrl}portfolio/eventi`} class="bento-card bento-sub eventi-card reveal-on-scroll" style="--reveal-delay: 110ms;">
+        <div class="card-bg-overlay"></div>
+        <div class="bento-sub-inner">
+          <span class="sub-kicker">03 · Reportage</span>
+          <h3>Fotografia Eventi</h3>
+          <p>Concerti, live, festival e feste private raccontati con discrezione.</p>
+          <span class="sub-more">Vedi i reportage &rarr;</span>
+        </div>
+      </a>
+
+      <a href={`${baseUrl}portfolio/ritratti`} class="bento-card bento-sub ritratti-card reveal-on-scroll" style="--reveal-delay: 160ms;">
+        <div class="card-bg-overlay"></div>
+        <div class="bento-sub-inner">
+          <span class="sub-kicker">04 · Persone</span>
+          <h3>Fotografia Ritrattistica</h3>
+          <p>Ritratti professionali e creativi in studio o all'aperto in Basilicata.</p>
+          <span class="sub-more">Vedi i ritratti &rarr;</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ===================== 02 · BLOG & NOW ===================== -->
+  <section class="home-section" aria-labelledby="home-space-title">
+    <div class="section-head reveal-on-scroll">
+      <div>
+        <div class="kicker"><span class="num">02</span><span class="lab">Il Mio Spazio sul Web</span></div>
+        <h2 id="home-space-title">Blog &amp; Day in the life</h2>
+      </div>
+      <a href={`${baseUrl}blog`} class="section-all-link">Tutti gli articoli &rarr;</a>
+    </div>
+
+    <div class="space-grid">
+      <!-- Sinistra: Ultimi 3 articoli del Blog -->
+      <div class="blog-panel reveal-on-scroll">
+        <div class="panel-head">
+          <span class="panel-kicker">Ultimi dal Blog</span>
+          <a href={`${baseUrl}blog`} class="panel-link">Archivio &rarr;</a>
+        </div>
+
+        <div class="home-posts-list">
+          {latestPosts.map((post) => (
+            <a href={`${baseUrl}blog/${post.id}`} class="home-post-item">
+              <div class="home-post-meta">
+                <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
+                {post.data.category && <span class="home-post-cat">{post.data.category}</span>}
+              </div>
+              <h3>{post.data.title}</h3>
+              {post.data.description && <p>{post.data.description}</p>}
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <!-- Destra: Anteprima dinamica pagina Now -->
+      <aside class="now-panel reveal-on-scroll" style="--reveal-delay: 90ms;" aria-label="Cosa sto facendo ora">
+        <div class="panel-head">
+          <span class="panel-kicker">Now · Day in the life</span>
+          {nowLastUpdated && (
+            <span class="now-updated">Agg. {formatDate(nowLastUpdated)}</span>
           )}
         </div>
-        <div class="card-footer">
-          <span class="card-meta">
-            {latestDiary ? formatDate(latestDiary.data.pubDate) : "Esplora la sezione"}
-          </span>
-          <span class="card-arrow">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-              <polyline points="12 5 19 12 12 19"></polyline>
-            </svg>
-          </span>
-        </div>
-      </a>
-      
-      <!-- Scheda Now: Dispone dell'effetto Alone Radiale che segue il puntatore del mouse -->
-      <a href={nowLink} class="nav-card now-card" id="nowCard">
-        <div class="card-header">
-          <span class="section-title">Now</span>
-        </div>
-        <div class="card-body">
-          <p class="card-desc">Cosa sto facendo esattamente in questo periodo della mia vita.</p>
-        </div>
-        <div class="card-footer">
-          <span class="card-meta">
-            {nowLastUpdated ? formatDate(nowLastUpdated) : "Scopri cosa faccio ora"}
-          </span>
-          <span class="card-arrow">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-              <polyline points="12 5 19 12 12 19"></polyline>
-            </svg>
-          </span>
-        </div>
-      </a>
-      
-      <!-- Scheda Portfolio: Scritta singola centrata su tutta la riga (span 2) -->
-      <a href={`${baseUrl}portfolio`} class="nav-card portfolio-card-span portfolio-card-centered">
-        <span class="portfolio-centered-title">Portfolio</span>
-      </a>
+
+        <h3>Cosa sto facendo in questo periodo</h3>
+
+        <ul class="now-highlights">
+          {displayedNowHighlights.map((item) => (
+            <li>
+              <span class="now-hl-label">{item.label}</span>
+              <span class="now-hl-value">{item.value}</span>
+            </li>
+          ))}
+        </ul>
+
+        <a href={`${baseUrl}now`} class="now-open-btn">Apri la pagina Now &rarr;</a>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ===================== 03 · CONTATTI & SOCIAL ===================== -->
+  <section class="home-section home-contacts-section" aria-labelledby="home-contacts-title">
+    <div class="section-head reveal-on-scroll">
+      <div>
+        <div class="kicker"><span class="num">03</span><span class="lab">Contatti &amp; Social</span></div>
+        <h2 id="home-contacts-title">Parliamo del tuo progetto</h2>
+      </div>
+      <a href={`${baseUrl}contatti`} class="section-all-link">Pagina contatti &rarr;</a>
     </div>
 
-    <!-- Sezione Contatti in fondo -->
-    <div class="contacts-section">
-      <h2>Contatti</h2>
-      <p>Se vuoi scrivermi o restare aggiornato su quello che scrivo, mi trovi qui:</p>
-      <ul class="contacts-list">
-        <li>Resta aggiornato: <a href="https://whatsapp.com/channel/0029VaFJXAvJ93wY6tcBGr2w">Canale WhatsApp</a></li>
-        <li>Scrivimi: <a href="mailto:scrivimiegidio@gmail.com?subject=Messaggio%20dal%20sito">E-mail</a></li>
-      </ul>
+    <div class="home-contact-grid reveal-on-scroll">
+      <!-- Instagram -->
+      <article class="hc-card is-primary">
+        <div class="hc-head-row">
+          <span class="hc-label">Instagram</span>
+          <span class={`hc-pill ${instagramUrl ? 'is-on' : ''}`}>
+            {instagramUrl ? 'Attivo' : 'In arrivo'}
+          </span>
+        </div>
+        {siteConfig.instagramHandle && <p class="hc-value">{siteConfig.instagramHandle}</p>}
+        <p class="hc-desc">
+          Scrivimi in DM su Instagram per progetti, preventivi, collaborazioni o per seguire i nuovi lavori.
+        </p>
+        <div class="hc-actions">
+          {instagramUrl ? (
+            <a href={instagramUrl} target="_blank" rel="noopener noreferrer" class="hc-btn-primary">
+              Scrivimi su Instagram &#8599;
+            </a>
+          ) : (
+            <span class="hc-disabled" aria-disabled="true">Profilo in arrivo</span>
+          )}
+        </div>
+      </article>
+
+      <!-- WhatsApp -->
+      <article class="hc-card">
+        <div class="hc-head-row">
+          <span class="hc-label">WhatsApp</span>
+          <span class={`hc-pill ${whatsappChatUrl ? 'is-on' : ''}`}>
+            {whatsappChatUrl ? 'Attivo' : 'In arrivo'}
+          </span>
+        </div>
+        <p class="hc-desc">Chat veloce per preventivi o disponibilità.</p>
+        <div class="hc-actions">
+          {whatsappChatUrl ? (
+            <a href={whatsappChatUrl} target="_blank" rel="noopener noreferrer" class="hc-btn-primary">
+              Apri WhatsApp &#8599;
+            </a>
+          ) : (
+            <span class="hc-disabled" aria-disabled="true">Numero diretto in arrivo</span>
+          )}
+        </div>
+      </article>
     </div>
+
+    <p class="channel-note reveal-on-scroll">
+      Vuoi ricevere solo gli aggiornamenti quando esce un nuovo articolo sul blog?
+      <a href={siteConfig.whatsappChannelUrl} target="_blank" rel="noopener noreferrer">Unisciti al Canale WhatsApp &#8599;</a>
+    </p>
   </section>
 </BaseLayout>
 
 <style>
-  .intro-section {
-    padding: var(--s2) 0;
+  section {
+    border-top: none;
+    padding: 0;
   }
 
-  h1 {
-    font-size: clamp(32px, 6vw, 48px);
-    margin-bottom: var(--s5);
-  }
-
-  /* Imposta Diario e Now affiancati (50% ciascuno) */
-  .navigation-grid {
+  /* ---------- HERO UNIFICATA ---------- */
+  .home-hero {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--s5);
-    margin: var(--s7) 0;
-  }
-
-  /* Proprietà generali delle schede */
-  .nav-card {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 185px;
-    min-width: 0;
-    text-decoration: none;
-    color: var(--text);
-    padding: var(--s5);
-    border-radius: 12px;
-    background: var(--surface);
-    position: relative;
-  }
-
-  /* Diario Card: Alone Posteriore Morbido per Creare Profondità */
-  .diario-card {
-    border: 1px solid var(--border);
-    box-shadow: 
-      0 10px 35px -10px color-mix(in srgb, var(--accent) 22%, transparent), 
-      0 0 20px -5px color-mix(in srgb, var(--accent) 10%, transparent);
-    transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
-  }
-
-  .diario-card:hover {
-    border-color: var(--accent);
-    box-shadow: 
-      0 15px 45px -8px color-mix(in srgb, var(--accent) 32%, transparent), 
-      0 0 25px -2px color-mix(in srgb, var(--accent) 16%, transparent);
-    background-color: var(--accent-2);
-  }
-
-  /* Now Card: Alone Radiale che Segue il Mouse */
-  .now-card {
-    border: 1px solid var(--border);
-    position: relative;
-    overflow: hidden;
-    background-color: var(--surface);
-    transition: border-color var(--transition-fast), background-color var(--transition-fast);
-  }
-
-  .now-card:hover {
-    border-color: var(--accent);
-    background-color: var(--accent-2);
-  }
-
-  /* Maschera di gradiente radiale controllata da JS via --mouse-x e --mouse-y */
-  .now-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(
-      200px circle at var(--mouse-x, 0px) var(--mouse-y, 0px),
-      color-mix(in srgb, var(--accent) 18%, transparent) 0%,
-      transparent 100%
-    );
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
-    z-index: 1;
-  }
-
-  .now-card:hover::before {
-    opacity: 1;
-  }
-
-  /* Mantiene il testo sopra il livello dell'alone luminoso */
-  .now-card > * {
-    position: relative;
-    z-index: 2;
-  }
-
-  /* Portfolio Card: Estesa su 2 colonne e centrata */
-  .portfolio-card-span {
-    grid-column: span 2;
-  }
-
-  .portfolio-card-centered {
-    display: flex;
-    justify-content: center;
+    grid-template-columns: 1.3fr 0.9fr;
+    gap: var(--s7);
     align-items: center;
-    height: 120px;
-    text-align: center;
-    border: 1px solid var(--border);
-    transition: border-color var(--transition-fast), background-color var(--transition-fast);
+    padding-top: var(--s2);
+    padding-bottom: var(--s7);
   }
 
-  .portfolio-card-centered:hover {
-    border-color: var(--accent);
-    background-color: var(--accent-2);
-  }
-
-  .portfolio-centered-title {
-    font-family: var(--font-serif);
-    font-size: clamp(26px, 5vw, 36px);
-    font-weight: 500;
-    color: var(--accent);
-    letter-spacing: -0.015em;
-    font-variation-settings: "opsz" 60;
-  }
-
-  .card-header {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    width: 100%;
-  }
-
-  .section-title {
+  .eyebrow {
     font-family: var(--font-mono);
     font-size: 12px;
-    font-weight: 500;
-    color: var(--accent);
-    letter-spacing: 0.1em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-  }
-
-  .card-body {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    flex-grow: 1;
-    margin-top: var(--s2);
-    margin-bottom: var(--s2);
-    min-width: 0;
-  }
-
-  .latest-title {
-    display: block;
-    font-family: var(--font-serif);
-    font-size: 1.25rem;
-    font-weight: 500;
-    color: var(--text);
-    line-height: 1.35;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    width: 100%;
-  }
-
-  .card-desc {
-    font-family: var(--font-sans);
-    font-size: 0.95rem;
-    color: var(--text-muted);
-    line-height: 1.5;
-    margin: 0;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .card-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    margin-top: auto;
-    border-top: 1px solid var(--border);
-    padding-top: var(--s3);
-  }
-
-  .card-meta {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--text-muted);
-  }
-
-  .card-arrow {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-muted);
-    transition: transform var(--transition-medium), color var(--transition-fast);
-  }
-
-  .nav-card:hover .card-arrow {
-    transform: translateX(4px);
     color: var(--accent);
-  }
-
-  .contacts-section {
-    margin-top: var(--s9);
-    border-top: 1px solid var(--border);
-    padding-top: var(--s7);
-  }
-
-  .contacts-section h2 {
-    font-size: 1.6rem;
     margin-bottom: var(--s4);
   }
 
-  .contacts-list {
+  .home-hero-main h1 {
+    font-size: clamp(34px, 5vw, 54px);
+    max-width: 15ch;
+    margin-bottom: var(--s4);
+  }
+
+  .lede {
+    font-size: 1.1rem;
+    color: var(--muted);
+    max-width: 58ch;
+    margin-bottom: var(--s5);
+    line-height: 1.65;
+  }
+
+  .lede strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .hero-btn-primary,
+  .hero-btn-secondary,
+  .hero-btn-ghost {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    text-decoration: none;
+    padding: 12px 18px;
+    border-radius: 10px;
+    white-space: nowrap;
+    transition: transform var(--transition-fast), opacity var(--transition-fast), border-color var(--transition-fast), background-color var(--transition-fast), color var(--transition-fast);
+  }
+
+  .hero-btn-primary {
+    background: var(--accent);
+    color: var(--paper);
+  }
+
+  .hero-btn-primary:hover {
+    opacity: 0.92;
+    transform: translateY(-1.5px);
+    color: var(--paper);
+  }
+
+  .hero-btn-secondary {
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  .hero-btn-secondary:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-2);
+  }
+
+  .hero-btn-ghost {
+    background: var(--accent-2);
+    color: var(--accent);
+    border: 1px solid color-mix(in srgb, var(--accent) 26%, transparent);
+  }
+
+  .hero-btn-ghost:hover {
+    background: var(--accent);
+    color: var(--paper);
+  }
+
+  /* Identity Card a destra */
+  .home-identity-card {
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: var(--surface);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--s4);
+    box-shadow: 0 16px 38px -20px color-mix(in srgb, var(--accent) 28%, transparent);
+  }
+
+  .identity-top {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .identity-avatar {
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: top center;
+    border: 2px solid color-mix(in srgb, var(--accent) 35%, var(--border));
+    flex-shrink: 0;
+  }
+
+  .identity-kicker {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    margin-bottom: 2px;
+  }
+
+  .identity-top h2 {
+    font-family: var(--font-serif);
+    font-size: 1.35rem;
+    margin: 0 0 2px;
+    line-height: 1.15;
+  }
+
+  .identity-role {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .identity-pillars {
     list-style: none;
-    padding-left: 0;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .identity-pillars li {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+    font-size: 0.92rem;
+    color: var(--text);
+  }
+
+  .pillar-idx {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .identity-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding-top: 4px;
+  }
+
+  .identity-location {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--accent);
+    background: var(--accent-2);
+    border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+    border-radius: 999px;
+    padding: 4px 11px;
+  }
+
+  .identity-more {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .identity-more:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  /* ---------- SEZIONI ---------- */
+  .home-section {
+    border-top: 1px solid var(--border);
+    padding: var(--s7) 0;
+  }
+
+  .home-contacts-section {
+    padding-bottom: var(--s4);
+  }
+
+  .section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: var(--s4);
+    flex-wrap: wrap;
+    margin-bottom: var(--s5);
+  }
+
+  .section-head h2 {
+    margin: 0;
+  }
+
+  .section-all-link {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+    padding-bottom: 2px;
+    white-space: nowrap;
+  }
+
+  .section-all-link:hover {
+    border-color: var(--accent);
+  }
+
+  /* ---------- PORTFOLIO BENTO ---------- */
+  .home-bento {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--s4);
+  }
+
+  .bento-card {
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    text-decoration: none;
+    color: #ffffff;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    z-index: 1;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
+  }
+
+  .bento-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    background-color: var(--surface);
+    z-index: -2;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .brand-turismo-card::before {
+    background-image: url('/img/portfolio/bg-brand-turismo.webp');
+  }
+
+  .stampa-3d-card::before {
+    background-image: url('/img/portfolio/bg-stampa-3d.webp');
+    background-position: center 45%;
+  }
+
+  .eventi-card::before {
+    background-image: url('/img/portfolio/bg-eventi.webp');
+  }
+
+  .ritratti-card::before {
+    background-image: url('/img/portfolio/bg-ritratti.webp');
+  }
+
+  .card-bg-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(14, 18, 22, 0.3), rgba(14, 18, 22, 0.82));
+    z-index: -1;
+  }
+
+  .stampa-3d-overlay {
+    background: linear-gradient(to bottom, rgba(14, 18, 22, 0.28), rgba(14, 18, 22, 0.86));
+  }
+
+  .hero-overlay {
+    background: linear-gradient(125deg, rgba(11, 23, 25, 0.84) 0%, rgba(16, 22, 24, 0.58) 55%, rgba(12, 18, 20, 0.84) 100%);
+  }
+
+  .bento-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 18px 40px -16px color-mix(in srgb, var(--accent) 34%, transparent);
+    transform: translateY(-2px);
+    color: #ffffff;
+  }
+
+  .bento-hero:hover::before,
+  .stampa-3d-card:hover::before,
+  .eventi-card:hover::before,
+  .ritratti-card:hover::before {
+    transform: scale(1.045);
+  }
+
+  .bento-hero {
+    grid-column: 1 / -1;
+    min-height: 270px;
+    padding: var(--s6);
+    align-items: stretch;
+  }
+
+  .bento-hero-grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1.35fr 0.85fr;
+    gap: var(--s6);
+    align-items: end;
+  }
+
+  .bento-hero-left {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s3);
+    align-items: flex-start;
+  }
+
+  .hero-badge {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(6px);
+    color: #ffffff;
+  }
+
+  .bento-hero-left h3 {
+    font-family: var(--font-serif);
+    font-size: clamp(26px, 3.6vw, 36px);
+    text-transform: none;
+    letter-spacing: -0.015em;
+    color: #ffffff;
+    margin: 0;
+  }
+
+  .bento-hero-left p {
+    font-size: 0.98rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0;
+    max-width: 54ch;
+  }
+
+  .service-pills {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 0;
+    margin: var(--s1) 0 0;
+  }
+
+  .service-pills li {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: #ffffff;
+    background: rgba(15, 25, 27, 0.62);
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    border-radius: 8px;
+    padding: 5px 11px;
+  }
+
+  .bento-hero-right {
+    background: rgba(14, 20, 22, 0.64);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 12px;
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .cases-label {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .cases-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .cases-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10px;
+    font-size: 0.88rem;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+  }
+
+  .cases-list strong {
+    color: #ffffff;
+    font-weight: 500;
+  }
+
+  .cases-list span {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    color: rgba(255, 255, 255, 0.76);
+    text-align: right;
+  }
+
+  .cases-cta {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: #ffffff;
+    margin-top: 4px;
+    transition: transform var(--transition-fast);
+  }
+
+  .bento-hero:hover .cases-cta {
+    transform: translateX(4px);
+  }
+
+  .bento-sub {
+    min-height: 220px;
+    padding: var(--s5);
+    align-items: flex-end;
+  }
+
+  .bento-sub-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .sub-kicker {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.78);
+  }
+
+  .bento-sub-inner h3 {
+    font-family: var(--font-serif);
+    font-size: 1.45rem;
+    text-transform: none;
+    letter-spacing: -0.01em;
+    color: #ffffff;
+    margin: 0;
+  }
+
+  .bento-sub-inner p {
+    font-size: 0.9rem;
+    line-height: 1.45;
+    color: rgba(255, 255, 255, 0.88);
+    margin: 0;
+  }
+
+  .sub-more {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: rgba(255, 255, 255, 0.88);
+    margin-top: 4px;
+    transition: transform var(--transition-fast);
+  }
+
+  .bento-sub:hover .sub-more {
+    transform: translateX(4px);
+  }
+
+  /* ---------- BLOG & NOW ---------- */
+  .space-grid {
+    display: grid;
+    grid-template-columns: 1.25fr 0.85fr;
+    gap: var(--s5);
+    align-items: stretch;
+  }
+
+  .blog-panel,
+  .now-panel {
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: var(--surface);
+    padding: 24px 26px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .panel-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: var(--s4);
+  }
+
+  .panel-kicker {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+  }
+
+  .panel-link,
+  .now-updated {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--muted);
+    text-decoration: none;
+  }
+
+  .panel-link:hover {
+    color: var(--accent);
+  }
+
+  .home-posts-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .home-post-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 14px 0;
+    border-top: 1px solid var(--border);
+    text-decoration: none;
+    color: inherit;
+    transition: transform var(--transition-fast);
+  }
+
+  .home-post-item:first-child {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  .home-post-item:last-child {
+    padding-bottom: 0;
+  }
+
+  .home-post-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--muted);
+  }
+
+  .home-post-cat {
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+    background: var(--accent-2);
+    border-radius: 999px;
+    padding: 1px 8px;
+  }
+
+  .home-post-item h3 {
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    text-transform: none;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    margin: 2px 0 0;
+    transition: color var(--transition-fast);
+  }
+
+  .home-post-item:hover h3 {
+    color: var(--accent);
+  }
+
+  .home-post-item p {
+    margin: 2px 0 0;
+    font-size: 0.92rem;
+    color: var(--muted);
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .now-panel {
+    background: linear-gradient(155deg, var(--surface) 0%, color-mix(in srgb, var(--accent-2) 48%, var(--surface)) 100%);
+  }
+
+  .now-panel h3 {
+    font-family: var(--font-serif);
+    font-size: 1.35rem;
+    text-transform: none;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    margin: 0 0 var(--s4);
+  }
+
+  .now-highlights {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--s5);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .now-highlights li {
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .now-highlights li:first-child {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  .now-hl-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+  }
+
+  .now-hl-value {
+    font-size: 0.94rem;
+    color: var(--text);
+    line-height: 1.48;
+  }
+
+  .now-open-btn {
+    margin-top: auto;
+    align-self: flex-start;
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--paper);
+    background: var(--accent);
+    text-decoration: none;
+    padding: 10px 16px;
+    border-radius: 9px;
+    transition: opacity var(--transition-fast), transform var(--transition-fast);
+  }
+
+  .now-open-btn:hover {
+    opacity: 0.92;
+    transform: translateY(-1px);
+    color: var(--paper);
+  }
+
+  /* ---------- CONTATTI & SOCIAL ---------- */
+  .home-contact-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--s4);
+  }
+
+  .hc-card {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--surface);
+    padding: 20px 22px;
     display: flex;
     flex-direction: column;
     gap: var(--s2);
-    margin-top: var(--s4);
   }
 
-  .contacts-list li {
-    font-size: 0.95rem;
+  .hc-card.is-primary {
+    border-color: color-mix(in srgb, var(--accent) 32%, var(--border));
+    background: linear-gradient(155deg, var(--surface) 0%, color-mix(in srgb, var(--accent-2) 55%, var(--surface)) 100%);
   }
 
-  /* Layout per dispositivi Mobile (Impila le schede verticalmente) */
-  @media (max-width: 600px) {
-    .navigation-grid {
+  .hc-head-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .hc-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+  }
+
+  .hc-pill {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--badge-completed-bg);
+    color: var(--muted);
+  }
+
+  .hc-pill.is-on {
+    background: var(--accent-2);
+    color: var(--accent);
+  }
+
+  .hc-value {
+    font-family: var(--font-mono);
+    font-size: 13.5px;
+    color: var(--text);
+    margin: 4px 0;
+    word-break: break-word;
+  }
+
+  .hc-desc {
+    font-size: 0.92rem;
+    color: var(--muted);
+    margin: 4px 0;
+    line-height: 1.5;
+  }
+
+  .hc-actions {
+    margin-top: auto;
+    padding-top: var(--s2);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .hc-btn-primary,
+  .hc-btn-secondary,
+  .hc-disabled {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    text-decoration: none;
+    padding: 9px 14px;
+    border-radius: 9px;
+    white-space: nowrap;
+    transition: opacity var(--transition-fast), transform var(--transition-fast), border-color var(--transition-fast), background-color var(--transition-fast);
+  }
+
+  .hc-btn-primary {
+    background: var(--accent);
+    color: var(--paper);
+  }
+
+  .hc-btn-primary:hover {
+    opacity: 0.92;
+    transform: translateY(-1px);
+    color: var(--paper);
+  }
+
+  .hc-btn-secondary {
+    background: var(--paper);
+    color: var(--text);
+    border: 1px solid var(--border);
+    cursor: pointer;
+  }
+
+  .hc-btn-secondary:hover,
+  .hc-btn-secondary.is-copied {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-2);
+  }
+
+  .hc-disabled {
+    background: var(--paper);
+    color: var(--muted);
+    border: 1px dashed var(--border);
+    cursor: default;
+  }
+
+  .channel-note {
+    margin: var(--s5) 0 0;
+    font-size: 0.92rem;
+    color: var(--muted);
+    max-width: none;
+  }
+
+  .channel-note a {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+    margin-left: 6px;
+  }
+
+  .channel-note a:hover {
+    border-color: var(--accent);
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 960px) {
+    .home-hero,
+    .bento-hero-grid,
+    .space-grid {
       grid-template-columns: 1fr;
-      gap: var(--s4);
+      gap: var(--s5);
     }
-    .portfolio-card-span {
-      grid-column: span 1;
+
+    .bento-hero {
+      min-height: auto;
+    }
+  }
+
+  @media (max-width: 820px) {
+    .home-bento,
+    .home-contact-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .bento-hero {
+      grid-column: auto;
+      padding: var(--s5);
+    }
+
+    .bento-sub {
+      min-height: 190px;
     }
   }
 </style>
-
-<!-- Script Client-Side per la gestione dell'Alone Interattivo su Now -->
-<script>
-  function setupMouseGlow() {
-    const card = document.querySelector('.now-card') as HTMLElement;
-    if (!card) return;
-
-    // Aggiorna le variabili CSS con la posizione del cursore relativa alla scheda
-    card.addEventListener('mousemove', (e) => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      card.style.setProperty('--mouse-x', `${x}px`);
-      card.style.setProperty('--mouse-y', `${y}px`);
-    });
-  }
-
-  // Esegue l'inizializzazione sia all'avvio che dopo cambi di pagina fluidi
-  setupMouseGlow();
-  document.addEventListener('astro:after-swap', setupMouseGlow);
-</script>

@@ -1,60 +1,318 @@
 ---
 import BaseLayout from '../../components/BaseLayout.astro';
+import PortfolioSubnav from '../../components/PortfolioSubnav.astro';
+import { progettiBrandTurismo } from '../../data/progetti-brand-turismo';
+import { siteConfig } from '../../data/site';
 
 const baseUrl = import.meta.env.BASE_URL;
+
+const faqItems = [
+  {
+    q: 'Realizzi sia il servizio fotografico che il sito web per B&B e attività turistiche?',
+    a: 'Sì. Unendo competenze di fotografia, informatica e stampa 3D, realizzo pacchetti completi: dallo shooting fotografico dei luoghi e delle esperienze fino alla creazione di un sito web veloce, mobile-first e ottimizzato SEO, integrabile anche con oggetti fisici e supporti QR/NFC su misura.'
+  },
+  {
+    q: 'Che tipi di oggetti realizzi con la progettazione e stampa 3D?',
+    a: 'Progetto in CAD e stampo in 3D oggetti personalizzati per strutture ricettive, brand e attività locali: portachiavi camera con logo, targhette porta e Wi-Fi, espositori da banco con QR Code o NFC collegati al sito web, oltre a gadget e prototipi funzionali su misura.'
+  },
+  {
+    q: 'In quali zone della Basilicata operi?',
+    a: 'La mia base è a Potenza e lavoro regolarmente in tutta la Basilicata: Castelsaraceno, Parco Nazionale del Pollino, Val d’Agri, Dolomiti Lucane (Castelmezzano e Pietrapertosa), Matera, Maratea e aree limitrofe.'
+  },
+  {
+    q: 'Sei disponibile anche per fotografia di eventi privati, concerti e ritratti a Potenza?',
+    a: 'Certamente. Oltre ai progetti per brand e turismo, realizzo servizi fotografici in stile reportage per concerti, spettacoli live, festival e feste private, oltre a sessioni di ritratto professionale e personale in studio o all’aperto.'
+  }
+];
+
+const portfolioSchema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': ['ProfessionalService', 'Photographer'],
+      '@id': `${siteConfig.siteUrl}/portfolio#business`,
+      name: 'Egidio Giacoia — Fotografia, Sviluppo Web & Stampa 3D in Basilicata',
+      url: `${siteConfig.siteUrl}/portfolio`,
+      image: `${siteConfig.siteUrl}/img/portfolio/profilo.webp`,
+      sameAs: [siteConfig.instagramUrl],
+      description:
+        'Fotografo, sviluppatore web e progettista 3D a Potenza e in Basilicata. Servizi fotografici commerciali e social, sviluppo siti web, stampa 3D, fotografia eventi e ritratti.',
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Potenza',
+        addressRegion: 'Basilicata',
+        addressCountry: 'IT'
+      },
+      areaServed: [
+        { '@type': 'AdministrativeArea', name: 'Basilicata' },
+        { '@type': 'City', name: 'Potenza' },
+        { '@type': 'City', name: 'Matera' },
+        { '@type': 'City', name: 'Castelsaraceno' },
+        { '@type': 'Place', name: 'Parco Nazionale del Pollino' },
+        { '@type': 'Place', name: 'Dolomiti Lucane' },
+        { '@type': 'City', name: 'Maratea' }
+      ],
+      hasOfferCatalog: {
+        '@type': 'OfferCatalog',
+        name: 'Servizi fotografici, web e stampa 3D in Basilicata',
+        itemListElement: [
+          {
+            '@type': 'Offer',
+            itemOffered: {
+              '@type': 'Service',
+              name: 'Fotografia Commerciale e Social per Brand, B&B e Turismo in Basilicata'
+            }
+          },
+          {
+            '@type': 'Offer',
+            itemOffered: {
+              '@type': 'Service',
+              name: 'Sviluppo Siti Web e SEO Locale per Strutture Ricettive e Aziende'
+            }
+          },
+          {
+            '@type': 'Offer',
+            itemOffered: {
+              '@type': 'Service',
+              name: 'Progettazione CAD e Stampa 3D su Misura'
+            }
+          },
+          {
+            '@type': 'Offer',
+            itemOffered: {
+              '@type': 'Service',
+              name: 'Fotografia Eventi, Concerti e Feste Private a Potenza e Basilicata'
+            }
+          },
+          {
+            '@type': 'Offer',
+            itemOffered: {
+              '@type': 'Service',
+              name: 'Fotografia Ritrattistica in Studio e all’Aperto'
+            }
+          }
+        ]
+      }
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': `${siteConfig.siteUrl}/portfolio#faq`,
+      mainEntity: faqItems.map((item) => ({
+        '@type': 'Question',
+        name: item.q,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: item.a
+        }
+      }))
+    }
+  ]
+};
+
+const areasBasilicata = [
+  'Potenza',
+  'Matera',
+  'Castelsaraceno',
+  'Parco del Pollino',
+  'Dolomiti Lucane',
+  "Val d'Agri",
+  'Maratea'
+];
+
+const studioFeaturedCases = progettiBrandTurismo.map((p) => ({
+  name: p.titoloBreve || p.titolo,
+  tags: p.sitoWeb
+    ? `Sito Web (${p.sitoWeb.dominio}) · Rebrand`
+    : p.grafiche?.length
+      ? 'Fotografia · Grafica'
+      : p.fotoLabel || 'Fotografia'
+}));
 ---
 
 <BaseLayout
-  title="Portfolio | Egidio Giacoia"
-  description="Fotografo e content creator a Potenza, in Basilicata. Servizi fotografici per turismo e brand, eventi e ritratti."
+  title="Portfolio Fotografo, Sviluppatore Web e Stampa 3D in Basilicata | Egidio Giacoia"
+  description="Fotografo, sviluppatore web e progettista 3D a Potenza e in Basilicata. Servizi fotografici, creazione siti web, stampa 3D su misura, eventi e ritratti."
+  keywords="fotografo Basilicata, fotografo Potenza, sviluppo siti web Basilicata, creazione siti web B&B Basilicata, stampa 3D Basilicata, progettazione 3D Potenza, fotografia eventi Potenza, ritratti fotografici Basilicata"
+  schema={portfolioSchema}
 >
-  <!-- ===================== INTRO ===================== -->
-  <section class="intro" id="top">
-    <p class="eyebrow">Portfolio — Fotografia &amp; content creation</p>
-    <h1>Immagini con un <em>obiettivo</em>.</h1>
-    <p class="lede">
-      Sono <strong>Egidio Giacoia</strong>, fotografo e content creator a Potenza, in Basilicata.
-      Lavoro con destinazioni, brand e persone per trasformare un luogo, una serata o un volto
-      in immagini che restano e che portano un risultato.
-    </p>
+  <PortfolioSubnav active="overview" />
+
+  <!-- ===================== STUDIO HERO (2 COLONNE SU DESKTOP) ===================== -->
+  <section class="studio-hero" id="top">
+    <div class="studio-hero-main">
+      <p class="eyebrow">Portfolio &amp; Servizi — Fotografia, Sviluppo Web &amp; Stampa 3D in Basilicata</p>
+      <h1>Immagini, siti web e oggetti 3D con un <em>obiettivo</em>.</h1>
+      <p class="lede">
+        Sono <strong>Egidio Giacoia</strong>, fotografo, sviluppatore web e progettista 3D a Potenza, in Basilicata.
+        Aiuto destinazioni turistiche, strutture ricettive, aziende e privati a raccontarsi online con
+        fotografie d'impatto, siti web moderni e soluzioni fisiche realizzate in manifattura additiva.
+      </p>
+      <div class="studio-hero-actions">
+        <a href={`${baseUrl}portfolio/brand-turismo`} class="hero-btn-primary">
+          Esplora Brand, Turismo &amp; Web &rarr;
+        </a>
+        <a href={`${baseUrl}contatti`} class="hero-btn-secondary">
+          Parliamo del tuo progetto
+        </a>
+      </div>
+    </div>
+
+    <aside class="studio-manifesto-card reveal-on-scroll" aria-label="Un unico referente in Basilicata">
+      <span class="manifesto-kicker">Un unico referente in Basilicata</span>
+      <h2>Dallo scatto al sito web, fino all'oggetto reale.</h2>
+      <ul class="manifesto-list">
+        <li>
+          <span class="manifesto-num">01</span>
+          <span>Fotografia Commerciale, Social, Eventi &amp; Ritratti</span>
+        </li>
+        <li>
+          <span class="manifesto-num">02</span>
+          <span>Sviluppo Siti Web Veloci &amp; SEO Locale</span>
+        </li>
+        <li>
+          <span class="manifesto-num">03</span>
+          <span>Progettazione CAD &amp; Stampa 3D su Misura</span>
+        </li>
+      </ul>
+      <div class="manifesto-footer">
+        <span class="manifesto-location">Base a Potenza · Operativo in tutta la Basilicata</span>
+      </div>
+    </aside>
   </section>
 
-  <!-- ===================== PORTFOLIO NAVIGATION GRID ===================== -->
-  <section class="portfolio-hub">
-    <div class="portfolio-grid">
-      <!-- Brand & Turismo -->
-      <a href={`${baseUrl}portfolio/brand-turismo`} class="portfolio-card category-card brand-turismo-card">
+  <!-- ===================== BENTO GRID SERVIZI STUDIO ===================== -->
+  <section class="portfolio-hub" aria-label="Aree del portfolio">
+    <div class="studio-bento">
+      <!-- 1. HERO BENTO: Brand, Turismo & Sviluppo Web -->
+      <a href={`${baseUrl}portfolio/brand-turismo`} class="portfolio-card hero-bento-card brand-turismo-card reveal-on-scroll">
+        <div class="card-bg-overlay hero-overlay"></div>
+        <div class="hero-bento-grid">
+          <div class="hero-bento-left">
+            <span class="hero-badge">Servizio Principale · Basilicata</span>
+            <h2 class="hero-card-title">Brand, Turismo &amp; Sviluppo Web</h2>
+            <p class="hero-card-desc">
+              Soluzioni complete per destinazioni, B&amp;B, hotel e attività locali: shooting fotografici per web e social,
+              siti web veloci su misura e integrazioni fisiche con la stampa 3D.
+            </p>
+            <ul class="service-pills" aria-label="Servizi inclusi">
+              <li>Fotografia Commerciale &amp; Social</li>
+              <li>Siti Web &amp; SEO</li>
+              <li>Grafica &amp; Rebrand</li>
+              <li>Integrazione Stampa 3D</li>
+            </ul>
+          </div>
+
+          <div class="hero-bento-right">
+            <span class="cases-preview-label">Casi studio &amp; collaborazioni</span>
+            <ul class="cases-preview-list">
+              {studioFeaturedCases.map((c) => (
+                <li>
+                  <strong>{c.name}</strong>
+                  <span>{c.tags}</span>
+                </li>
+              ))}
+            </ul>
+            <span class="hero-cta-arrow">Esplora i casi studio &rarr;</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- 2. Progettazione & Stampa 3D -->
+      <a href={`${baseUrl}portfolio/stampa-3d`} class="portfolio-card category-card stampa-3d-card reveal-on-scroll" style="--reveal-delay: 60ms;">
+        <div class="card-bg-overlay stampa-3d-overlay"></div>
+        <div class="category-card-inner">
+          <span class="card-kicker">02 · Manifattura Additiva</span>
+          <h2 class="card-title">Progettazione &amp; Stampa 3D</h2>
+          <p class="card-subtitle">Rilievi 3D, scansioni del volto, portachiavi NFC, lampade d'arredo e prototipi CAD su misura</p>
+          <span class="card-more">Scopri i servizi 3D &rarr;</span>
+        </div>
+      </a>
+
+      <!-- 3. Fotografia Eventi -->
+      <a href={`${baseUrl}portfolio/eventi`} class="portfolio-card category-card eventi-card reveal-on-scroll" style="--reveal-delay: 110ms;">
         <div class="card-bg-overlay"></div>
-        <span class="card-title">Brand &amp; Turismo</span>
+        <div class="category-card-inner">
+          <span class="card-kicker">03 · Reportage</span>
+          <h2 class="card-title">Fotografia Eventi</h2>
+          <p class="card-subtitle">Concerti, spettacoli live, festival e feste private in stile reportage</p>
+          <span class="card-more">Scopri i reportage &rarr;</span>
+        </div>
       </a>
 
-      <!-- Eventi -->
-      <a href={`${baseUrl}portfolio/eventi`} class="portfolio-card category-card eventi-card">
+      <!-- 4. Fotografia Ritrattistica -->
+      <a href={`${baseUrl}portfolio/ritratti`} class="portfolio-card category-card ritratti-card reveal-on-scroll" style="--reveal-delay: 160ms;">
         <div class="card-bg-overlay"></div>
-        <span class="card-title">Eventi</span>
+        <div class="category-card-inner">
+          <span class="card-kicker">04 · Persone</span>
+          <h2 class="card-title">Fotografia Ritrattistica</h2>
+          <p class="card-subtitle">Ritratti professionali, artistici e personali in studio o all'aperto</p>
+          <span class="card-more">Vedi i ritratti &rarr;</span>
+        </div>
       </a>
 
-      <!-- Ritratti -->
-      <a href={`${baseUrl}portfolio/ritratti`} class="portfolio-card category-card ritratti-card">
-        <div class="card-bg-overlay"></div>
-        <span class="card-title">Ritratti</span>
+      <!-- 5. Chi sono -->
+      <a href={`${baseUrl}chi-sono`} class="portfolio-card long-card chi-sono-card reveal-on-scroll" style="--reveal-delay: 200ms;">
+        <div class="long-card-text">
+          <span class="long-card-title">Chi sono — Informatica, Fotografia &amp; 3D</span>
+          <span class="long-card-desc">Come unisco sviluppo web, comunicazione visiva e stampa 3D in Basilicata</span>
+        </div>
+        <span class="long-card-arrow" aria-hidden="true">&rarr;</span>
       </a>
 
-      <!-- Chi sono -->
-      <a href={`${baseUrl}portfolio/chi-sono`} class="portfolio-card long-card chi-sono-card">
-        <span class="long-card-title">Chi sono</span>
+      <!-- 6. Contatti -->
+      <a href={`${baseUrl}contatti`} class="portfolio-card long-card contatti-card reveal-on-scroll" style="--reveal-delay: 240ms;">
+        <div class="long-card-text">
+          <span class="long-card-title">Contatti &amp; Preventivi</span>
+          <span class="long-card-desc">Parliamo del tuo sito web, shooting fotografico, evento o progetto 3D</span>
+        </div>
+        <span class="long-card-arrow" aria-hidden="true">&rarr;</span>
       </a>
+    </div>
+  </section>
 
-      <!-- Contatti -->
-      <a href={`${baseUrl}portfolio/contatti`} class="portfolio-card long-card contatti-card">
-        <span class="long-card-title">Contatti</span>
-      </a>
+  <!-- ===================== LOCAL SEO BASILICATA & FAQ (2 COLONNE) ===================== -->
+  <section class="seo-basilicata reveal-on-scroll" aria-labelledby="local-seo-title">
+    <div class="seo-split-grid">
+      <div class="seo-split-info">
+        <div class="kicker"><span class="num">SEO</span><span class="lab">Territorio &amp; Domande Frequenti</span></div>
+        <h2 id="local-seo-title">Lavorare con me in Basilicata</h2>
+        <p class="seo-intro">
+          Collaboro con strutture ricettive, aziende, enti turistici e privati tra <strong>Potenza</strong>,
+          <strong>Matera</strong> e i borghi dell'entroterra lucano per costruire una comunicazione visiva, digitale e fisica coerente.
+        </p>
+
+        <ul class="areas-list" aria-label="Aree servite in Basilicata">
+          {areasBasilicata.map((area) => (
+            <li>{area}</li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="faq-list">
+        {faqItems.map((item) => (
+          <details class="seo-faq-item">
+            <summary>
+              <span>{item.q}</span>
+              <span class="faq-plus" aria-hidden="true">+</span>
+            </summary>
+            <p>{item.a}</p>
+          </details>
+        ))}
+      </div>
     </div>
   </section>
 </BaseLayout>
 
 <style>
-  /* ---------- INTRO ---------- */
+  /* ---------- STUDIO HERO (2 COLONNE) ---------- */
+  .studio-hero {
+    display: grid;
+    grid-template-columns: 1.3fr 0.9fr;
+    gap: var(--s7);
+    align-items: center;
+    padding-top: var(--s2);
+  }
+
   .eyebrow {
     font-family: var(--font-mono);
     font-size: 12px;
@@ -64,193 +322,585 @@ const baseUrl = import.meta.env.BASE_URL;
     margin-bottom: var(--s4);
   }
 
+  .studio-hero-main h1 {
+    font-size: clamp(36px, 5.2vw, 56px);
+    max-width: 15ch;
+  }
+
   .lede {
-    font-size: 1.18rem;
+    font-size: 1.12rem;
     color: var(--muted);
     max-width: 56ch;
     margin-bottom: var(--s5);
   }
   .lede strong { color: var(--text); font-weight: 500; }
 
-  /* ---------- PORTFOLIO HUB GRID ---------- */
+  .studio-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .hero-btn-primary,
+  .hero-btn-secondary {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    text-decoration: none;
+    padding: 12px 18px;
+    border-radius: 10px;
+    transition: transform var(--transition-fast), opacity var(--transition-fast), border-color var(--transition-fast), background-color var(--transition-fast);
+  }
+
+  .hero-btn-primary {
+    background: var(--accent);
+    color: var(--paper);
+  }
+
+  .hero-btn-primary:hover {
+    opacity: 0.92;
+    transform: translateY(-1.5px);
+    color: var(--paper);
+  }
+
+  .hero-btn-secondary {
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  .hero-btn-secondary:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-2);
+  }
+
+  /* Card Manifesto a destra */
+  .studio-manifesto-card {
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: var(--surface);
+    padding: 26px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--s4);
+    box-shadow: 0 14px 36px -18px color-mix(in srgb, var(--accent) 25%, transparent);
+  }
+
+  .manifesto-kicker {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+  }
+
+  .studio-manifesto-card h2 {
+    font-family: var(--font-serif);
+    font-size: 1.45rem;
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  .manifesto-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .manifesto-list li {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+    font-size: 0.94rem;
+    color: var(--text);
+  }
+
+  .manifesto-num {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .manifesto-footer {
+    padding-top: 6px;
+  }
+
+  .manifesto-location {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--accent);
+    background: var(--accent-2);
+    border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+    border-radius: 999px;
+    padding: 5px 12px;
+  }
+
+  /* ---------- BENTO GRID SERVIZI (6 COLONNE) ---------- */
   .portfolio-hub {
     border-top: 1px solid var(--border);
     padding-top: var(--s7);
   }
 
-  .portfolio-grid {
+  .studio-bento {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(6, 1fr);
     gap: var(--s5);
-    margin: var(--s2) 0 var(--s6);
   }
 
-  /* Base properties for all portfolio cards */
   .portfolio-card {
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: 16px;
     text-decoration: none;
     box-sizing: border-box;
     display: flex;
-    justify-content: center;
-    align-items: center;
     position: relative;
     overflow: hidden;
-    transition: border-color var(--transition-fast), background-color var(--transition-fast), box-shadow var(--transition-fast);
+    transition: border-color var(--transition-fast), background-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
   }
 
-  /* --- Category Cards (With blurred background image) --- */
+  .hero-bento-card,
   .category-card {
-    height: 185px;
     color: #ffffff;
-    text-align: center;
     z-index: 1;
   }
 
+  .hero-bento-card::before,
   .category-card::before {
     content: '';
     position: absolute;
     inset: 0;
     background-size: cover;
     background-position: center;
-    background-color: var(--surface); /* Fallback color */
+    background-color: var(--surface);
     z-index: -2;
-    transition: transform var(--transition-medium);
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  /* 
-    Background Images. 
-    Per inserire le tue foto sfocate di sfondo:
-    1. Salva i file in /public/img/portfolio/ usando i nomi qui sotto 
-       (es. bg-brand-turismo.webp, bg-eventi.webp, bg-ritratti.webp)
-    2. In alternativa, puoi scommentare i percorsi fallback per usare le foto originali.
-  */
   .brand-turismo-card::before {
     background-image: url('/img/portfolio/bg-brand-turismo.webp');
-    /* Per usare la foto originale come fallback temporaneo: */
-    /* background-image: url('/img/portfolio/vista-panoramica-castelsaraceno.webp'); */
+  }
+
+  .stampa-3d-card::before {
+    background-image: url('/img/portfolio/bg-stampa-3d.webp');
+    background-position: center 45%;
   }
 
   .eventi-card::before {
     background-image: url('/img/portfolio/bg-eventi.webp');
-    /* Per usare la foto originale come fallback temporaneo: */
-    /* background-image: url('/img/portfolio/festa-e-balli.webp'); */
   }
 
   .ritratti-card::before {
     background-image: url('/img/portfolio/bg-ritratti.webp');
-    /* Per usare la foto originale come fallback temporaneo: */
-    /* background-image: url('/img/portfolio/come-su-vogue.webp'); */
   }
 
   .card-bg-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.65));
+    background: linear-gradient(to bottom, rgba(14, 18, 22, 0.3), rgba(14, 18, 22, 0.82));
     z-index: -1;
-    transition: background-color var(--transition-fast);
   }
 
+  .stampa-3d-overlay {
+    background: linear-gradient(to bottom, rgba(14, 18, 22, 0.28), rgba(14, 18, 22, 0.86));
+  }
+
+  .hero-overlay {
+    background: linear-gradient(125deg, rgba(11, 23, 25, 0.84) 0%, rgba(16, 22, 24, 0.58) 55%, rgba(12, 18, 20, 0.84) 100%);
+  }
+
+  .hero-bento-card:hover,
   .category-card:hover {
     border-color: var(--accent);
-    box-shadow: 0 10px 25px -10px color-mix(in srgb, var(--accent) 30%, transparent);
+    box-shadow: 0 18px 40px -16px color-mix(in srgb, var(--accent) 34%, transparent);
+    transform: translateY(-2px);
   }
 
-  .category-card:hover::before {
-    transform: scale(1.06);
+  .hero-bento-card:hover::before,
+  .stampa-3d-card:hover::before,
+  .eventi-card:hover::before,
+  .ritratti-card:hover::before {
+    transform: scale(1.045);
   }
 
-  .category-card:hover .card-bg-overlay {
-    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.75));
+  /* 1. Hero Bento Card */
+  .hero-bento-card {
+    grid-column: 1 / -1;
+    min-height: 300px;
+    padding: var(--s6);
+    align-items: stretch;
+  }
+
+  .hero-bento-grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1.35fr 0.85fr;
+    gap: var(--s6);
+    align-items: end;
+  }
+
+  .hero-bento-left {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s3);
+    align-items: flex-start;
+  }
+
+  .hero-badge {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(6px);
+    color: #ffffff;
+  }
+
+  .hero-card-title {
+    font-family: var(--font-serif);
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 500;
+    color: #ffffff;
+    margin: 0;
+    letter-spacing: -0.015em;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+  }
+
+  .hero-card-desc {
+    font-size: 1.02rem;
+    color: rgba(255, 255, 255, 0.92);
+    margin: 0;
+    max-width: 54ch;
+    line-height: 1.5;
+  }
+
+  .service-pills {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 0;
+    margin: var(--s1) 0 0;
+  }
+
+  .service-pills li {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: #ffffff;
+    background: rgba(15, 25, 27, 0.62);
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    border-radius: 8px;
+    padding: 5px 11px;
+  }
+
+  /* Colonna destra dentro Hero Bento */
+  .hero-bento-right {
+    background: rgba(14, 20, 22, 0.64);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 12px;
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .cases-preview-label {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .cases-preview-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .cases-preview-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 10px;
+    font-size: 0.9rem;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+  }
+
+  .cases-preview-list strong {
+    color: #ffffff;
+    font-weight: 500;
+  }
+
+  .cases-preview-list span {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.76);
+    text-align: right;
+  }
+
+  .hero-cta-arrow {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: #ffffff;
+    margin-top: 4px;
+    transition: transform var(--transition-fast);
+  }
+
+  .hero-bento-card:hover .hero-cta-arrow {
+    transform: translateX(4px);
+  }
+
+  /* 2, 3, 4. Category Cards (3 colonne su desktop) */
+  .category-card {
+    grid-column: span 2;
+    min-height: 250px;
+    padding: var(--s5);
+    align-items: flex-end;
+  }
+
+  .category-card-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .card-kicker {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.78);
   }
 
   .category-card .card-title {
     font-family: var(--font-serif);
-    font-size: 1.35rem;
+    font-size: 1.55rem;
     font-weight: 500;
+    color: #ffffff;
+    margin: 0;
     letter-spacing: -0.01em;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
   }
 
-  /* --- Long Cards (Chi sono / Contatti) --- */
+  .card-subtitle {
+    font-size: 0.92rem;
+    line-height: 1.45;
+    color: rgba(255, 255, 255, 0.88);
+    margin: 0;
+    max-width: 34ch;
+  }
+
+  .card-more {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: rgba(255, 255, 255, 0.85);
+    margin-top: 6px;
+    transition: transform var(--transition-fast);
+  }
+
+  .category-card:hover .card-more {
+    transform: translateX(4px);
+    color: #ffffff;
+  }
+
+  /* 5 & 6. Long Cards */
   .long-card {
-    height: 100px;
+    grid-column: span 3;
+    padding: 22px 26px;
     background: var(--surface);
-    color: var(--accent);
+    color: var(--text);
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--s4);
   }
 
   .long-card:hover {
     border-color: var(--accent);
     background-color: var(--accent-2);
+    transform: translateY(-2px);
+  }
+
+  .long-card-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
   }
 
   .long-card-title {
     font-family: var(--font-serif);
-    font-size: 1.6rem;
+    font-size: 1.35rem;
     font-weight: 500;
+    color: var(--accent);
     letter-spacing: -0.015em;
   }
 
-  /* Desktop Grid placement */
-  .brand-turismo-card { order: 1; }
-  .eventi-card { order: 2; }
-  .ritratti-card { order: 3; }
-  
-  .chi-sono-card {
-    grid-column: span 3;
-    order: 4;
-  }
-  
-  .contatti-card {
-    grid-column: span 3;
-    order: 5;
+  .long-card-desc {
+    font-size: 0.92rem;
+    color: var(--muted);
   }
 
-  /* ---------- RESPONSIVE / MOBILE ---------- */
-  @media (max-width: 600px) {
-    .portfolio-grid {
-      grid-template-columns: 1fr 1fr;
+  .long-card-arrow {
+    font-family: var(--font-mono);
+    font-size: 17px;
+    color: var(--accent);
+    transition: transform var(--transition-fast);
+  }
+
+  .long-card:hover .long-card-arrow {
+    transform: translateX(4px);
+  }
+
+  /* ---------- LOCAL SEO & FAQ ---------- */
+  .seo-basilicata {
+    border-top: 1px solid var(--border);
+    padding-top: var(--s7);
+  }
+
+  .seo-split-grid {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: var(--s7);
+    align-items: start;
+  }
+
+  .seo-basilicata h2 {
+    margin-top: 0;
+  }
+
+  .seo-intro {
+    color: var(--muted);
+    margin-bottom: var(--s4);
+  }
+
+  .seo-intro strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .areas-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .areas-list li {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--accent);
+    background: var(--accent-2);
+    border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+    border-radius: 999px;
+    padding: 4px 12px;
+  }
+
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .seo-faq-item {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+    padding: 16px 20px;
+    transition: border-color var(--transition-fast), background-color var(--transition-fast);
+  }
+
+  .seo-faq-item[open] {
+    border-color: var(--accent);
+  }
+
+  .seo-faq-item summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--s4);
+    font-family: var(--font-serif);
+    font-size: 1.06rem;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .seo-faq-item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-plus {
+    font-family: var(--font-mono);
+    font-size: 18px;
+    color: var(--accent);
+    transition: transform var(--transition-fast);
+    flex-shrink: 0;
+  }
+
+  .seo-faq-item[open] .faq-plus {
+    transform: rotate(45deg);
+  }
+
+  .seo-faq-item p {
+    margin: var(--s3) 0 0;
+    font-size: 0.95rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 960px) {
+    .studio-hero,
+    .hero-bento-grid,
+    .seo-split-grid {
+      grid-template-columns: 1fr;
+      gap: var(--s5);
+    }
+
+    .hero-bento-card {
+      min-height: auto;
+    }
+  }
+
+  @media (max-width: 820px) {
+    .studio-bento {
+      grid-template-columns: 1fr;
       gap: var(--s4);
     }
 
-    /* Small pills for Chi sono and Contatti at the top */
-    .chi-sono-card {
-      grid-column: span 1;
-      order: 1;
-      height: 52px;
-      border-radius: 999px;
+    .hero-bento-card,
+    .category-card,
+    .long-card {
+      grid-column: auto;
     }
 
-    .contatti-card {
-      grid-column: span 1;
-      order: 2;
-      height: 52px;
-      border-radius: 999px;
+    .hero-bento-card,
+    .category-card {
+      padding: var(--s5);
     }
 
-    .chi-sono-card .long-card-title,
-    .contatti-card .long-card-title {
-      font-family: var(--font-sans);
-      font-size: 0.9rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    /* Categories stack below the pills */
-    .brand-turismo-card {
-      grid-column: span 2;
-      order: 3;
-    }
-
-    .eventi-card {
-      grid-column: span 2;
-      order: 4;
-    }
-
-    .ritratti-card {
-      grid-column: span 2;
-      order: 5;
+    .category-card {
+      min-height: 200px;
     }
   }
 </style>
